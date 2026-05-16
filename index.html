@@ -1235,6 +1235,8 @@
 (function() {
   'use strict';
 
+  let currentLang = localStorage.getItem('vestibular_lang') || 'ru';
+
   const STORAGE_SCHEMA_VERSION = 1;
   const STORAGE_KEY = 'vestibular_dashboard_v3';
 
@@ -1763,6 +1765,7 @@
       '<select id="sizeSelect" class="lang-select">' +
       sizeOpts.map(o => '<option value="' + o.v + '">' + o.d + '</option>').join('') +
       '</select>';
+    document.getElementById('langSelect').value = currentLang;
     document.getElementById('langSelect').addEventListener('change', function() {
       switchLang(this.value);
     });
@@ -1773,7 +1776,8 @@
   }
 
   function switchLang(lang) {
-    if (lang === 'ru') { location.reload(); return; }
+    if (lang === 'ru') { localStorage.setItem('vestibular_lang', 'ru'); location.reload(); return; }
+    currentLang = lang;
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
       const trans = TRANS[key];
