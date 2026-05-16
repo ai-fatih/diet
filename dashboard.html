@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Персонализированный медицинский дашборд: вестибулярный неврит (AB31.0), диагностика, анализы крови, МСКТ, МРТ шейного отдела, рекомендации невролога.">
+<script src="translations.js"></script>
 <meta name="keywords" content="вестибулярный неврит, медицинский дашборд, МСКТ головного мозга, МРТ шейного отдела, анализы крови, невролог, диагностика головокружения, цервикогенное головокружение">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Vestibular Rehabilitation Project">
@@ -135,6 +136,11 @@
 
   .footer { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); font-size: 0.75rem; color: var(--slate-400); text-align: center; }
 
+  .lang-bar { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+  .lang-bar label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--slate-500); white-space: nowrap; }
+  .lang-select { font-size: 0.78rem; padding: 0.25rem 0.5rem; border-radius: 6px; border: 1px solid var(--slate-200); background: #fff; color: var(--slate-700); cursor: pointer; font-family: var(--font); }
+  .lang-select:focus { outline: none; border-color: var(--accent); }
+
   hr { border: none; border-top: 1px solid var(--slate-200); margin: 1rem 0; }
 
   .questions li { padding: 0.4rem 0; font-size: 0.85rem; color: var(--slate-600); border-bottom: 1px solid var(--slate-100); }
@@ -149,24 +155,26 @@
 <body>
 <div class="app">
 
+  <div class="lang-bar" id="langBar"></div>
+
   <header class="header">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
-      <h1><span>◆</span> Медицинский дашборд</h1>
-      <span class="badge">18 апреля 2026</span>
+      <h1><span>◆</span> <span data-i18n="dash_title">Медицинский дашборд</span></h1>
+      <span class="badge" data-i18n="dash_date">18 апреля 2026</span>
     </div>
     <div class="meta">
-      <span>Женщина</span>
-      <span>Жалобы: головокружение (~10 дн.), боли в шее</span>
-      <span>Направление: невролог → КТ</span>
+      <span data-i18n="dash_gender">Женщина</span>
+      <span data-i18n="dash_complaints">Жалобы: головокружение (~10 дн.), боли в шее</span>
+      <span data-i18n="dash_referral">Направление: невролог → КТ</span>
     </div>
   </header>
 
   <!-- ========== 0. ДИАГНОЗ ========== -->
   <div class="card" style="border-left: 4px solid var(--accent);">
-    <h2 class="card-title"><span class="icon">◆</span> 0. Диагноз</h2>
+    <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s0_title">0. Диагноз</span></h2>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Диагноз</th><th>Дата</th><th>Статус</th><th>Источник</th></tr></thead>
+        <thead><tr id="diagHeaderRow"><th>Диагноз</th><th>Дата</th><th>Статус</th><th>Источник</th></tr></thead>
         <tbody>
           <tr>
             <td><strong>Вестибулярный неврит</strong> (AB31.0)</td>
@@ -187,10 +195,10 @@
 
   <!-- ========== 1. ИССЛЕДОВАНИЯ ========== -->
   <div class="card">
-    <h2 class="card-title"><span class="icon">◆</span> 1. Инструментальные исследования</h2>
+    <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s1_title">1. Инструментальные исследования</span></h2>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Исследование</th><th>Дата</th><th>Результат</th><th>Статус</th><th>Комментарий</th></tr></thead>
+        <thead><tr id="studyHeaderRow"><th>Исследование</th><th>Дата</th><th>Результат</th><th>Статус</th><th>Комментарий</th></tr></thead>
         <tbody>
           <tr>
             <td><strong>МСКТ головного мозга</strong></td>
@@ -221,10 +229,10 @@
   <!-- ========== 2. ЛАБОРАТОРНЫЕ АНАЛИЗЫ ========== -->
   <div class="grid-2">
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> 2A. Биохимия крови (11.04.2026)</h2>
+      <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s2a_title">2A. Биохимия крови (11.04.2026)</span></h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Показатель</th><th>Значение</th><th>Референс</th><th>Статус</th></tr></thead>
+          <thead><tr id="biochemHeaderRow"><th>Показатель</th><th>Значение</th><th>Референс</th><th>Статус</th></tr></thead>
           <tbody>
             <tr><td>Магний</td><td>0.94 ммоль/л</td><td>0.66–1.07</td><td><span class="tag tag-green">Норма</span></td></tr>
             <tr><td>СРБ</td><td>&lt; 0.33 мг/л</td><td>0.00–5.00</td><td><span class="tag tag-green">Норма</span></td></tr>
@@ -235,10 +243,10 @@
       </div>
     </div>
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> 2B. ОАК + формула (11.04.2026)</h2>
+      <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s2b_title">2B. ОАК + формула (11.04.2026)</span></h2>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Показатель</th><th>Значение</th><th>Референс</th><th>Статус</th></tr></thead>
+          <thead><tr id="cbcHeaderRow"><th>Показатель</th><th>Значение</th><th>Референс</th><th>Статус</th></tr></thead>
           <tbody>
             <tr><td>Гемоглобин</td><td>145 г/л</td><td>120–145 (♀)</td><td><span class="tag tag-yellow">Верхняя граница</span></td></tr>
             <tr><td>Эритроциты</td><td>5.16</td><td>3.8–5.1</td><td><span class="tag tag-yellow">Верхняя граница</span></td></tr>
@@ -256,7 +264,7 @@
   <!-- ========== 3. КЛИНИЧЕСКИЕ ДАННЫЕ ========== -->
   <div class="grid-3">
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Симптомы</h2>
+      <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s3_symptoms">Симптомы</span></h2>
       <table>
         <tbody>
           <tr><td>Боли в шее</td><td><span class="tag tag-red">Да</span></td></tr>
@@ -271,7 +279,7 @@
     </div>
 
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Гипотезы</h2>
+      <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s3_hypotheses">Гипотезы</span></h2>
       <div class="hypothesis">
         <div class="h-title">Гемангиомы С4-С5 <span class="prob">🔴 Наиболее вероятно</span></div>
         <div class="h-body">Доброкачественные сосудистые образования. Частая находка на КТ после 30–40 лет. Не влияют на анализы крови.</div>
@@ -291,7 +299,7 @@
     </div>
 
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Ключевой вывод</h2>
+      <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s3_conclusion">Ключевой вывод</span></h2>
       <p style="font-size:0.9rem;color:var(--slate-700);">
         Все дороги ведут к <strong>МРТ шейного отдела</strong>. 
         Без него тревога не уйдёт, а упражнения нельзя делать вслепую.
@@ -306,9 +314,9 @@
 
   <!-- ========== 4. РЕКОМЕНДАЦИИ ========== -->
   <div class="card">
-    <h2 class="card-title"><span class="icon">◆</span> 4. Рекомендации</h2>
+    <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s4_title">4. Рекомендации</span></h2>
 
-    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Приоритетные действия</div>
+    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_priority_actions">Приоритетные действия</div>
     <div class="rec-step">
       <span class="rec-num danger">1</span>
       <div class="rec-body"><strong>МРТ шейного отдела позвоночника</strong> — определить природу очагов С4-С5. Золотой стандарт. Без него упражнения противопоказаны.</div>
@@ -324,10 +332,10 @@
 
     <hr>
 
-    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Образ жизни</div>
+    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_lifestyle">Образ жизни</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
       <div>
-        <p style="font-weight:600;font-size:0.8rem;color:var(--emerald);margin-bottom:0.25rem;">Можно и нужно</p>
+        <p style="font-weight:600;font-size:0.8rem;color:var(--emerald);margin-bottom:0.25rem;" data-i18n="dash_do">Можно и нужно</p>
         <ul class="questions" style="font-size:0.82rem;">
           <li>Пить больше воды (гематокрит повышен)</li>
           <li>Ортопедическая подушка с валиком под шею</li>
@@ -339,7 +347,7 @@
         </ul>
       </div>
       <div>
-        <p style="font-weight:600;font-size:0.8rem;color:var(--danger);margin-bottom:0.25rem;">Нельзя до МРТ</p>
+        <p style="font-weight:600;font-size:0.8rem;color:var(--danger);margin-bottom:0.25rem;" data-i18n="dash_dont">Нельзя до МРТ</p>
         <ul class="questions" style="font-size:0.82rem;">
           <li>Активные упражнения для шеи (повороты, наклоны)</li>
           <li>Спать на животе (шея выкручена)</li>
@@ -351,7 +359,7 @@
 
     <hr>
 
-    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Вопросы к неврологу на приём</div>
+    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_questions_header">Вопросы к неврологу на приём</div>
     <ol class="questions">
       <li>Можно ли считать очаги в С4-С5 доброкачественными (гемангиомы) с учётом нормальных анализов крови?</li>
       <li>Нужно ли МРТ с ангиографией (сосуды шеи) или достаточно стандартного режима?</li>
@@ -365,7 +373,7 @@
   <!-- ========== 5. СВОДКА ========== -->
   <div class="grid-2">
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Что исключено (с высокой вероятностью)</h2>
+      <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s5_excluded">Что исключено (с высокой вероятностью)</span></h2>
       <ul class="questions">
         <li>Опухоль головного мозга — КТ чистое</li>
         <li>Инсульт/кровоизлияние — КТ чистое</li>
@@ -378,7 +386,7 @@
       </ul>
     </div>
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Что требует подтверждения</h2>
+      <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s5_pending">Что требует подтверждения</span></h2>
       <ul class="questions">
         <li><strong>Природа очагов в С4-С5</strong> — МРТ шейного отдела</li>
         <li><strong>Цервикогенное головокружение</strong> — оценка невролога + МРТ</li>
@@ -388,10 +396,115 @@
   </div>
 
   <footer class="footer">
-    <p>Информация носит справочный характер. Для постановки диагноза и назначения лечения необходима очная консультация врача.</p>
-    <p style="margin-top:0.25rem;">Май 2026</p>
+    <p data-i18n="dash_footer">Информация носит справочный характер. Для постановки диагноза и назначения лечения необходима очная консультация врача.</p>
+    <p style="margin-top:0.25rem;" data-i18n="dash_footer_date">Май 2026</p>
   </footer>
 
 </div>
+<script>
+(function() {
+  'use strict';
+
+  let currentLang = localStorage.getItem('vestibular_lang') || 'ru';
+
+  function t(key) {
+    if (key === 'ru') return null;
+    const trans = DASHBOARD_TRANS[key];
+    if (!trans) return null;
+    return trans[currentLang] || null;
+  }
+
+  function tArr(baseKey) {
+    if (currentLang === 'ru') return null;
+    const suffix = '_' + currentLang;
+    const arr = DASHBOARD_TRANS[baseKey + suffix];
+    if (arr && Array.isArray(arr)) return arr;
+    return null;
+  }
+
+  function applyTranslations() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      const val = t(key);
+      if (val !== null && val !== undefined) {
+        el.innerHTML = val;
+      }
+    });
+    const sel = document.getElementById('langSelect');
+    if (sel) sel.value = currentLang;
+
+    // Table headers
+    const diagHeaders = tArr('dash_diag_h');
+    if (diagHeaders) applyTableHeaders('diagHeaderRow', diagHeaders);
+    const studyHeaders = tArr('dash_study_h');
+    if (studyHeaders) applyTableHeaders('studyHeaderRow', studyHeaders);
+    const biochemHeaders = tArr('dash_biochem_h');
+    if (biochemHeaders) applyTableHeaders('biochemHeaderRow', biochemHeaders);
+    const cbcHeaders = tArr('dash_biochem_h');
+    if (cbcHeaders) applyTableHeaders('cbcHeaderRow', cbcHeaders);
+  }
+
+  function applyTableHeaders(rowId, headers) {
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    row.querySelectorAll('th').forEach((th, i) => {
+      if (i < headers.length) th.textContent = headers[i];
+    });
+  }
+
+  function switchLang(lang) {
+    if (lang === currentLang) return;
+    currentLang = lang;
+    localStorage.setItem('vestibular_lang', lang);
+    applyTranslations();
+  }
+
+  function buildLangSwitcher() {
+    const bar = document.getElementById('langBar');
+    if (!bar) return;
+    const sizeLabel = t('size_label') || 'Размер:';
+    const sizeOpts = [
+      { v:'small', k:'size_small', d:'Маленький' },
+      { v:'medium', k:'size_medium', d:'Средний' },
+      { v:'large', k:'size_large', d:'Большой' },
+    ];
+    bar.innerHTML = '<label>Язык:</label>' +
+      '<select id="langSelect" class="lang-select">' +
+      '<option value="ru">🇷🇺 Русский</option>' +
+      Object.entries(LANGUAGES).map(([code, info]) =>
+        '<option value="' + code + '">' + info.flag + ' ' + info.label + '</option>'
+      ).join('') +
+      '</select>' +
+      '<label style="margin-left:0.8rem;">' + sizeLabel + '</label>' +
+      '<select id="sizeSelect" class="lang-select">' +
+      sizeOpts.map(o => '<option value="' + o.v + '">' + o.d + '</option>').join('') +
+      '</select>';
+    document.getElementById('langSelect').value = currentLang;
+    document.getElementById('langSelect').addEventListener('change', function() {
+      switchLang(this.value);
+    });
+    initFontSize();
+    document.getElementById('sizeSelect').addEventListener('change', function() {
+      setFontSize(this.value);
+    });
+  }
+
+  const SIZE_MAP = { small:'14px', medium:'16px', large:'18px' };
+
+  function initFontSize() {
+    const saved = localStorage.getItem('vestibular_font_size') || 'medium';
+    document.getElementById('sizeSelect').value = saved;
+    document.documentElement.style.fontSize = SIZE_MAP[saved];
+  }
+
+  function setFontSize(val) {
+    localStorage.setItem('vestibular_font_size', val);
+    document.documentElement.style.fontSize = SIZE_MAP[val];
+  }
+
+  buildLangSwitcher();
+  applyTranslations();
+})();
+</script>
 </body>
 </html>

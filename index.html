@@ -71,7 +71,7 @@
   }
   html { font-size: 15px; }
   body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; padding: 0; }
-  .app { max-width: 1240px; margin: 0 auto; padding: 1.6rem 1rem; }
+  .app { max-width: 1024px; margin: 0 auto; padding: 1.6rem 1rem; }
   @media (min-width: 768px) { .app { padding: 2rem 1.5rem; } }
 
   /* ─── Tabs main ─── */
@@ -81,6 +81,13 @@
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
+
+  /* ─── Glossary ─── */
+  .gloss-term { display: flex; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .gloss-term:last-child { border-bottom: none; }
+  .gloss-abbr { font-weight: 700; font-size: 0.82rem; min-width: 90px; color: var(--accent); font-family: var(--font-mono, monospace); }
+  .gloss-def { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+  .gloss-def strong { color: var(--text); }
 
   /* ─── Sub-tabs ─── */
   .sub-tabs { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
@@ -156,6 +163,9 @@
   .tl .pdesc { font-size: 0.68rem; color: var(--text-dim); max-width: 120px; margin-top: 0.15rem; line-height: 1.3; }
   .tl .you-here { position: absolute; top: -0.6rem; left: 50%; transform: translateX(-50%); z-index: 2; font-size: 0.58rem; font-weight: 700; background: var(--green); color: #fff; padding: 0.1rem 0.5rem; border-radius: 999px; white-space: nowrap; letter-spacing: 0.02em; }
   .tl-legend { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.2rem; }
+  .tl-date-editors { display: flex; align-items: center; gap: 0.4rem 0.8rem; flex-wrap: wrap; margin-bottom: 0.3rem; font-size: 0.75rem; color: var(--text-dim); }
+  .tl-date-editors label { font-weight: 500; }
+  .tl-date-editors input[type="date"] { font-size: 0.75rem; padding: 0.15rem 0.3rem; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); color: var(--text); max-width: 140px; }
 
   /* ─── Entity Map ─── */
   .emap { }
@@ -290,14 +300,26 @@
   .principle { padding: 0.6rem; border-radius: 8px; border-left: 3px solid var(--accent); background: var(--accent-light); font-size: 0.76rem; }
   .principle strong { color: var(--accent); }
 
+  /* ─── Food ref search / sort / filter ─── */
+  .food-controls { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.8rem; }
+  .food-search { width: 100%; padding: 0.5rem 0.7rem; font-size: 0.82rem; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); font-family: var(--font); outline: none; transition: border-color 0.2s; }
+  .food-search:focus { border-color: var(--accent); }
+  .food-search::placeholder { color: var(--text-faint); }
+  .food-filter-bar { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .food-filter-chip { padding: 0.25rem 0.65rem; font-size: 0.7rem; font-weight: 600; border-radius: 999px; border: 1px solid var(--border); background: var(--bg); color: var(--text-dim); cursor: pointer; transition: all 0.15s; user-select: none; }
+  .food-filter-chip:hover { background: var(--accent-light); border-color: var(--accent); }
+  .food-filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .food-results-count { font-size: 0.68rem; color: var(--text-faint); padding: 0.1rem 0.3rem; }
+  .sort-header { cursor: pointer; user-select: none; }
+  .sort-header:hover { background: var(--border) !important; }
+  .sort-header::after { content: ' ↕'; font-size: 0.65rem; opacity: 0.4; }
+  .sort-header.sort-asc::after { content: ' ↑'; opacity: 0.8; }
+  .sort-header.sort-desc::after { content: ' ↓'; opacity: 0.8; }
+  .food-controls-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .food-reset-btn { font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: none; color: var(--text-faint); cursor: pointer; }
+  .food-reset-btn:hover { background: var(--border); color: var(--text-dim); }
+
   @media print {
-    body { background: #fff; }
-    .app { padding: 0.3in; }
-    .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-    .editable { border: none !important; background: transparent !important; }
-    .tag, .tl .dot, .emap-lvl, .goal-box { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    .cat-tag { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-  }
 </style>
 </head>
 <body>
@@ -330,35 +352,15 @@
 <div class="tab-content active" id="tab-dashboard">
 
 <div class="card">
-  <h2 class="card-title">◇ Таймлайн восстановления</h2>
-  <div class="tl">
-    <div class="ph">
-      <div class="dot done"></div>
-      <div class="pl done">Острая</div>
-      <div class="pd">8–10 апр</div>
-      <div class="pdesc">Вертиго, тошнота, постельный режим</div>
-    </div>
-    <div class="ph">
-      <div class="dot done"></div>
-      <div class="pl done">Подострая</div>
-      <div class="pd">11–17 апр</div>
-      <div class="pdesc">Анализы, стихание симптомов, поиск помощи</div>
-    </div>
-    <div class="ph" style="position:relative;">
-      <div class="dot active"></div>
-      <div class="pl active">Реабилитация</div>
-      <div class="pd">18 апр →</div>
-      <div class="pdesc">VRT, вагус, MC-стабилизация, сенсорная защита</div>
-      <span class="you-here" id="youHereMarker">📍 Вы здесь</span>
-    </div>
-    <div class="ph">
-      <div class="dot" style="background:var(--border)"></div>
-      <div class="pl">Профилактика</div>
-      <div class="pd">июнь →</div>
-      <div class="pdesc">Поддержание баланса, предотвращение рецидивов</div>
-    </div>
+  <h2 class="card-title" data-i18n="tl_title">◇ Таймлайн восстановления</h2>
+  <div class="tl-date-editors">
+    <label data-i18n="tl_onset_label">Начало симптомов:</label>
+    <input type="date" id="tlOnsetDate" value="2026-04-08">
+    <label data-i18n="tl_acute_end_label">Конец острой фазы:</label>
+    <input type="date" id="tlAcuteEndDate" value="2026-04-10">
   </div>
-  <div class="tl-legend">◀ пройдено &nbsp;|&nbsp; <strong style="color:var(--accent);">● текущая фаза</strong> &nbsp;|&nbsp; ○ впереди</div>
+  <div class="tl" id="timelineContainer"></div>
+  <div class="tl-legend" data-i18n="tl_legend">◀ пройдено &nbsp;|&nbsp; <strong style="color:var(--accent);">● текущая фаза</strong> &nbsp;|&nbsp; ○ впереди</div>
 </div>
 
 <!-- Entity Map -->
@@ -398,31 +400,6 @@
       <div class="emap-arrow" style="color:var(--red);font-weight:600;">◀</div>
       <div class="emap-int cbt" title="Экспозиция, когнитивное переструктурирование">🔄 Поведение</div>
     </div>
-  </div>
-</div>
-
-<!-- Biomarkers -->
-<div class="card">
-  <h2 class="card-title">◇ Биомаркеры воспаления и нейровосстановления</h2>
-  <div class="table-wrap">
-    <table class="tbl">
-      <thead><tr><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
-      <tbody>
-        <tr><td><strong>CRP</strong></td><td>Острое воспаление</td><td>&lt;0.33 мг/л</td><td>0–5</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
-        <tr><td><strong>СОЭ (ESR)</strong></td><td>Системное воспаление</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
-        <tr><td><strong>Ферритин</strong></td><td>Депо железа, острофазный белок</td><td>85.4 нг/мл</td><td>10–150</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
-        <tr><td><strong>Гемоглобин</strong></td><td>Кислородная ёмкость</td><td>145 г/л</td><td>120–145</td><td><span class="tag tag-amber">Верхняя граница</span></td></tr>
-        <tr><td><strong>Гематокрит</strong></td><td>Густота крови</td><td>46.6%</td><td>35–45</td><td><span class="tag tag-amber">↑ Выше нормы</span></td></tr>
-        <tr><td><strong>NLR</strong></td><td>Нейтрофильно-лимфоцитарное соотношение</td><td>~1.2 (расчёт)</td><td>&lt;3.0</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
-        <tr><td><strong>Магний</strong></td><td>Нейропротекция, передача импульса</td><td>0.94 ммоль/л</td><td>0.66–1.07</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
-        <tr><td><strong>IL-6</strong></td><td>Нейровоспаление, активация HPA</td><td><span class="editable" contenteditable="true" data-key="il6">—</span></td><td>&lt;7 пг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
-        <tr><td><strong>25-HC</strong></td><td>Биомаркер вестибулярного неврита</td><td><span class="editable" contenteditable="true" data-key="ohc">—</span></td><td>—</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
-        <tr><td><strong>Кортизол утренний</strong></td><td>Функция HPA-оси</td><td><span class="editable" contenteditable="true" data-key="cortisol">—</span></td><td>6.2–19.4 мкг/дл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
-        <tr><td><strong>HRV (RMSSD)</strong></td><td>Вагусный тонус</td><td><span class="editable" contenteditable="true" data-key="hrv">—</span></td><td>&gt;30 мс</td><td><span class="tag tag-blue">Через браслет/часы</span></td></tr>
-        <tr><td><strong>Витамин D</strong></td><td>Иммуномодуляция, нейропластичность</td><td><span class="editable" contenteditable="true" data-key="vitd">—</span></td><td>30–80 нг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
-        <tr><td><strong>Гомоцистеин</strong></td><td>Эндотелий + BLB</td><td><span class="editable" contenteditable="true" data-key="hcy">—</span></td><td>&lt;12 мкмоль/л</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
-      </tbody>
-    </table>
   </div>
 </div>
 
@@ -654,6 +631,31 @@
   </div>
 </div>
 
+<!-- Biomarkers -->
+<div class="card">
+  <h2 class="card-title">◇ Биомаркеры воспаления и нейровосстановления</h2>
+  <div class="table-wrap">
+    <table class="tbl">
+      <thead><tr><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CRP</strong></td><td>Острое воспаление</td><td>&lt;0.33 мг/л</td><td>0–5</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>СОЭ (ESR)</strong></td><td>Системное воспаление</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Ферритин</strong></td><td>Депо железа, острофазный белок</td><td>85.4 нг/мл</td><td>10–150</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Гемоглобин</strong></td><td>Кислородная ёмкость</td><td>145 г/л</td><td>120–145</td><td><span class="tag tag-amber">Верхняя граница</span></td></tr>
+        <tr><td><strong>Гематокрит</strong></td><td>Густота крови</td><td>46.6%</td><td>35–45</td><td><span class="tag tag-amber">↑ Выше нормы</span></td></tr>
+        <tr><td><strong>NLR</strong></td><td>Нейтрофильно-лимфоцитарное соотношение</td><td>~1.2 (расчёт)</td><td>&lt;3.0</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Магний</strong></td><td>Нейропротекция, передача импульса</td><td>0.94 ммоль/л</td><td>0.66–1.07</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>IL-6</strong></td><td>Нейровоспаление, активация HPA</td><td><span class="editable" contenteditable="true" data-key="il6">—</span></td><td>&lt;7 пг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>25-HC</strong></td><td>Биомаркер вестибулярного неврита</td><td><span class="editable" contenteditable="true" data-key="ohc">—</span></td><td>—</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>Кортизол утренний</strong></td><td>Функция HPA-оси</td><td><span class="editable" contenteditable="true" data-key="cortisol">—</span></td><td>6.2–19.4 мкг/дл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>HRV (RMSSD)</strong></td><td>Вагусный тонус</td><td><span class="editable" contenteditable="true" data-key="hrv">—</span></td><td>&gt;30 мс</td><td><span class="tag tag-blue">Через браслет/часы</span></td></tr>
+        <tr><td><strong>Витамин D</strong></td><td>Иммуномодуляция, нейропластичность</td><td><span class="editable" contenteditable="true" data-key="vitd">—</span></td><td>30–80 нг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>Гомоцистеин</strong></td><td>Эндотелий + BLB</td><td><span class="editable" contenteditable="true" data-key="hcy">—</span></td><td>&lt;12 мкмоль/л</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <footer class="footer">
   <p>Отслеживание симптомов и прогресса — ключ к успешной реабилитации</p>
   <p>💾 Все данные сохраняются автоматически</p>
@@ -667,84 +669,6 @@
 <div class="tab-content" id="tab-exercises">
 
 <!-- SOURCES -->
-<div class="card">
-  <h2 class="card-title">◇ Источники и научная база методик</h2>
-  <div class="src-grid">
-    <div class="src-item">
-      <div class="src-field">Вестибулярная реабилитация</div>
-      <div class="src-name">Сэр Теренс Которн (Terence Cawthorne) и Ф.С. Кукси (F.S. Cooksey)</div>
-      <div class="src-desc">Основоположники вестибулярной реабилитации (Cawthorne-Cooksey exercises, 1940-е). Протокол последовательных движений глаз-головы-тела для компенсации вестибулярной потери.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Вестибулярная реабилитация</div>
-      <div class="src-name">Д-р Сьюзен Хердман (Susan Herdman, PhD, PT)</div>
-      <div class="src-desc">Современные протоколы VRT (University of Miami). Книга "Vestibular Rehabilitation" — золотой стандарт клинической практики. Доказала эффективность VOR-адаптации.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Вагусная стимуляция</div>
-      <div class="src-name">Д-р Кевин Трейси (Kevin Tracey, MD)</div>
-      <div class="src-desc">Пионер холинергического противовоспалительного пути (Feinstein Institute). Открыл, что стимуляция вагуса подавляет TNF-α, IL-1β, IL-6 через α7nAChR на макрофагах.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Поливагальная теория</div>
-      <div class="src-name">Д-р Стивен Порджис (Stephen Porges, PhD)</div>
-      <div class="src-desc">Поливагальная теория: три ветви вагуса (дорсальная/вентральная/симпатическая). Обосновал роль вокализации, дыхания и социального взаимодействия в регуляции нервной системы.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Дыхательные практики</div>
-      <div class="src-name">Д-р Эндрю Вайль (Andrew Weil, MD)</div>
-      <div class="src-desc">Популяризировал дыхание 4-7-8 (расслабляющее дыхание). Адаптировал пранаямические техники для западной клинической практики. Программа "Breathing: The Master Key to Self-Healing".</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Тучные клетки, кверцетин</div>
-      <div class="src-name">Д-р Феохарис Теохаридес (Theoharis Theoharides, MD, PhD)</div>
-      <div class="src-desc">Пионер исследований тучных клеток и нейровоспаления (Tufts University). Доказал эффективность кверцетина и лютеолина как стабилизаторов MC при аллергических и воспалительных заболеваниях.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Сенсорная интеграция</div>
-      <div class="src-name">Д-р Энн Джин Айрес (A. Jean Ayres, PhD, OTR)</div>
-      <div class="src-desc">Основоположница теории сенсорной интеграции (1970-е). Создала концепцию сенсорной диеты и подход к терапии через регулируемую сенсорную стимуляцию.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Wilbarger-протокол</div>
-      <div class="src-name">Патриция Уилбаргер (Patricia Wilbarger, MEd, OTR)</div>
-      <div class="src-desc">Автор протокола глубокого давления (DPPT). Щеточный массаж + компрессия суставов для сенсорной регуляции. Широко применяется при сенсорной защите.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Сон и циркадианные ритмы</div>
-      <div class="src-name">Д-р Александр Борбели (Alexander Borbély, MD)</div>
-      <div class="src-desc">Создатель двухпроцессной модели сна (Process C + Process S). Объяснил взаимодействие циркадианного и гомеостатического механизмов регуляции сна.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Стресс и HPA-ось</div>
-      <div class="src-name">Д-р Роберт Сапольски (Robert Sapolsky, PhD)</div>
-      <div class="src-desc">Исследования хронического стресса, кортизола, HPA-оси (Stanford). Книга "Why Zebras Don't Get Ulcers" — классика нейроэндокринологии стресса.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Вестибулярный неврит</div>
-      <div class="src-name">Д-р Михаэль Штрупп (Michael Strupp, MD, PhD)</div>
-      <div class="src-desc">Ведущий исследователь вестибулярного неврита и центральных вестибулярных расстройств (Munich University). Работы по диагностике, фармакотерапии и реабилитации.</div>
-    </div>
-    <div class="src-item">
-      <div class="src-field">Аллостатическая нагрузка</div>
-      <div class="src-name">Д-р Брюс Макьюэн (Bruce McEwen, PhD)</div>
-      <div class="src-desc">Концепция аллостатической нагрузки — "цена адаптации" при хроническом стрессе. Исследования пластичности мозга, гиппокампа и HPA-оси (Rockefeller University).</div>
-    </div>
-  </div>
-</div>
-
-<!-- PRINCIPLES -->
-<div class="card">
-  <h2 class="card-title">◇ Основные принципы выполнения</h2>
-  <div class="principles">
-    <div class="principle"><strong>1. Прогрессия от простого к сложному:</strong> лёжа → сидя → стоя → в движении. Не переходите к следующему уровню, пока текущий не перестанет вызывать дискомфорт.</div>
-    <div class="principle"><strong>2. Короткие сессии, часто:</strong> 1–2 минуты, 5 раз в день. Лучше 5×1 мин, чем 1×5 мин. Регулярность — основа нейропластичности.</div>
-    <div class="principle"><strong>3. Безопасность:</strong> все упражнения выполнять рядом с опорой (стена, стул). При усилении симптомов — пауза, перерыв.</div>
-    <div class="principle"><strong>4. Провокация — цель, а не ошибка:</strong> лёгкое головокружение = активация компенсаторных механизмов. Избегайте вестибулосупрессоров >3 дней.</div>
-  </div>
-</div>
-
-<!-- TIME-OF-DAY SUB-TABS -->
 <div class="card">
   <h2 class="card-title">◇ Таблица упражнений по времени дня</h2>
   <div class="sub-tabs">
@@ -942,6 +866,84 @@
 
 </div><!-- /card: exercises table -->
 
+<div class="card">
+  <h2 class="card-title">◇ Источники и научная база методик</h2>
+  <div class="src-grid">
+    <div class="src-item">
+      <div class="src-field">Вестибулярная реабилитация</div>
+      <div class="src-name">Сэр Теренс Которн (Terence Cawthorne) и Ф.С. Кукси (F.S. Cooksey)</div>
+      <div class="src-desc">Основоположники вестибулярной реабилитации (Cawthorne-Cooksey exercises, 1940-е). Протокол последовательных движений глаз-головы-тела для компенсации вестибулярной потери.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Вестибулярная реабилитация</div>
+      <div class="src-name">Д-р Сьюзен Хердман (Susan Herdman, PhD, PT)</div>
+      <div class="src-desc">Современные протоколы VRT (University of Miami). Книга "Vestibular Rehabilitation" — золотой стандарт клинической практики. Доказала эффективность VOR-адаптации.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Вагусная стимуляция</div>
+      <div class="src-name">Д-р Кевин Трейси (Kevin Tracey, MD)</div>
+      <div class="src-desc">Пионер холинергического противовоспалительного пути (Feinstein Institute). Открыл, что стимуляция вагуса подавляет TNF-α, IL-1β, IL-6 через α7nAChR на макрофагах.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Поливагальная теория</div>
+      <div class="src-name">Д-р Стивен Порджис (Stephen Porges, PhD)</div>
+      <div class="src-desc">Поливагальная теория: три ветви вагуса (дорсальная/вентральная/симпатическая). Обосновал роль вокализации, дыхания и социального взаимодействия в регуляции нервной системы.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Дыхательные практики</div>
+      <div class="src-name">Д-р Эндрю Вайль (Andrew Weil, MD)</div>
+      <div class="src-desc">Популяризировал дыхание 4-7-8 (расслабляющее дыхание). Адаптировал пранаямические техники для западной клинической практики. Программа "Breathing: The Master Key to Self-Healing".</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Тучные клетки, кверцетин</div>
+      <div class="src-name">Д-р Феохарис Теохаридес (Theoharis Theoharides, MD, PhD)</div>
+      <div class="src-desc">Пионер исследований тучных клеток и нейровоспаления (Tufts University). Доказал эффективность кверцетина и лютеолина как стабилизаторов MC при аллергических и воспалительных заболеваниях.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Сенсорная интеграция</div>
+      <div class="src-name">Д-р Энн Джин Айрес (A. Jean Ayres, PhD, OTR)</div>
+      <div class="src-desc">Основоположница теории сенсорной интеграции (1970-е). Создала концепцию сенсорной диеты и подход к терапии через регулируемую сенсорную стимуляцию.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Wilbarger-протокол</div>
+      <div class="src-name">Патриция Уилбаргер (Patricia Wilbarger, MEd, OTR)</div>
+      <div class="src-desc">Автор протокола глубокого давления (DPPT). Щеточный массаж + компрессия суставов для сенсорной регуляции. Широко применяется при сенсорной защите.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Сон и циркадианные ритмы</div>
+      <div class="src-name">Д-р Александр Борбели (Alexander Borbély, MD)</div>
+      <div class="src-desc">Создатель двухпроцессной модели сна (Process C + Process S). Объяснил взаимодействие циркадианного и гомеостатического механизмов регуляции сна.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Стресс и HPA-ось</div>
+      <div class="src-name">Д-р Роберт Сапольски (Robert Sapolsky, PhD)</div>
+      <div class="src-desc">Исследования хронического стресса, кортизола, HPA-оси (Stanford). Книга "Why Zebras Don't Get Ulcers" — классика нейроэндокринологии стресса.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Вестибулярный неврит</div>
+      <div class="src-name">Д-р Михаэль Штрупп (Michael Strupp, MD, PhD)</div>
+      <div class="src-desc">Ведущий исследователь вестибулярного неврита и центральных вестибулярных расстройств (Munich University). Работы по диагностике, фармакотерапии и реабилитации.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Аллостатическая нагрузка</div>
+      <div class="src-name">Д-р Брюс Макьюэн (Bruce McEwen, PhD)</div>
+      <div class="src-desc">Концепция аллостатической нагрузки — "цена адаптации" при хроническом стрессе. Исследования пластичности мозга, гиппокампа и HPA-оси (Rockefeller University).</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINCIPLES -->
+<div class="card">
+  <h2 class="card-title">◇ Основные принципы выполнения</h2>
+  <div class="principles">
+    <div class="principle"><strong>1. Прогрессия от простого к сложному:</strong> лёжа → сидя → стоя → в движении. Не переходите к следующему уровню, пока текущий не перестанет вызывать дискомфорт.</div>
+    <div class="principle"><strong>2. Короткие сессии, часто:</strong> 1–2 минуты, 5 раз в день. Лучше 5×1 мин, чем 1×5 мин. Регулярность — основа нейропластичности.</div>
+    <div class="principle"><strong>3. Безопасность:</strong> все упражнения выполнять рядом с опорой (стена, стул). При усилении симптомов — пауза, перерыв.</div>
+    <div class="principle"><strong>4. Провокация — цель, а не ошибка:</strong> лёгкое головокружение = активация компенсаторных механизмов. Избегайте вестибулосупрессоров >3 дней.</div>
+  </div>
+</div>
+
+<!-- TIME-OF-DAY SUB-TABS -->
 <footer class="footer">
   <p>Упражнения составлены на основе протоколов Cawthorne-Cooksey, Herdman VRT, поливагальной теории Порджиса, Wilbarger DPPT и дыхательных практик Вайля</p>
   <p>Перед началом выполнения — консультация врача. При усилении симптомов прекратите и обратитесь к специалисту.</p>
@@ -953,6 +955,59 @@
 <!-- ═══ TAB 3: ПИТАНИЕ ═══ -->
 <!-- ════════════════════════════════════════════════════════════ -->
 <div class="tab-content" id="tab-food">
+
+<div class="card">
+  <h2 class="card-title">◇ Справочник продуктов: низкогистаминовое питание с низким ГИ</h2>
+
+  <div class="food-controls">
+    <div class="food-controls-row">
+      <input type="search" class="food-search" id="foodSearch" placeholder="🔍 Поиск продуктов...">
+      <button class="food-reset-btn" id="foodResetBtn" onclick="resetFoodFilters()">× Сброс</button>
+    </div>
+    <div class="food-filter-bar" id="foodFilterBar">
+      <span class="food-filter-chip active" data-cat="all" onclick="filterFoodCategory(this)">Все</span>
+      <span class="food-filter-chip" data-cat="Клетчатка" onclick="filterFoodCategory(this)">Клетчатка</span>
+      <span class="food-filter-chip" data-cat="Белок" onclick="filterFoodCategory(this)">Белок</span>
+      <span class="food-filter-chip" data-cat="Жиры" onclick="filterFoodCategory(this)">Жиры</span>
+      <span class="food-filter-chip" data-cat="Углеводы" onclick="filterFoodCategory(this)">Углеводы</span>
+      <span class="food-filter-chip" data-cat="Напиток" onclick="filterFoodCategory(this)">Напиток</span>
+    </div>
+    <div class="food-results-count" id="foodResultsCount"></div>
+  </div>
+
+  <div class="sub-tabs">
+    <button class="sub-btn active" data-food="morning">🌅 Утро (завтрак)</button>
+    <button class="sub-btn" data-food="day">☀️ День (обед)</button>
+    <button class="sub-btn" data-food="evening">🌆 Вечер (ужин)</button>
+  </div>
+
+  <div class="sub-block active" id="food-morning">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr id="foodRefMorningHeader"><th class="sort-header" data-sort="product" onclick="sortFoodRef('product')">Продукт</th><th class="sort-header" data-sort="category" onclick="sortFoodRef('category')">Категория</th><th class="sort-header" data-sort="gi" onclick="sortFoodRef('gi')">ГИ</th><th class="sort-header" data-sort="histamine" onclick="sortFoodRef('histamine')">Гистамин</th><th>Примечание</th></tr></thead>
+        <tbody id="foodRefMorningBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-block" id="food-day">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr id="foodRefDayHeader"><th class="sort-header" data-sort="product" onclick="sortFoodRef('product')">Продукт</th><th class="sort-header" data-sort="category" onclick="sortFoodRef('category')">Категория</th><th class="sort-header" data-sort="gi" onclick="sortFoodRef('gi')">ГИ</th><th class="sort-header" data-sort="histamine" onclick="sortFoodRef('histamine')">Гистамин</th><th>Примечание</th></tr></thead>
+        <tbody id="foodRefDayBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-block" id="food-evening">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr id="foodRefEveningHeader"><th class="sort-header" data-sort="product" onclick="sortFoodRef('product')">Продукт</th><th class="sort-header" data-sort="category" onclick="sortFoodRef('category')">Категория</th><th class="sort-header" data-sort="gi" onclick="sortFoodRef('gi')">ГИ</th><th class="sort-header" data-sort="histamine" onclick="sortFoodRef('histamine')">Гистамин</th><th>Примечание</th></tr></thead>
+        <tbody id="foodRefEveningBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 <div class="card" style="border-left: 4px solid var(--accent);">
   <h2 class="card-title">◇ Быстрая оценка продуктов и блюд</h2>
@@ -1047,92 +1102,6 @@
   </div>
 </div>
 
-<div class="card">
-  <h2 class="card-title">◇ Справочник продуктов: низкогистаминовое питание с низким ГИ</h2>
-  <p style="font-size:0.74rem;color:var(--text-dim);margin-bottom:0.8rem;">
-    Группировка по приёмам пищи. ГИ — гликемический индекс. Уровень гистамина: <span style="color:var(--green);">● низкий</span> · <span style="color:var(--amber);">● средний</span> · <span style="color:var(--red);">● высокий</span>.
-    Выбирайте свежие, неферментированные, термически необработанные длительно продукты.
-  </p>
-
-  <div class="sub-tabs">
-    <button class="sub-btn active" data-food="morning">🌅 Утро (завтрак)</button>
-    <button class="sub-btn" data-food="day">☀️ День (обед)</button>
-    <button class="sub-btn" data-food="evening">🌆 Вечер (ужин)</button>
-  </div>
-
-  <!-- Food: Morning -->
-  <div class="sub-block active" id="food-morning">
-    <div class="table-wrap">
-      <table class="tbl">
-        <thead><tr><th>Продукт</th><th>Категория</th><th>ГИ</th><th>Гистамин</th><th>Примечание</th></tr></thead>
-        <tbody>
-          <tr><td>Овсянка (долгая варка)</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Цельнозерновая, не мгновенная</td></tr>
-          <tr><td>Гречка зелёная/пропаренная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Безглютеновый источник сложных углеводов</td></tr>
-          <tr><td>Киноа</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Полноценный белок, все аминокислоты</td></tr>
-          <tr><td>Яйца (свежие, всмятку/омлет)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Хранить не более 5–7 дней</td></tr>
-          <tr><td>Творог нежирный свежий</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Только свежий (до 24 ч), без заквасок</td></tr>
-          <tr><td>Груша</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Свежая, с кожурой</td></tr>
-          <tr><td>Черника/голубика</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Замороженная тоже OK</td></tr>
-          <tr><td>Яблоко зелёное</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Свежее, без кожицы при чувствительности</td></tr>
-          <tr><td>Тыквенные семечки</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Магний, цинк — поддержка нервной системы</td></tr>
-          <tr><td>Миндаль (сырой, замоченный)</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Не более горсти; замачивать 8 ч</td></tr>
-          <tr><td>Кокосовое масло</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Для жарки или в кашу</td></tr>
-          <tr><td>Ромашковый/имбирный чай</td><td><span class="cat-tag" style="background:#dceafa;color:#2a5f8a;">Напиток</span></td><td style="color:var(--green);">—</td><td style="color:var(--green);">низкий</td><td>Без кофеина, противовоспалительный</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Food: Day -->
-  <div class="sub-block" id="food-day">
-    <div class="table-wrap">
-      <table class="tbl">
-        <thead><tr><th>Продукт</th><th>Категория</th><th>ГИ</th><th>Гистамин</th><th>Примечание</th></tr></thead>
-        <tbody>
-          <tr><td>Куриная грудка (свежая, паровая)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Приготовить сразу после покупки</td></tr>
-          <tr><td>Филе индейки</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Не мариновать, готовить в день покупки</td></tr>
-          <tr><td>Рыба белая свежая (треска/судак)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Парная/свежемороженая; приготовить в день разморозки</td></tr>
-          <tr><td>Рис басмати</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Углеводы</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Коричневый — низкий ГИ</td></tr>
-          <tr><td>Картофель отварной (охлаждённый)</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Углеводы</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>После охлаждения — резистентный крахмал</td></tr>
-          <tr><td>Батат</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Углеводы</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Запечённый, богат бета-каротином</td></tr>
-          <tr><td>Брокколи</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>На пару — сохраняет сульфорафан</td></tr>
-          <tr><td>Цветная капуста</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Запечь или на пару</td></tr>
-          <tr><td>Кабачок/цуккини</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Тушёный или гриль</td></tr>
-          <tr><td>Морковь (свежая, тушёная)</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Сырая — ниже ГИ</td></tr>
-          <tr><td>Листовой салат/руккола</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Без заправок на уксусе</td></tr>
-          <tr><td>Огурец свежий</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Гидратация, кремний</td></tr>
-          <tr><td>Сельдерей</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Натуральный диуретик, противовоспалительный</td></tr>
-          <tr><td>Оливковое масло EV</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">—</td><td style="color:var(--green);">низкий</td><td>Полифенолы, олеокантал — ↓ воспаление</td></tr>
-          <tr><td>Чечевица красная/зелёная</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Хорошо промыть, замочить 4 ч</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Food: Evening -->
-  <div class="sub-block" id="food-evening">
-    <div class="table-wrap">
-      <table class="tbl">
-        <thead><tr><th>Продукт</th><th>Категория</th><th>ГИ</th><th>Гистамин</th><th>Примечание</th></tr></thead>
-        <tbody>
-          <tr><td>Овощной суп (без зажарки)</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Кабачок, морковь, брокколи, сельдерей</td></tr>
-          <tr><td>Тыква запечёная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Магний, триптофан (→ серотонин)</td></tr>
-          <tr><td>Спаржа зелёная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>На пару, источник фолатов</td></tr>
-          <tr><td>Свёкла варёная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Нитраты → NO → вазодилатация</td></tr>
-          <tr><td>Печёное яблоко (без кожуры)</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Пектин, лёгкое переваривание</td></tr>
-          <tr><td>Груша запечёная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Альтернатива яблоку</td></tr>
-          <tr><td>Кролик (филе, тушёное)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Гипоаллергенный белок</td></tr>
-          <tr><td>Рыба белая (минтай/хек, паровая)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Свежемороженая, приготовить сразу</td></tr>
-          <tr><td>Творог нежирный свежий</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Только сегодняшний; можно с зеленью</td></tr>
-          <tr><td>Лён (семена, молотые)</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Омега-3, клетчатка; 1 ст.л. в день</td></tr>
-          <tr><td>Чай из ромашки/мелиссы</td><td><span class="cat-tag" style="background:#dceafa;color:#2a5f8a;">Напиток</span></td><td style="color:var(--green);">—</td><td style="color:var(--green);">низкий</td><td>Успокаивает ЦНС, ↓ тревогу</td></tr>
-          <tr><td>Вода тёплая с лимоном (долька)</td><td><span class="cat-tag" style="background:#dceafa;color:#2a5f8a;">Напиток</span></td><td style="color:var(--green);">—</td><td style="color:var(--green);">низкий</td><td>Витамин C, гидратация</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
 <div class="card" style="border-left: 4px solid var(--green);">
   <h2 class="card-title">◇ Правила низкогистаминового питания</h2>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;font-size:0.76rem;">
@@ -1172,7 +1141,41 @@
 (function() {
   'use strict';
 
+  const STORAGE_SCHEMA_VERSION = 1;
   const STORAGE_KEY = 'vestibular_dashboard_v3';
+
+  function migrateStorage() {
+    const savedVersion = parseInt(localStorage.getItem('vestibular_schema_version')) || 0;
+    if (savedVersion >= STORAGE_SCHEMA_VERSION) return;
+
+    if (savedVersion < 1) {
+      try {
+        const oldRoutine = localStorage.getItem('routineData');
+        if (oldRoutine && !localStorage.getItem('routineData_v3')) {
+          localStorage.setItem('routineData_v3', oldRoutine);
+        }
+      } catch(e) { /* fallback to default */ }
+      localStorage.removeItem('routineData');
+
+      try {
+        const oldLog = localStorage.getItem('weeklyLog');
+        if (oldLog && !localStorage.getItem('weeklyLog_v3')) {
+          localStorage.setItem('weeklyLog_v3', oldLog);
+        }
+      } catch(e) { /* fallback to empty */ }
+      localStorage.removeItem('weeklyLog');
+
+      try {
+        const oldDash = localStorage.getItem('vestibular_dashboard_v2');
+        if (oldDash && !localStorage.getItem(STORAGE_KEY)) {
+          localStorage.setItem(STORAGE_KEY, oldDash);
+        }
+      } catch(e) { /* ignore */ }
+      localStorage.removeItem('vestibular_dashboard_v2');
+    }
+
+    localStorage.setItem('vestibular_schema_version', String(STORAGE_SCHEMA_VERSION));
+  }
 
   // ─── Wishes ───
   const WISHES = [
@@ -1227,8 +1230,129 @@
     const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
     const dateStr = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
     document.getElementById('todayDisplay').textContent = dateStr;
-    const marker = document.getElementById('youHereMarker');
-    if (marker) marker.textContent = '📍 Вы здесь — ' + dateStr;
+  }
+
+  // ─── Timeline ───
+  function getTimelineConfig() {
+    try {
+      const saved = localStorage.getItem('timelineConfig');
+      if (saved) return JSON.parse(saved);
+    } catch(e) { /* ignore */ }
+    return {
+      onsetDate: '2026-04-08',
+      acutePhaseEndDate: '2026-04-10',
+      phases: [
+        { id:'acute',      i18nPrefix:'tl_acute',      descKey:'tl_acute_desc',      label:'Острая',        description:'Вертиго, тошнота, постельный режим' },
+        { id:'subacute',   i18nPrefix:'tl_subacute',   descKey:'tl_subacute_desc',   label:'Подострая',     description:'Анализы, стихание симптомов, поиск помощи' },
+        { id:'rehab',      i18nPrefix:'tl_rehab',       descKey:'tl_rehab_desc',       label:'Реабилитация',  description:'VRT, вагус, MC-стабилизация, сенсорная защита', ongoing:true },
+        { id:'prevention', i18nPrefix:'tl_prevention',  descKey:'tl_prevention_desc', label:'Профилактика',   description:'Поддержание баланса, предотвращение рецидивов', future:true }
+      ],
+      acuteDurationDays: 3,
+      subacuteDurationDays: 7,
+      preventionOffsetDays: 60
+    };
+  }
+
+  function saveTimelineConfig(cfg) {
+    localStorage.setItem('timelineConfig', JSON.stringify(cfg));
+  }
+
+  async function seedTimelineFromJson() {
+    if (localStorage.getItem('timelineConfig')) return;
+    try {
+      const res = await fetch('timeline-config.json');
+      if (!res.ok) return;
+      const cfg = await res.json();
+      localStorage.setItem('timelineConfig', JSON.stringify(cfg));
+    } catch(e) { /* ignore */ }
+  }
+
+  function parseDate(str) {
+    const p = str.split('-');
+    return new Date(+p[0], +p[1]-1, +p[2]);
+  }
+
+  function formatDateShort(d) {
+    const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+    return d.getDate() + ' ' + months[d.getMonth()];
+  }
+
+  function renderTimeline() {
+    const cfg = getTimelineConfig();
+    const container = document.getElementById('timelineContainer');
+    if (!container) return;
+
+    const onsetInput = document.getElementById('tlOnsetDate');
+    const acuteEndInput = document.getElementById('tlAcuteEndDate');
+    if (onsetInput) onsetInput.value = cfg.onsetDate;
+    if (acuteEndInput) acuteEndInput.value = cfg.acutePhaseEndDate;
+
+    const onset = parseDate(cfg.onsetDate);
+    const acuteEnd = parseDate(cfg.acutePhaseEndDate);
+    const subacuteEnd = new Date(acuteEnd);
+    subacuteEnd.setDate(subacuteEnd.getDate() + cfg.subacuteDurationDays);
+    const rehabStart = new Date(subacuteEnd);
+    rehabStart.setDate(rehabStart.getDate() + 1);
+    const preventionStart = new Date(onset);
+    preventionStart.setDate(preventionStart.getDate() + cfg.preventionOffsetDays);
+
+    const phaseDates = [
+      { start: onset, end: acuteEnd },
+      { start: new Date(acuteEnd.getTime() + 86400000), end: subacuteEnd },
+      { start: rehabStart, end: null },
+      { start: preventionStart, end: null }
+    ];
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+    const todayStr = today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+
+    container.innerHTML = '';
+    cfg.phases.forEach((phase, i) => {
+      const pd = phaseDates[i];
+      let status = 'upcoming';
+      if (pd.end && today > pd.end) status = 'done';
+      else if (pd.start <= today && (!pd.end || pd.end >= today)) status = 'active';
+
+      const div = document.createElement('div');
+      div.className = 'ph';
+      if (status === 'active') div.style.position = 'relative';
+
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (status === 'done' ? ' done' : '') + (status === 'active' ? ' active' : '');
+
+      const pl = document.createElement('div');
+      pl.className = 'pl' + (status === 'done' ? ' done' : '') + (status === 'active' ? ' active' : '');
+      pl.textContent = phase.label;
+
+      const pdEl = document.createElement('div');
+      pdEl.className = 'pd';
+      if (pd.start && pd.end) {
+        pdEl.textContent = formatDateShort(pd.start) + ' – ' + formatDateShort(pd.end);
+      } else if (pd.start) {
+        pdEl.textContent = formatDateShort(pd.start) + ' →';
+      }
+
+      const pdesc = document.createElement('div');
+      pdesc.className = 'pdesc';
+      pdesc.textContent = phase.description;
+
+      div.appendChild(dot);
+      div.appendChild(pl);
+      div.appendChild(pdEl);
+      div.appendChild(pdesc);
+
+      if (status === 'active') {
+        const marker = document.createElement('span');
+        marker.className = 'you-here';
+        marker.textContent = '📍 Вы здесь — ' + todayStr;
+        div.appendChild(marker);
+      }
+
+      container.appendChild(div);
+    });
   }
 
   // ─── Routine data ───
@@ -1527,6 +1651,7 @@
   // ─── Init ───
   initWishes();
   setToday();
+  seedTimelineFromJson().then(renderTimeline).catch(() => renderTimeline());
   loadAll();
   updateCheckCount();
   updateBars();
@@ -1537,6 +1662,17 @@
     renderRoutine(defaultRoutineData());
     saveRoutineData(defaultRoutineData());
   }
+  // Timeline date listeners
+  function onTimelineDateChange() {
+    const cfg = getTimelineConfig();
+    cfg.onsetDate = document.getElementById('tlOnsetDate').value;
+    cfg.acutePhaseEndDate = document.getElementById('tlAcuteEndDate').value;
+    saveTimelineConfig(cfg);
+    renderTimeline();
+  }
+  document.getElementById('tlOnsetDate')?.addEventListener('change', onTimelineDateChange);
+  document.getElementById('tlAcuteEndDate')?.addEventListener('change', onTimelineDateChange);
+
   window.addEventListener('beforeunload', () => { saveWeekDay(); saveAll(); });
 
   // ─── Tabs: main ───

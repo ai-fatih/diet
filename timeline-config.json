@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-05-16",
+
+  "onsetDate": "2026-04-08",
+  "acutePhaseEndDate": "2026-04-10",
+
+  "phases": [
+    {
+      "id": "acute",
+      "i18nPrefix": "tl_acute",
+      "descKey": "tl_acute_desc",
+      "label": "Острая",
+      "description": "Вертиго, тошнота, постельный режим"
+    },
+    {
+      "id": "subacute",
+      "i18nPrefix": "tl_subacute",
+      "descKey": "tl_subacute_desc",
+      "label": "Подострая",
+      "description": "Анализы, стихание симптомов, поиск помощи"
+    },
+    {
+      "id": "rehab",
+      "i18nPrefix": "tl_rehab",
+      "descKey": "tl_rehab_desc",
+      "label": "Реабилитация",
+      "description": "VRT, вагус, MC-стабилизация, сенсорная защита",
+      "ongoing": true
+    },
+    {
+      "id": "prevention",
+      "i18nPrefix": "tl_prevention",
+      "descKey": "tl_prevention_desc",
+      "label": "Профилактика",
+      "description": "Поддержание баланса, предотвращение рецидивов",
+      "future": true
+    }
+  ],
+
+  "computation": {
+    "acuteDurationDays": 3,
+    "subacuteDurationDays": 7,
+    "preventionOffsetDays": 60
+  }
+}
