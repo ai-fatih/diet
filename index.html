@@ -442,7 +442,7 @@
   <div class="card">
     <h2 class="card-title">◇ Вагусная стимуляция</h2>
     <table class="tbl">
-      <thead><tr><th>Время</th><th>Практика</th><th>Длительность</th></tr></thead>
+      <thead><tr id="vagusHeaderRow"><th>Время</th><th>Практика</th><th>Длительность</th></tr></thead>
       <tbody>
         <tr><td>Утро</td><td>Холодный компресс на лицо / умывание ледяной водой</td><td>30–60 сек</td></tr>
         <tr><td>Каждые 2–3 ч</td><td>Дыхание 5–6 вдохов/мин (удлинённый выдох)</td><td>2–5 мин</td></tr>
@@ -516,7 +516,6 @@
     </div>
   </div>
 </div>
-</div>
 
 <!-- Daily routine (editable, grouped) -->
 <div class="card">
@@ -584,22 +583,22 @@
   <div class="card">
     <h2 class="card-title">◇ Шкала симптомов (сегодня)</h2>
     <div class="sym-item">
-      <label>Вертиго</label>
+      <label class="sym-label">Вертиго</label>
       <div class="bw"><div class="bf v1" id="barVertigo"></div></div>
       <span class="val"><span class="editable" contenteditable="true" data-key="score_vertigo" id="scoreVertigo">3</span>/10</span>
     </div>
     <div class="sym-item">
-      <label>Тревога</label>
+      <label class="sym-label">Тревога</label>
       <div class="bw"><div class="bf v2" id="barAnxiety"></div></div>
       <span class="val"><span class="editable" contenteditable="true" data-key="score_anxiety" id="scoreAnxiety">2</span>/10</span>
     </div>
     <div class="sym-item">
-      <label>Боль в шее</label>
+      <label class="sym-label">Боль в шее</label>
       <div class="bw"><div class="bf v3" id="barNeck"></div></div>
       <span class="val"><span class="editable" contenteditable="true" data-key="score_neck" id="scoreNeck">1</span>/10</span>
     </div>
     <div class="sym-item">
-      <label>Усталость</label>
+      <label class="sym-label">Усталость</label>
       <div class="bw"><div class="bf v4" id="barFatigue"></div></div>
       <span class="val"><span class="editable" contenteditable="true" data-key="score_fatigue" id="scoreFatigue">3</span>/10</span>
     </div>
@@ -638,7 +637,7 @@
   <h2 class="card-title">◇ Недельный лог</h2>
   <div class="table-wrap">
     <table class="tbl" id="weeklyLog">
-      <thead><tr><th>День</th><th>Вертиго (0-10)</th><th>Тревога (0-10)</th><th>Чеклист (/7)</th><th>Заметка</th></tr></thead>
+      <thead><tr id="weekLogHeaderRow"><th>День</th><th>Вертиго (0-10)</th><th>Тревога (0-10)</th><th>Чеклист (/7)</th><th>Заметка</th></tr></thead>
       <tbody id="weeklyBody"></tbody>
     </table>
   </div>
@@ -653,7 +652,7 @@
   <h2 class="card-title">◇ Биомаркеры воспаления и нейровосстановления</h2>
   <div class="table-wrap">
     <table class="tbl">
-      <thead><tr><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
+      <thead><tr id="bioHeaderRow"><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
       <tbody>
         <tr><td><strong>CRP</strong></td><td>Острое воспаление</td><td>&lt;0.33 мг/л</td><td>0–5</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
         <tr><td><strong>СОЭ (ESR)</strong></td><td>Системное воспаление</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
@@ -698,7 +697,7 @@
   <div class="sub-block active" id="ex-morning">
     <div class="table-wrap">
       <table class="tbl">
-        <thead><tr><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
+        <thead><tr id="exMorningHeader"><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
         <tbody>
           <tr>
             <td><span class="cat-tag cat-vagus">вагус</span></td>
@@ -751,7 +750,7 @@
   <div class="sub-block" id="ex-day">
     <div class="table-wrap">
       <table class="tbl">
-        <thead><tr><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
+        <thead><tr id="exDayHeader"><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
         <tbody>
           <tr>
             <td><span class="cat-tag cat-vest">вестиб</span></td>
@@ -825,7 +824,7 @@
   <div class="sub-block" id="ex-evening">
     <div class="table-wrap">
       <table class="tbl">
-        <thead><tr><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
+        <thead><tr id="exEveningHeader"><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
         <tbody>
           <tr>
             <td><span class="cat-tag cat-vest">вестиб</span></td>
@@ -1036,7 +1035,7 @@
   </p>
   <div class="table-wrap">
     <table class="tbl" id="foodChecker">
-      <thead><tr><th>Продукт / Блюдо</th><th>Гистамин</th><th>ГИ</th><th>Вердикт</th><th>Пояснение</th><th></th></tr></thead>
+      <thead><tr id="foodCheckerHeader"><th>Продукт / Блюдо</th><th>Гистамин</th><th>ГИ</th><th>Вердикт</th><th>Пояснение</th><th></th></tr></thead>
       <tbody id="checkerBody">
         <tr>
           <td><span class="editable" contenteditable="true">Гречка отварная</span></td>
@@ -1161,7 +1160,7 @@
   <h2 class="card-title">◇ Биомаркеры воспаления и нейровосстановления</h2>
   <div class="table-wrap">
     <table class="tbl">
-      <thead><tr><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
+      <thead><tr id="bioHeaderRow2"><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
       <tbody>
         <tr><td><strong>CRP</strong></td><td>Острое воспаление</td><td>&lt;0.33 мг/л</td><td>0–5</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
         <tr><td><strong>СОЭ (ESR)</strong></td><td>Системное воспаление</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
@@ -1322,8 +1321,9 @@
   // ─── today date ───
   function setToday() {
     const d = new Date();
-    const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
-    const dateStr = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    const localeMap = { en:'en-US', de:'de-DE', es:'es-ES', ko:'ko-KR', zh:'zh-CN', ru:'ru-RU' };
+    const loc = localeMap[currentLang] || 'ru-RU';
+    const dateStr = d.toLocaleDateString(loc, { day:'numeric', month:'short', year:'numeric' });
     document.getElementById('todayDisplay').textContent = dateStr;
   }
 
@@ -1854,6 +1854,7 @@
         if (row) row.querySelectorAll('th').forEach((th, i) => { if (i < foodRefHeaders.length) th.textContent = foodRefHeaders[i]; });
       });
     }
+    setToday();
     const sel = document.getElementById('langSelect');
     if (sel) sel.value = lang;
     localStorage.setItem('vestibular_lang', lang);
@@ -1876,6 +1877,49 @@
   buildLangSwitcher();
   initWishes();
   setToday();
+  // Restore saved language
+  const savedLang = localStorage.getItem('vestibular_lang');
+  if (savedLang && savedLang !== 'ru') {
+    // Apply static data-i18n translations
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      const trans = TRANS[key];
+      if (trans && trans[savedLang]) el.innerHTML = trans[savedLang];
+    });
+    // Dynamic table headers
+    function applyHeaders(rowId, headers) {
+      const row = document.getElementById(rowId);
+      if (row) row.querySelectorAll('th').forEach((th, i) => { if (i < headers.length) th.textContent = headers[i]; });
+    }
+    applyHeaders('weekLogHeaderRow', WEEK_LOG_HEADERS[savedLang]);
+    applyHeaders('bioHeaderRow', BIOMARKER_HEADERS[savedLang]);
+    applyHeaders('vagusHeaderRow', VAGUS_TABLE_HEADERS[savedLang]);
+    ['exMorningHeader','exDayHeader','exEveningHeader'].forEach(id => applyHeaders(id, EX_TABLE_HEADERS[savedLang]));
+    applyHeaders('foodCheckerHeader', FOOD_TABLE_HEADERS[savedLang]);
+    ['foodRefMorningHeader','foodRefDayHeader','foodRefEveningHeader'].forEach(id => applyHeaders(id, FOOD_REF_HEADERS[savedLang]));
+    // Dynamic: checklist
+    const clTexts = CHECKLIST_TRANS[savedLang];
+    if (clTexts) document.querySelectorAll('#dailyChecklist .cl-text').forEach((el, i) => { if (i < clTexts.length) el.textContent = clTexts[i]; });
+    // Dynamic: symptom labels
+    const symTexts = SYMPTOM_TRANS[savedLang];
+    if (symTexts) document.querySelectorAll('.sym-label').forEach((el, i) => { if (i < symTexts.length) el.textContent = symTexts[i]; });
+    // Dynamic: routine group titles
+    const groupTitles = GROUP_TITLES[savedLang];
+    if (groupTitles) document.querySelectorAll('.routine-group').forEach(group => { const g = group.dataset.group; const t = group.querySelector('.rg-title'); if (t && groupTitles[g]) t.textContent = groupTitles[g]; });
+    // Dynamic: wishes
+    const wishesArr = WISHES_TRANS[savedLang];
+    if (wishesArr) {
+      const bar = document.getElementById('wishesBar');
+      bar.innerHTML = '';
+      WISHES.forEach((w, i) => {
+        const div = document.createElement('div');
+        div.className = 'wish-slide' + (i === 0 ? ' active' : '');
+        div.innerHTML = '<span class="wish-icon">' + w.icon + '</span>' + (wishesArr[i] || w.text);
+        bar.appendChild(div);
+      });
+    }
+    document.getElementById('langSelect').value = savedLang;
+  }
   seedTimelineFromJson().then(renderTimeline).catch(() => renderTimeline());
   loadAll();
   updateCheckCount();
