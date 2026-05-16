@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дашборд вестибулярной реабилитации</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f4f7fa; --surface: #fff; --border: #dce4ed; --text: #1a2a3a;
+    --text-dim: #5a7288; --text-faint: #8da0b5;
+    --accent: #5279a8; --accent-light: #e6edf6;
+    --green: #3a9d6e; --green-bg: #e6f3ed;
+    --amber: #d4a04a; --amber-bg: #fcf2e0;
+    --red: #c95a5a; --red-bg: #f8e8e8;
+    --purple: #8a6ab0; --purple-bg: #f0e6fa;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --radius: 12px; --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+  }
+  html { font-size: 15px; }
+  body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; padding: 0; }
+  .app { max-width: 1240px; margin: 0 auto; padding: 1.6rem 1rem; }
+  @media (min-width: 768px) { .app { padding: 2rem 1.5rem; } }
+
+  /* ─── Tabs main ─── */
+  .tab-bar { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); flex-wrap: wrap; }
+  .tab-btn { padding: 0.55rem 1.2rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; border: none; background: none; color: var(--text-faint); transition: all 0.2s; border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap; }
+  .tab-btn:hover { color: var(--text-dim); background: var(--accent-light); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ─── Sub-tabs ─── */
+  .sub-tabs { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .sub-btn { padding: 0.4rem 1rem; font-size: 0.75rem; font-weight: 600; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text-dim); cursor: pointer; transition: all 0.2s; }
+  .sub-btn:hover { background: var(--accent-light); }
+  .sub-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .sub-block { display: none; }
+  .sub-block.active { display: block; }
+
+  /* ─── Header ─── */
+  .header { margin-bottom: 1.6rem; padding-bottom: 1.2rem; border-bottom: 1px solid var(--border); }
+  .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .header h1 small { font-size: 0.7rem; font-weight: 400; color: var(--text-faint); }
+  .header .subtitle { font-size: 0.82rem; color: var(--text-faint); margin-top: 0.2rem; }
+  .meta-grid { display: flex; gap: 0 1.5rem; flex-wrap: wrap; margin-top: 0.8rem; row-gap: 0.4rem; }
+  .meta-field { display: flex; flex-direction: column; gap: 0.1rem; }
+  .meta-field label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 600; }
+  .meta-field .editable { font-size: 0.85rem; padding: 0.2rem 0.4rem; border-radius: 6px; border: 1px dashed transparent; min-width: 70px; cursor: text; transition: border-color 0.2s, background 0.2s; }
+  .meta-field .editable:hover { border-color: var(--border); background: var(--accent-light); }
+  .meta-field .editable:focus { outline: none; border-color: var(--accent); background: #fff; }
+  .badge-date { display: inline-block; font-size: 0.65rem; font-weight: 500; padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--accent); color: #fff; }
+
+  /* ─── Cards ─── */
+  .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 1.2rem; margin-bottom: 1.2rem; box-shadow: var(--shadow); }
+  .card-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem; }
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (min-width: 700px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+  .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (min-width: 800px) { .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  @media (min-width: 1024px) { .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; } }
+
+  /* ─── Tables ─── */
+  .table-wrap { overflow-x: auto; }
+  table.tbl { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  table.tbl thead th { text-align: left; padding: 0.5rem 0.6rem; font-weight: 600; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-faint); border-bottom: 2px solid var(--border); white-space: nowrap; background: var(--bg); }
+  table.tbl tbody td { padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.45; }
+  table.tbl tbody tr:last-child td { border-bottom: none; }
+  table.tbl tbody tr:hover { background: var(--accent-light); }
+  table.tbl .cat-tag { display: inline-block; font-size: 0.6rem; font-weight: 600; padding: 0.1rem 0.4rem; border-radius: 4px; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.03em; }
+  .cat-vest { background: #dceafa; color: #2a5f8a; }
+  .cat-vagus { background: #f0e6fa; color: #6a4a8a; }
+  .cat-resp { background: #e6f3ed; color: #2a7a55; }
+  .cat-sens { background: #fcf2e0; color: #8a6a2a; }
+  table.tbl .instr { font-size: 0.78rem; color: var(--text-dim); }
+  table.tbl .why-cell { font-size: 0.78rem; color: var(--text-dim); }
+
+  /* ─── Tags ─── */
+  .tag { display: inline-block; font-size: 0.65rem; font-weight: 500; padding: 0.08rem 0.4rem; border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap; }
+  .tag-green { background: var(--green-bg); color: #2a7a55; }
+  .tag-amber { background: var(--amber-bg); color: #8a6a2a; }
+  .tag-red { background: var(--red-bg); color: #a04545; }
+  .tag-blue { background: var(--accent-light); color: #3a5f8a; }
+
+  /* ─── Timeline ─── */
+  .tl { display: flex; align-items: flex-start; justify-content: space-between; position: relative; padding: 0.8rem 0; margin: 0.3rem 0; }
+  .tl::before { content: ''; position: absolute; top: 28px; left: 0; right: 0; height: 3px; background: var(--border); border-radius: 2px; }
+  .tl .ph { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; z-index: 1; text-align: center; }
+  .tl .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--border); border: 3px solid var(--bg); margin-bottom: 0.4rem; }
+  .tl .dot.done { background: var(--green); }
+  .tl .dot.active { background: var(--accent); box-shadow: 0 0 0 4px var(--accent-light); }
+  .tl .pl { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-faint); }
+  .tl .pl.done { color: var(--green); }
+  .tl .pl.active { color: var(--accent); }
+  .tl .pd { font-size: 0.65rem; color: var(--text-faint); margin-top: 0.1rem; }
+  .tl .pdesc { font-size: 0.68rem; color: var(--text-dim); max-width: 120px; margin-top: 0.15rem; line-height: 1.3; }
+  .tl-legend { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.2rem; }
+
+  /* ─── Entity Map ─── */
+  .emap { }
+  .emap-row { display: flex; align-items: center; gap: 0; margin-bottom: 0; position: relative; padding: 0.15rem 0; }
+  .emap-lvl { flex: 1; padding: 0.45rem 0.7rem; border-radius: 6px; font-size: 0.78rem; font-weight: 500; border: 1px solid var(--border); background: var(--surface); }
+  .emap-lvl.l1 { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+  .emap-lvl.l2 { background: var(--amber-bg); border-color: var(--amber); color: #8a6a2a; }
+  .emap-lvl.l3 { background: var(--purple-bg); border-color: var(--purple); color: #6a4a8a; }
+  .emap-lvl.l4 { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+  .emap-lvl.l5 { background: var(--green-bg); border-color: var(--green); color: #2a7a55; }
+  .emap-arrow { font-size: 0.65rem; color: var(--text-faint); padding: 0 0.3rem; flex-shrink: 0; }
+  .emap-int { font-size: 0.65rem; padding: 0.08rem 0.4rem; border-radius: 999px; font-weight: 600; flex-shrink: 0; margin-left: 0.4rem; white-space: nowrap; cursor: default; }
+  .emap-int.vagus { background: var(--purple-bg); color: #6a4a8a; }
+  .emap-int.mc { background: var(--green-bg); color: #2a7a55; }
+  .emap-int.barrier { background: var(--accent-light); color: var(--accent); }
+  .emap-int.vrt { background: var(--amber-bg); color: #8a6a2a; }
+  @media (max-width: 600px) {
+    .emap-row { flex-wrap: wrap; margin-bottom: 0.2rem; }
+    .emap-lvl { width: 100%; margin-bottom: 0.15rem; }
+    .emap-arrow { transform: rotate(90deg); padding: 0.05rem 0; }
+    .emap-int { margin-left: 0; }
+  }
+
+  /* ─── Rec tabs ─── */
+  .rec-phase-grid { display: grid; grid-template-columns: 1fr; gap: 0.4rem; margin-top: 0.4rem; }
+  @media (min-width: 500px) { .rec-phase-grid { grid-template-columns: 1fr 1fr; } }
+  .rec-phase { font-size: 0.75rem; padding: 0.45rem 0.6rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); }
+  .rec-phase .phdr { font-weight: 600; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 0.2rem; }
+  .rec-phase .phdr.acute { color: var(--red); }
+  .rec-phase .phdr.subacute { color: var(--amber); }
+  .rec-phase .phdr.rehab { color: var(--accent); }
+  .rec-phase .phdr.maint { color: var(--green); }
+  .rec-phase ul { padding-left: 1rem; margin-top: 0.15rem; }
+  .rec-phase li { margin-bottom: 0.1rem; line-height: 1.4; font-size: 0.72rem; }
+
+  .rec-block { margin-bottom: 0.8rem; }
+  .rec-block:last-child { margin-bottom: 0; }
+  .rec-block h4 { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.3rem; }
+  .rec-block .sub { font-size: 0.68rem; color: var(--text-faint); font-weight: 400; }
+  .dd { font-size: 0.76rem; }
+  .dd .do { color: var(--green); }
+  .dd .dont { color: var(--red); }
+
+  /* ─── Checklist ─── */
+  .cl { list-style: none; }
+  .cl li { display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0; border-bottom: 1px solid var(--border); font-size: 0.78rem; }
+  .cl li:last-child { border-bottom: none; }
+  .cl input[type="checkbox"] { width: 1rem; height: 1rem; accent-color: var(--green); cursor: pointer; flex-shrink: 0; }
+  .cl li.checked { color: var(--text-faint); text-decoration: line-through; }
+
+  /* ─── Symptom bars ─── */
+  .sym-item { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; }
+  .sym-item label { font-size: 0.75rem; font-weight: 500; min-width: 70px; }
+  .sym-item .bw { flex: 1; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .sym-item .bf { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .sym-item .bf.v1 { background: var(--accent); }
+  .sym-item .bf.v2 { background: var(--amber); }
+  .sym-item .bf.v3 { background: var(--red); }
+  .sym-item .bf.v4 { background: var(--text-faint); }
+  .sym-item .val { font-size: 0.74rem; color: var(--text-dim); min-width: 26px; text-align: right; }
+
+  /* ─── Stats ─── */
+  .prog-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; }
+  @media (max-width: 500px) { .prog-grid { grid-template-columns: 1fr; } }
+  .sc { text-align: center; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); }
+  .sc .num { font-size: 1.3rem; font-weight: 700; color: var(--green); }
+  .sc .lbl { font-size: 0.65rem; color: var(--text-faint); margin-top: 0.1rem; text-transform: uppercase; }
+
+  .goal-box { padding: 0.8rem; border-radius: 8px; background: var(--green-bg); border: 1px solid var(--green); margin-top: 0.6rem; }
+  .goal-box .goal-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--green); font-weight: 600; }
+  .goal-box .editable { font-size: 0.8rem; margin-top: 0.15rem; padding: 0.15rem 0.3rem; border-radius: 4px; cursor: text; }
+  .goal-box .editable:focus { outline: 1px solid var(--green); background: #fff; }
+  .goal-box .editable:hover { background: rgba(255,255,255,0.6); }
+
+  /* ─── Sources grid ─── */
+  .src-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  @media (max-width: 600px) { .src-grid { grid-template-columns: 1fr; } }
+  .src-item { padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); font-size: 0.78rem; }
+  .src-item .src-name { font-weight: 600; color: var(--text); }
+  .src-item .src-field { font-size: 0.68rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .src-item .src-desc { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.1rem; }
+
+  .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+  .btn-sm { font-size: 0.65rem; color: var(--text-faint); background: none; border: 1px solid var(--border); padding: 0.15rem 0.5rem; border-radius: 4px; cursor: pointer; }
+  .btn-sm:hover { background: var(--border); }
+  .note-edit { font-size: 0.75rem; padding: 0.35rem 0.5rem; border: 1px dashed var(--border); border-radius: 6px; min-height: 36px; cursor: text; }
+  .note-edit:focus { outline: none; border-color: var(--accent); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 0.8rem 0; }
+  .footer { margin-top: 1.2rem; padding-top: 0.8rem; border-top: 1px solid var(--border); font-size: 0.68rem; color: var(--text-faint); text-align: center; }
+  .footer p { margin-bottom: 0.1rem; }
+  body .editable { cursor: text; }
+  body .editable:focus { outline: 1px solid var(--accent); background: #fff; }
+  table.tbl .editable-symptom { cursor: text; padding: 0.1rem 0.25rem; border-radius: 3px; min-width: 24px; }
+  table.tbl .editable-symptom:focus { outline: 1px solid var(--accent); background: #fff; }
+
+  /* ─── Principle cards in exercises ─── */
+  .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  @media (max-width: 600px) { .principles { grid-template-columns: 1fr; } }
+  .principle { padding: 0.6rem; border-radius: 8px; border-left: 3px solid var(--accent); background: var(--accent-light); font-size: 0.76rem; }
+  .principle strong { color: var(--accent); }
+
+  @media print {
+    body { background: #fff; }
+    .app { padding: 0.3in; }
+    .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    .editable { border: none !important; background: transparent !important; }
+    .tag, .tl .dot, .emap-lvl, .goal-box { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .cat-tag { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ════════ HEADER ════════ -->
+<header class="header">
+  <div class="flex-between">
+    <h1>◇ Дашборд реабилитации <small>вестибулярная нейроиммунология</small></h1>
+    <span class="badge-date" id="todayDisplay"></span>
+  </div>
+  <div class="subtitle">Персонализированный протокол на основе научных данных</div>
+  <div class="meta-grid">
+    <div class="meta-field"><label>ФИО</label><div class="editable" contenteditable="true" data-key="name">Эльмира</div></div>
+    <div class="meta-field"><label>Возраст</label><div class="editable" contenteditable="true" data-key="age">42</div></div>
+    <div class="meta-field"><label>Пол</label><div class="editable" contenteditable="true" data-key="gender">Ж</div></div>
+    <div class="meta-field"><label>Начало</label><div class="editable" contenteditable="true" data-key="startDate">8 апр 2026</div></div>
+    <div class="meta-field"><label>Пик (loss of consciousness)</label><div class="editable" contenteditable="true" data-key="peakDate">11 апр 2026</div></div>
+    <div class="meta-field"><label>Диагноз</label><div class="editable" contenteditable="true" data-key="diagnosis">Вестибулярный неврит (AB31.0)</div></div>
+  </div>
+</header>
+
+<!-- ════════ TABS ════════ -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="dashboard">◇ Главная</button>
+  <button class="tab-btn" data-tab="exercises">🏋️ Упражнения</button>
+  <button class="tab-btn" data-tab="food">🥗 Питание</button>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- ═══ TAB 1: ГЛАВНАЯ ═══ -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-dashboard">
+
+<div class="card">
+  <div class="card-title">◇ Таймлайн восстановления</div>
+  <div class="tl">
+    <div class="ph">
+      <div class="dot done"></div>
+      <div class="pl done">Острая</div>
+      <div class="pd">8–10 апр</div>
+      <div class="pdesc">Вертиго, тошнота, постельный режим</div>
+    </div>
+    <div class="ph">
+      <div class="dot done"></div>
+      <div class="pl done">Подострая</div>
+      <div class="pd">11–17 апр</div>
+      <div class="pdesc">Анализы, стихание симптомов, поиск помощи</div>
+    </div>
+    <div class="ph">
+      <div class="dot active"></div>
+      <div class="pl active">Реабилитация</div>
+      <div class="pd">18 апр →</div>
+      <div class="pdesc">VRT, вагус, MC-стабилизация, сенсорная защита</div>
+    </div>
+    <div class="ph">
+      <div class="dot" style="background:var(--border)"></div>
+      <div class="pl">Профилактика</div>
+      <div class="pd">июнь →</div>
+      <div class="pdesc">Поддержание баланса, предотвращение рецидивов</div>
+    </div>
+  </div>
+  <div class="tl-legend">◀ пройдено &nbsp;|&nbsp; <strong style="color:var(--accent);">● текущая фаза</strong> &nbsp;|&nbsp; ○ впереди</div>
+</div>
+
+<!-- Entity Map -->
+<div class="card">
+  <div class="card-title">◇ Карта связей: порочный круг и точки вмешательства</div>
+  <div class="emap">
+    <div class="emap-row">
+      <div class="emap-lvl l1">Ур.1: Хронический стресс / тревога</div>
+      <div class="emap-arrow">▼</div>
+      <div class="emap-int vagus" title="Дыхание 4-7-8, холод, вагусная стимуляция">⚡ Вагус</div>
+    </div>
+    <div class="emap-row">
+      <div class="emap-lvl l2">Ур.2: HPA-ось → ↑CRH + ↑кортизол + ↑SP</div>
+      <div class="emap-arrow">▼</div>
+      <div class="emap-int vagus" title="Ашваганда, адаптогены, режим сна">🌿 Адаптогены</div>
+    </div>
+    <div class="emap-row">
+      <div class="emap-lvl l3">Ур.3: CRH→CRHR-1 + SP→MRGPRX2 → Дегрануляция MC</div>
+      <div class="emap-arrow">▼</div>
+      <div class="emap-int mc" title="Кверцетин 2000-4000 мг/д, лютеолин, низкогистаминовая диета">🛡 Стабилизация MC</div>
+    </div>
+    <div class="emap-row">
+      <div class="emap-lvl l4">Ур.4: ↑Гистамин → ↑проницаемость гемато-лабиринтного барьера</div>
+      <div class="emap-arrow">▼</div>
+      <div class="emap-int barrier" title="Витамин C, NAC, антигистаминные">💊 Барьер</div>
+    </div>
+    <div class="emap-row">
+      <div class="emap-lvl l5">Ур.5: Отёк нерва → ВЕРТИГО → паника → обратно к ур.1</div>
+      <div class="emap-arrow" style="color:var(--red);font-weight:600;">◀</div>
+      <div class="emap-int vrt" title="VOR адаптация, габитуация, Cawthorne-Cooksey">🏃 VRT</div>
+    </div>
+  </div>
+</div>
+
+<!-- Biomarkers -->
+<div class="card">
+  <div class="card-title">◇ Биомаркеры воспаления и нейровосстановления</div>
+  <div class="table-wrap">
+    <table class="tbl">
+      <thead><tr><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CRP</strong></td><td>Острое воспаление</td><td>&lt;0.33 мг/л</td><td>0–5</td><td><span class="tag tag-green">Норма</span></td></tr>
+        <tr><td><strong>IL-6</strong></td><td>Нейровоспаление, активация HPA</td><td><span class="editable" contenteditable="true" data-key="il6">—</span></td><td>&lt;7 пг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>25-HC</strong></td><td>Биомаркер вестибулярного неврита</td><td><span class="editable" contenteditable="true" data-key="ohc">—</span></td><td>—</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>NLR</strong></td><td>Нейтрофильно-лимфоцитарное соотношение</td><td>~1.2 (расчёт)</td><td>&lt;3.0</td><td><span class="tag tag-green">Норма</span></td></tr>
+        <tr><td><strong>Кортизол утренний</strong></td><td>Функция HPA-оси</td><td><span class="editable" contenteditable="true" data-key="cortisol">—</span></td><td>6.2–19.4 мкг/дл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>HRV (RMSSD)</strong></td><td>Вагусный тонус</td><td><span class="editable" contenteditable="true" data-key="hrv">—</span></td><td>&gt;30 мс</td><td><span class="tag tag-blue">Через браслет/часы</span></td></tr>
+        <tr><td><strong>СОЭ</strong></td><td>Системное воспаление</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 4 rec cards -->
+<div class="grid-4">
+  <div class="card">
+    <div class="card-title">◇ Вестибулярная реабилитация</div>
+    <p style="font-size:0.74rem;color:var(--text-dim);margin-bottom:0.4rem;">Последовательность по фазам:</p>
+    <div class="rec-phase-grid">
+      <div class="rec-phase"><div class="phdr acute">Фаза 1: Острая (1–3 дн)</div><ul><li>Постельный режим</li><li>Антиэметики при тошноте</li><li>Без резких движений</li></ul></div>
+      <div class="rec-phase"><div class="phdr subacute">Фаза 2: Подострая (3–10 дн)</div><ul><li>VOR адаптация: палец→поворот головы</li><li>Фиксация взора при ходьбе</li><li>По 1–2 мин, 3×/день</li></ul></div>
+      <div class="rec-phase"><div class="phdr rehab">Фаза 3: Реабилитация (2–6 нед)</div><ul><li>Cawthorne-Cooksey progression</li><li>Ходьба с поворотами головы</li><li>Стояние на одной ноге</li><li>3–5×/день по 2–5 мин</li></ul></div>
+      <div class="rec-phase"><div class="phdr maint">Фаза 4: Поддержание (6+ нед)</div><ul><li>Тренировка равновесия</li><li>Силовые упражнения</li><li>Профилактика 5×/нед</li></ul></div>
+    </div>
+    <hr>
+    <div class="dd"><span class="do">✓ Правило:</span> VOR → габитуация → замещение</div>
+    <div class="dd"><span class="dont">✗</span> Вестибулосупрессоры >3 дней тормозят компенсацию</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">◇ Вагусная стимуляция</div>
+    <table class="tbl">
+      <thead><tr><th>Время</th><th>Практика</th><th>Длительность</th></tr></thead>
+      <tbody>
+        <tr><td>Утро</td><td>Холодный компресс на лицо / умывание ледяной водой</td><td>30–60 сек</td></tr>
+        <tr><td>Каждые 2–3 ч</td><td>Дыхание 5–6 вдохов/мин (удлинённый выдох)</td><td>2–5 мин</td></tr>
+        <tr><td>Перед сном</td><td>Гудение/пение/chanting «ом»</td><td>5–10 мин</td></tr>
+        <tr><td>При стрессе</td><td>Точечный массаж уха (cymba conchae)</td><td>30–60 сек</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.72rem;color:var(--text-dim);margin-top:0.3rem;"><strong>Эффект:</strong> ↑HRV, ↓TNF-α, ↓IL-6, ↓CRP, ↓кортизол</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">◇ Стабилизация тучных клеток</div>
+    <div class="rec-block">
+      <h4>🥗 Диета <span class="sub">низкогистаминовая ×3-4 нед</span></h4>
+      <div class="dd"><span class="do">✓</span> Исключить: ферментированное, выдержанные сыры, алкоголь, консервы, остатки >24ч</div>
+      <div class="dd"><span class="do">✓</span> Основы: свежие овощи, зелень, куркума, имбирь, лук</div>
+    </div>
+    <div class="rec-block">
+      <h4>💊 Нутрицевтики</h4>
+      <div class="dd">✓ <strong>Кверцетин</strong> 2000–4000 мг/д</div>
+      <div class="dd">✓ Витамин C 1–3 г/д, D 2000–5000 МЕ/д</div>
+      <div class="dd">✓ NAC 500–1000 мг/д, куркумин 1–4 г/д</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">◇ Сон + сенсорная защита</div>
+    <div class="rec-block">
+      <h4>🌙 Гигиена сна</h4>
+      <div class="dd"><span class="do">✓</span> Пробуждение в одно время ±30 мин</div>
+      <div class="dd"><span class="do">✓</span> Яркий свет утром (10–30 мин)</div>
+      <div class="dd"><span class="do">✓</span> ↓ Синий свет с 20:00</div>
+    </div>
+    <div class="rec-block">
+      <h4>🧸 Сенсорная защита</h4>
+      <div class="dd">✓ Утяжелённое одеяло</div>
+      <div class="dd">✓ Wilbarger-протокол 2–3×/д</div>
+      <div class="dd">✓ Магний глицинат 300–400 мг вечером</div>
+    </div>
+  </div>
+</div>
+
+<!-- Monitoring -->
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">◇ Ежедневный чеклист</div>
+    <ul class="cl" id="dailyChecklist">
+      <li><input type="checkbox" data-key="cb_vagus_morning"><span>☀️ Утренняя вагусная практика (холод/дыхание)</span></li>
+      <li><input type="checkbox" data-key="cb_vor"><span>👁 VOR-упражнения (3×1–2 мин)</span></li>
+      <li><input type="checkbox" data-key="cb_quercetin"><span>💊 Приём кверцетина + C + D + NAC</span></li>
+      <li><input type="checkbox" data-key="cb_diet"><span>🥗 Низкогистаминовое питание</span></li>
+      <li><input type="checkbox" data-key="cb_walk"><span>🚶 Прогулка 20+ мин</span></li>
+      <li><input type="checkbox" data-key="cb_vagus_evening"><span>🌙 Вечерняя вагусная практика (гудение/дыхание)</span></li>
+      <li><input type="checkbox" data-key="cb_sleep"><span>🛌 Отход ко сну до 23:00</span></li>
+    </ul>
+    <div class="flex-between" style="margin-top:0.4rem;">
+      <span style="font-size:0.72rem;color:var(--text-dim);">Выполнено: <span id="checkCount">0</span>/7</span>
+      <button class="btn-sm" onclick="resetChecklist()">Сбросить</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">◇ Шкала симптомов (сегодня)</div>
+    <div class="sym-item">
+      <label>Вертиго</label>
+      <div class="bw"><div class="bf v1" id="barVertigo"></div></div>
+      <span class="val"><span class="editable" contenteditable="true" data-key="score_vertigo" id="scoreVertigo">3</span>/10</span>
+    </div>
+    <div class="sym-item">
+      <label>Тревога</label>
+      <div class="bw"><div class="bf v2" id="barAnxiety"></div></div>
+      <span class="val"><span class="editable" contenteditable="true" data-key="score_anxiety" id="scoreAnxiety">2</span>/10</span>
+    </div>
+    <div class="sym-item">
+      <label>Боль в шее</label>
+      <div class="bw"><div class="bf v3" id="barNeck"></div></div>
+      <span class="val"><span class="editable" contenteditable="true" data-key="score_neck" id="scoreNeck">1</span>/10</span>
+    </div>
+    <div class="sym-item">
+      <label>Усталость</label>
+      <div class="bw"><div class="bf v4" id="barFatigue"></div></div>
+      <span class="val"><span class="editable" contenteditable="true" data-key="score_fatigue" id="scoreFatigue">3</span>/10</span>
+    </div>
+    <hr>
+    <div class="flex-between" style="margin-bottom:0.2rem;">
+      <span style="font-size:0.72rem;font-weight:600;">📝 Заметка дня</span>
+      <button class="btn-sm" onclick="clearNote()">Очистить</button>
+    </div>
+    <div class="note-edit" contenteditable="true" data-key="dailyNote" id="dailyNote"></div>
+  </div>
+</div>
+
+<!-- Positive reinforcement -->
+<div class="card">
+  <div class="card-title">◇ Позитивное подкрепление</div>
+  <div class="prog-grid" id="progressStats">
+    <div class="sc"><div class="num" id="statDays">0</div><div class="lbl">дней в протоколе</div></div>
+    <div class="sc"><div class="num" id="statCheckRate">0%</div><div class="lbl">выполнение чеклиста</div></div>
+    <div class="sc"><div class="num" id="statTrend">↓ —</div><div class="lbl">динамика вертиго</div></div>
+  </div>
+  <div class="goal-box">
+    <div class="goal-label">🎯 Цель на эту неделю</div>
+    <div class="editable" contenteditable="true" data-key="weeklyGoal">VRT 5×/день + вагусное дыхание каждые 2 часа</div>
+  </div>
+  <div style="margin-top:0.6rem;">
+    <div style="font-size:0.74rem;font-weight:600;color:var(--green);margin-bottom:0.3rem;">🏆 Мои достижения</div>
+    <div style="font-size:0.76rem;">
+      <div>✅ Пройден острый период (8–11 апр) — продолжать восстановление</div>
+      <div class="editable" contenteditable="true" data-key="achievements" style="margin-top:0.15rem;padding:0.2rem 0.4rem;border:1px dashed var(--border);border-radius:6px;cursor:text;min-height:1.4em;">✅ Низкогистаминовая диета — снижение нагрузки на тучные клетки</div>
+    </div>
+  </div>
+</div>
+
+<!-- Weekly log -->
+<div class="card">
+  <div class="card-title">◇ Недельный лог</div>
+  <div class="table-wrap">
+    <table class="tbl" id="weeklyLog">
+      <thead><tr><th>День</th><th>Вертиго (0-10)</th><th>Тревога (0-10)</th><th>Чеклист (/7)</th><th>Заметка</th></tr></thead>
+      <tbody id="weeklyBody"></tbody>
+    </table>
+  </div>
+  <div class="flex-between" style="margin-top:0.4rem;">
+    <button class="btn-sm" onclick="saveWeekDay()">➕ Добавить сегодня</button>
+    <button class="btn-sm" onclick="clearWeek()">Очистить неделю</button>
+  </div>
+</div>
+
+<!-- Daily routine -->
+<div class="card">
+  <div class="card-title">◇ Полный режим дня</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;font-size:0.76rem;">
+    <div>
+      <div style="font-weight:600;margin-bottom:0.2rem;">🌅 Утро (7:00–9:00)</div>
+      <div>• Пробуждение, стакан воды</div>
+      <div>• Холодное умывание (30–60")</div>
+      <div>• Кверцетин + C + D + NAC</div>
+      <div>• Низкогистаминовый завтрак</div>
+      <div>• Прогулка / свет 10+ мин</div>
+      <div>• Дыхание 4-7-8 (4-5 циклов)</div>
+    </div>
+    <div>
+      <div style="font-weight:600;margin-bottom:0.2rem;">☀️ День (9:00–18:00)</div>
+      <div>• VOR-упражнения (3×1-2 мин)</div>
+      <div>• Дыхание 5-6 вдохов/мин каждые 2-3ч</div>
+      <div>• Низкогистаминовые приёмы пищи</div>
+      <div>• Прогулка 20+ мин</div>
+      <div>• Гудение/пение 5 мин (в перерыв)</div>
+    </div>
+    <div>
+      <div style="font-weight:600;margin-bottom:0.2rem;">🌆 Вечер (18:00–21:00)</div>
+      <div>• Лёгкий ужин (до 19:00-19:30)</div>
+      <div>• ↓ Синий свет (лампы 2200K)</div>
+      <div>• Wilbarger-протокол (щётка + компрессия)</div>
+      <div>• Гудение / Bhramari pranayama (5-10')</div>
+    </div>
+    <div>
+      <div style="font-weight:600;margin-bottom:0.2rem;">🌙 Ночь (21:00–7:00)</div>
+      <div>• Магний глицинат 300-400 мг</div>
+      <div>• L-теанин 200 мг (по необходимости)</div>
+      <div>• Отход ко сну до 23:00</div>
+      <div>• Утяжелённое одеяло</div>
+      <div>• Беруши (при сенсорной чувствительности)</div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>Протокол основан на международных исследованиях (Nature, Cochrane, J Neuroinflammation, Frontiers 2024–2026)</p>
+  <p>Информация носит справочный характер · Для назначения лечения необходима консультация врача</p>
+  <p style="margin-top:0.15rem;">💾 Данные сохраняются автоматически в браузере</p>
+</footer>
+
+</div><!-- /tab-dashboard -->
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- ═══ TAB 2: УПРАЖНЕНИЯ ═══ -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-exercises">
+
+<!-- SOURCES -->
+<div class="card">
+  <div class="card-title">◇ Источники и научная база методик</div>
+  <div class="src-grid">
+    <div class="src-item">
+      <div class="src-field">Вестибулярная реабилитация</div>
+      <div class="src-name">Сэр Теренс Которн (Terence Cawthorne) и Ф.С. Кукси (F.S. Cooksey)</div>
+      <div class="src-desc">Основоположники вестибулярной реабилитации (Cawthorne-Cooksey exercises, 1940-е). Протокол последовательных движений глаз-головы-тела для компенсации вестибулярной потери.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Вестибулярная реабилитация</div>
+      <div class="src-name">Д-р Сьюзен Хердман (Susan Herdman, PhD, PT)</div>
+      <div class="src-desc">Современные протоколы VRT (University of Miami). Книга "Vestibular Rehabilitation" — золотой стандарт клинической практики. Доказала эффективность VOR-адаптации.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Вагусная стимуляция</div>
+      <div class="src-name">Д-р Кевин Трейси (Kevin Tracey, MD)</div>
+      <div class="src-desc">Пионер холинергического противовоспалительного пути (Feinstein Institute). Открыл, что стимуляция вагуса подавляет TNF-α, IL-1β, IL-6 через α7nAChR на макрофагах.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Поливагальная теория</div>
+      <div class="src-name">Д-р Стивен Порджис (Stephen Porges, PhD)</div>
+      <div class="src-desc">Поливагальная теория: три ветви вагуса (дорсальная/вентральная/симпатическая). Обосновал роль вокализации, дыхания и социального взаимодействия в регуляции нервной системы.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Дыхательные практики</div>
+      <div class="src-name">Д-р Эндрю Вайль (Andrew Weil, MD)</div>
+      <div class="src-desc">Популяризировал дыхание 4-7-8 (расслабляющее дыхание). Адаптировал пранаямические техники для западной клинической практики. Программа "Breathing: The Master Key to Self-Healing".</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Тучные клетки, кверцетин</div>
+      <div class="src-name">Д-р Феохарис Теохаридес (Theoharis Theoharides, MD, PhD)</div>
+      <div class="src-desc">Пионер исследований тучных клеток и нейровоспаления (Tufts University). Доказал эффективность кверцетина и лютеолина как стабилизаторов MC при аллергических и воспалительных заболеваниях.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Сенсорная интеграция</div>
+      <div class="src-name">Д-р Энн Джин Айрес (A. Jean Ayres, PhD, OTR)</div>
+      <div class="src-desc">Основоположница теории сенсорной интеграции (1970-е). Создала концепцию сенсорной диеты и подход к терапии через регулируемую сенсорную стимуляцию.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Wilbarger-протокол</div>
+      <div class="src-name">Патриция Уилбаргер (Patricia Wilbarger, MEd, OTR)</div>
+      <div class="src-desc">Автор протокола глубокого давления (DPPT). Щеточный массаж + компрессия суставов для сенсорной регуляции. Широко применяется при сенсорной защите.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Сон и циркадианные ритмы</div>
+      <div class="src-name">Д-р Александр Борбели (Alexander Borbély, MD)</div>
+      <div class="src-desc">Создатель двухпроцессной модели сна (Process C + Process S). Объяснил взаимодействие циркадианного и гомеостатического механизмов регуляции сна.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Стресс и HPA-ось</div>
+      <div class="src-name">Д-р Роберт Сапольски (Robert Sapolsky, PhD)</div>
+      <div class="src-desc">Исследования хронического стресса, кортизола, HPA-оси (Stanford). Книга "Why Zebras Don't Get Ulcers" — классика нейроэндокринологии стресса.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Вестибулярный неврит</div>
+      <div class="src-name">Д-р Михаэль Штрупп (Michael Strupp, MD, PhD)</div>
+      <div class="src-desc">Ведущий исследователь вестибулярного неврита и центральных вестибулярных расстройств (Munich University). Работы по диагностике, фармакотерапии и реабилитации.</div>
+    </div>
+    <div class="src-item">
+      <div class="src-field">Аллостатическая нагрузка</div>
+      <div class="src-name">Д-р Брюс Макьюэн (Bruce McEwen, PhD)</div>
+      <div class="src-desc">Концепция аллостатической нагрузки — "цена адаптации" при хроническом стрессе. Исследования пластичности мозга, гиппокампа и HPA-оси (Rockefeller University).</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINCIPLES -->
+<div class="card">
+  <div class="card-title">◇ Основные принципы выполнения</div>
+  <div class="principles">
+    <div class="principle"><strong>1. Прогрессия от простого к сложному:</strong> лёжа → сидя → стоя → в движении. Не переходите к следующему уровню, пока текущий не перестанет вызывать дискомфорт.</div>
+    <div class="principle"><strong>2. Короткие сессии, часто:</strong> 1–2 минуты, 5 раз в день. Лучше 5×1 мин, чем 1×5 мин. Регулярность — основа нейропластичности.</div>
+    <div class="principle"><strong>3. Безопасность:</strong> все упражнения выполнять рядом с опорой (стена, стул). При усилении симптомов — пауза, перерыв.</div>
+    <div class="principle"><strong>4. Провокация — цель, а не ошибка:</strong> лёгкое головокружение = активация компенсаторных механизмов. Избегайте вестибулосупрессоров >3 дней.</div>
+  </div>
+</div>
+
+<!-- TIME-OF-DAY SUB-TABS -->
+<div class="card">
+  <div class="card-title">◇ Таблица упражнений по времени дня</div>
+  <div class="sub-tabs">
+    <button class="sub-btn active" data-ex="morning">🌅 Утро</button>
+    <button class="sub-btn" data-ex="day">☀️ День</button>
+    <button class="sub-btn" data-ex="evening">🌙 Вечер</button>
+  </div>
+
+  <!-- ======================== MORNING ======================== -->
+  <div class="sub-block active" id="ex-morning">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="cat-tag cat-vagus">вагус</span></td>
+            <td><strong>Холодовой стимул</strong></td>
+            <td class="instr">Погружение лица в холодную воду или холодное умывание сразу после пробуждения</td>
+            <td class="why-cell">Нырятельный рефлекс → мощная вагусная активация → парасимпатический сдвиг → ↓ ЧСС, ↓ кортизол, ↑ HRV</td>
+            <td class="instr">Утром после пробуждения: умойтесь холодной водой 30–60 сек. Или погрузите лицо в миску с холодной водой на 5–10 сек, задержав дыхание. Дышите ровно после. Можно чередовать с тёплой.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-resp">дыхат</span></td>
+            <td><strong>Дыхание 4-7-8</strong></td>
+            <td class="instr">Вдох через нос 4 сек — задержка 7 сек — выдох ртом 8 сек</td>
+            <td class="why-cell">Удлинённый выдох активирует барорецепторный рефлекс → стимуляция вагуса → ↓ ЧСС, ↓ тревоги. Задержка ↑ CO₂ → вазодилатация.</td>
+            <td class="instr">Сядьте прямо, спина ровная. Вдох носом 4 сек. Задержка 7 сек. Выдох ртом 8 сек со звуком «ф-ф-ф». 4–5 циклов. Выполнять перед завтраком или при стрессе.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vest">вестиб</span></td>
+            <td><strong>VOR X1 (горизонтальный, сидя)</strong></td>
+            <td class="instr">Фиксация взгляда на неподвижном объекте при поворотах головы влево-вправо</td>
+            <td class="why-cell">Базовая адаптация вестибуло-окулярного рефлекса (ВОР). Тренировка полукружных каналов → стабилизация взора при движении головы.</td>
+            <td class="instr">Сидя. Вытяните руку с большим пальцем на уровне глаз. Медленно поворачивайте голову влево-вправо (~60°), не отрывая взгляд от пальца. Палец неподвижен. 1–2 мин. Темп: 1 поворот в 1–2 сек.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vest">вестиб</span></td>
+            <td><strong>VOR X1 (вертикальный, сидя)</strong></td>
+            <td class="instr">Фиксация взгляда при кивании головой вверх-вниз</td>
+            <td class="why-cell">Адаптация ВОР в вертикальной плоскости. Тренировка переднего/заднего полукружных каналов. Дополнение к горизонтальному VOR.</td>
+            <td class="instr">Сидя. Вытяните руку с пальцем. Кивайте головой вверх-вниз, фиксируя взгляд на пальце. 1–2 мин. Темп медленный. Сочетайте с горизонтальным VOR.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-sens">сенсор</span></td>
+            <td><strong>Утренняя светотерапия</strong></td>
+            <td class="instr">Воздействие естественного дневного света в первые 30 минут после пробуждения</td>
+            <td class="why-cell">Синхронизация циркадианного ритма через ipRGC → SCN → ↓ дневной кортизол → ↑ мелатонин вечером. Улучшает качество сна и снижает тревогу.</td>
+            <td class="instr">Выйдите на улицу на 10–15 мин в первые 30 мин после пробуждения (без солнцезащитных очков). Если пасмурно — световой бокс 10,000 люкс 20–30 мин.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-sens">сенсор</span></td>
+            <td><strong>Изометрия шеи (двойной подбородок)</strong></td>
+            <td class="instr">Задвигание подбородка назад без наклона головы — ретракция шеи</td>
+            <td class="why-cell">Проприоцептивная стимуляция глубоких мышц шеи, ↓ спазма, ↓ цервикогенного головокружения. Активирует сенсорные рецепторы суставов.</td>
+            <td class="instr">Сидя или стоя. Потяните подбородок строго назад, создавая «двойной подбородок». Спина прямая. Держите 5–10 сек, медленно отпустите. 5 повторов.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ======================== DAY ======================== -->
+  <div class="sub-block" id="ex-day">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="cat-tag cat-vest">вестиб</span></td>
+            <td><strong>VOR X1 (стоя/в движении)</strong></td>
+            <td class="instr">Фиксация взгляда на цели при ходьбе с поворотами головы</td>
+            <td class="why-cell">Усложнённая адаптация ВОР в функциональных позициях. Интеграция вестибулярной, зрительной и проприоцептивной систем.</td>
+            <td class="instr">Встаньте, ноги на ширине плеч. Выберите объект на стене. Медленно идите вперёд, поворачивая голову влево-вправо, не отрывая взгляд от объекта. 2–3 мин. Затем — ходьба с киванием головы.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vest">вестиб</span></td>
+            <td><strong>VOR X2 (активная цель)</strong></td>
+            <td class="instr">Удержание взгляда на объекте, который движется противофазно голове</td>
+            <td class="why-cell">Усложнённая адаптация ВОР. При X2 нагрузка на систему выше, что усиливает нейропластичность вестибулярных ядер.</td>
+            <td class="instr">Сидя или стоя. Вытяните руку с пальцем. Поворачивайте голову влево, одновременно двигая руку вправо (и наоборот). Взгляд — на пальце. 1–2 мин. Темп медленный.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vest">вестиб</span></td>
+            <td><strong>Габитуация (повороты в постели)</strong></td>
+            <td class="instr">Повторение движений, которые провоцируют лёгкое головокружение — в безопасной позе</td>
+            <td class="why-cell">Габитуация: многократное воздействие → снижение чувствительности вестибулярных ядер к провоцирующим стимулам. Ключевой механизм компенсации.</td>
+            <td class="instr">Лёжа на спине. Медленно поверните голову влево, задержитесь 5–10 сек. Вернитесь в центр. Поверните вправо. Затем — поворот на бок (с помощью рук). При головокружении — пауза до стихания. 3–5 повторов.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vest">вестиб</span></td>
+            <td><strong>Тренировка равновесия</strong></td>
+            <td class="instr">Стояние на одной ноге, на подушке, с закрытыми глазами — от простого к сложному</td>
+            <td class="why-cell">Замещение: проприоцептивная и зрительная стратегии компенсируют вестибулярный дефицит. Прогрессивное усложнение → укрепление альтернативных путей.</td>
+            <td class="instr">У опоры. Стоять на одной ноге 15–30 сек. Усложнение: закрыть глаза → стоять на подушке → стоять на подушке с закрытыми глазами. 3 подхода на каждую ногу.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vagus">вагус</span></td>
+            <td><strong>Когерентное дыхание (5-6/мин)</strong></td>
+            <td class="instr">Медленное дыхание с частотой 5–6 вдохов/мин (вдох 5–6 сек, выдох 5–6 сек)</td>
+            <td class="why-cell">Максимальная активация барорецепторного рефлекса → синхронизация HRV с дыханием → ↑ парасимпатического тонуса. Самая эффективная дыхательная техника для вагуса.</td>
+            <td class="instr">Сядьте прямо. Вдох носом 5–6 сек, выдох ртом 5–6 сек. Пауза между циклами минимальная. 5 мин. Выполнять каждые 2–3 часа. Можно с браслетом/пульсометром.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vagus">вагус</span></td>
+            <td><strong>Гудение / Brahmari pranayama</strong></td>
+            <td class="instr">Протяжное гудение или пение на выдохе, вибрация голосовых связок</td>
+            <td class="why-cell">Двойной механизм: вибрация голосовых связок стимулирует ларингеальную ветвь вагуса + удлинённый выдох → парасимпатический сдвиг. + вибрация черепа → ↓ сенсорной гиперчувствительности.</td>
+            <td class="instr">Сядьте, закройте глаза. На вдохе носом 4 сек. На выдохе — протяжное «Ом-м-м-м» или гудение с закрытым ртом. Язык прижат к нёбу. 5 мин. Можно в перерыв, перед сном, при тревоге.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-sens">сенсор</span></td>
+            <td><strong>Проприоцептивная нагрузка</strong></td>
+            <td class="instr">Упражнения с глубоким давлением: планка, отжимания, поза ребёнка, йога</td>
+            <td class="why-cell">Глубокое давление → выброс серотонина и дофамина → ↓ тревоги, ↑ сенсорной регуляции. Проприоцептивная стимуляция → ↑ осознания тела → ↓ дезориентации.</td>
+            <td class="instr">Планка: 30–60 сек. Отжимания: 10–15 раз. Поза ребёнка (йога): 1–2 мин. Выберите 1–2 упражнения, выполняйте 5–10 мин. При головокружении — поза ребёнка.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-sens">сенсор</span></td>
+            <td><strong>Сенсорные перерывы (диета)</strong></td>
+            <td class="instr">Запланированные 1–2 мин тишины, темноты или глубокого давления каждый 2–3 час</td>
+            <td class="why-cell">Профилактика сенсорной перегрузки. Поддержание оптимального уровня возбуждения ЦНС. Предотвращение накопления сенсорного стресса.</td>
+            <td class="instr">Каждые 2–3 ч: 2 мин глубокого давления (утяжеленный жилет/одеяло), или 1 мин в тихой тёмной комнате, или 30 сек объятия/самомассажа рук.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-resp">дыхат</span></td>
+            <td><strong>Квадратное дыхание (Box breathing)</strong></td>
+            <td class="instr">Вдох 4 сек — задержка 4 сек — выдох 4 сек — задержка 4 сек</td>
+            <td class="why-cell">Выравнивание симпатической и парасимпатической активности. Равные фазы → баланс нервной системы. Улучшает концентрацию и снижает тревожность.</td>
+            <td class="instr">Вдох носом 4 сек. Задержка 4 сек. Выдох ртом 4 сек. Задержка 4 сек. Повторить 4–5 раз. Использовать перед сложными задачами или при нарастании тревоги.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ======================== EVENING ======================== -->
+  <div class="sub-block" id="ex-evening">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th style="width:70px;">Категория</th><th style="width:130px;">Упражнение</th><th style="width:160px;">Что это</th><th style="width:160px;">Почему это работает</th><th>Инструкция выполнения</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="cat-tag cat-vest">вестиб</span></td>
+            <td><strong>Габитуация (лёжа, щадящая)</strong></td>
+            <td class="instr">Медленные повороты головы лёжа с паузами — в безопасной позиции</td>
+            <td class="why-cell">Продолжение габитуации в конце дня без риска падения. Закрепление дневной работы. Подготовка нервной системы к ночному восстановлению.</td>
+            <td class="instr">Лёжа на спине. Медленно поверните голову влево до упора, задержитесь 10 сек. Вернитесь. Вправо — 10 сек. 3–5 повторов. Если головокружение — закрыть глаза, подождать.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vagus">вагус</span></td>
+            <td><strong>Диафрагмальное дыхание с удлинённым выдохом</strong></td>
+            <td class="instr">Медленное дыхание животом: вдох 4 сек, выдох 6–8 сек</td>
+            <td class="why-cell">Удлинённый выдох → максимальная вагусная активация → ↓ ЧСС, ↓ АД, ↓ кортизол. Диафрагмальное дыхание массирует блуждающий нерв через брюшное давление.</td>
+            <td class="instr">Лягте, рука на животе. Вдох носом 4 сек — живот поднимается. Выдох ртом 6–8 сек — живот опускается. 5–10 мин. Перед сном, после Wilbarger-протокола.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-vagus">вагус</span></td>
+            <td><strong>Bhramari (пчелиное дыхание)</strong></td>
+            <td class="instr">Гудящий выдох с закрытыми ушами пальцами — усиление вибрации</td>
+            <td class="why-cell">Усиленная вибрация через закупорку ушных каналов → мощная стимуляция ларингеальной ветви вагуса + вибрация черепа → парасимпатический ответ + ↓ сенсорной гиперчувствительности.</td>
+            <td class="instr">Закройте уши большими пальцами, глаза — остальными пальцами. Вдох носом 4 сек. На выдохе — гудящий звук «М-м-м» как пчела. 5–10 циклов. Ощущение вибрации в голове.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-sens">сенсор</span></td>
+            <td><strong>Wilbarger-протокол (DPPT)</strong></td>
+            <td class="instr">Глубокое давление щеткой по коже с последующей компрессией суставов</td>
+            <td class="why-cell">Глубокое давление → активация проприоцептивных рецепторов → выброс серотонина → успокаивающий, организующий эффект на ЦНС. Снижает тактильную и сенсорную защиту.</td>
+            <td class="instr">Специальной щеткой (Therabrush или жёсткая нейлоновая): руки (ладонь → плечо) ×3, спина ×3, ноги ×3. НЕ лицо, НЕ живот. Затем — компрессия суставов (плечи, локти, запястья, бёдра, колени). Каждые 2 ч.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-sens">сенсор</span></td>
+            <td><strong>Утяжелённое одеяло</strong></td>
+            <td class="instr">Использование одеяла весом 4–8 кг (~10% веса тела) во время сна</td>
+            <td class="why-cell">Глубокое давление через всю поверхность тела → проприоцептивная стимуляция → выброс серотонина → превращение в мелатонин → ↓ тревоги, ↑ глубокого сна.</td>
+            <td class="instr">Использовать одеяло за 30 мин до сна. Вес: ~10% от массы тела (≈4–8 кг). При клаустрофобии или дискомфорте — начать с лёгкого, постепенно увеличивая вес. Не использовать при апноэ сна.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-sens">сенсор</span></td>
+            <td><strong>Скрининг сенсорной защиты</strong></td>
+            <td class="instr">Оценка реакций на разные сенсорные стимулы (свет, звук, прикосновения)</td>
+            <td class="why-cell">Осознание триггеров сенсорной гиперчувствительности → возможность их профилактики. Снижение накопления сенсорного стресса в течение дня.</td>
+            <td class="instr">Вечером отметьте: что вызывало дискомфорт сегодня (яркий свет, шум, одежда, прикосновения)? Запишите заметку в дневник. Планируйте завтра: избежать триггеров или подготовить защиту.</td>
+          </tr>
+          <tr>
+            <td><span class="cat-tag cat-resp">дыхат</span></td>
+            <td><strong>Расслабляющее дыхание «Счёт»</strong></td>
+            <td class="instr">Медленный выдох через нос попеременно: вдох 4, выдох 6, затем 8 и т.д.</td>
+            <td class="why-cell">Прогрессивное удлинение выдоха ↑ вагусный тонус. Фокус на счёте ↓ мыслительную активность. Плавный переход ко сну.</td>
+            <td class="instr">Лёжа в постели. Вдох носом 4 сек. Выдох носом 6 сек. Через 3 цикла: выдох 8 сек. Через ещё 3: выдох 10 сек. Не форсировать. 5–10 мин.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /card: exercises table -->
+
+<footer class="footer">
+  <p>Упражнения составлены на основе протоколов Cawthorne-Cooksey, Herdman VRT, поливагальной теории Порджиса, Wilbarger DPPT и дыхательных практик Вайля</p>
+  <p>Перед началом выполнения — консультация врача. При усилении симптомов прекратите и обратитесь к специалисту.</p>
+</footer>
+
+</div><!-- /tab-exercises -->
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- ═══ TAB 3: ПИТАНИЕ ═══ -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-food">
+
+<div class="card" style="border-left: 4px solid var(--accent);">
+  <div class="card-title">◇ Быстрая оценка продуктов и блюд</div>
+  <p style="font-size:0.74rem;color:var(--text-dim);margin-bottom:0.6rem;">
+    <span class="tag" style="background:var(--green-bg);color:#2a7a55;">✅ Разрешено</span>
+    <span class="tag" style="background:var(--amber-bg);color:#8a6a2a;">⚠️ С оговорками</span>
+    <span class="tag" style="background:var(--red-bg);color:#a04545;">❌ Не рекомендуется</span>
+    — столбцы можно редактировать, строки добавлять через кнопку внизу
+  </p>
+  <div class="table-wrap">
+    <table class="tbl" id="foodChecker">
+      <thead><tr><th>Продукт / Блюдо</th><th>Гистамин</th><th>ГИ</th><th>Вердикт</th><th>Пояснение</th><th></th></tr></thead>
+      <tbody id="checkerBody">
+        <tr>
+          <td><span class="editable" contenteditable="true">Гречка отварная</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="tag" style="background:var(--green-bg);color:#2a7a55;">✅</span></td>
+          <td><span class="editable" contenteditable="true">Чистая гречка — отлично. Безглютеновая, низкий ГИ, низкий гистамин.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+        <tr>
+          <td><span class="editable" contenteditable="true">Сливочное масло (свежее)</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--amber);">средний</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">—</span></td>
+          <td><span class="tag" style="background:var(--amber-bg);color:#8a6a2a;">⚠️</span></td>
+          <td><span class="editable" contenteditable="true">Молочный продукт. В небольших кол-вах (10–15 г) OK, если масло свежее. Без заквасок.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+        <tr>
+          <td><span class="editable" contenteditable="true">Банан (спелый)</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--amber);">средний (50–60)</span></td>
+          <td><span class="tag" style="background:var(--amber-bg);color:#8a6a2a;">⚠️</span></td>
+          <td><span class="editable" contenteditable="true">Гистамин низкий, но ГИ средний (в зелёном — ниже). ½ банана в день допустимо. В сочетании с гречкой ↑ суммарный ГИ.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+        <tr>
+          <td><span class="editable" contenteditable="true">Сырник (творожник) жареный</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--red);">средний–высокий</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--amber);">средний</span></td>
+          <td><span class="tag" style="background:var(--red-bg);color:#a04545;">❌</span></td>
+          <td><span class="editable" contenteditable="true">Проблема: 1) творог — только свежий (до 24ч), иначе ↑ гистамин; 2) жарка → AGEs + ПОПускать; 3) мука/сахар ↑ ГИ. Замена: творог свежий без термообработки.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+        <tr>
+          <td><span class="editable" contenteditable="true">Кофе чёрный</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--red);">высокий</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">—</span></td>
+          <td><span class="tag" style="background:var(--red-bg);color:#a04545;">❌</span></td>
+          <td><span class="editable" contenteditable="true">Кофеин ↑ кортизол (активация HPA), ↑ тревогу, ↑ проницаемость BLB. Кофе — высвобождает гистамин. Исключить на 3–4 нед. Замена: ромашковый/имбирный чай.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+        <tr>
+          <td><span class="editable" contenteditable="true">Гречка + паровая куриная грудка + брокколи</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="tag" style="background:var(--green-bg);color:#2a7a55;">✅</span></td>
+          <td><span class="editable" contenteditable="true">Идеальный обеденный приём. Все компоненты — низкий гистамин, низкий ГИ, сбалансировано.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+        <tr>
+          <td><span class="editable" contenteditable="true">Овсянка на воде + черника + тыквенные семечки</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="tag" style="background:var(--green-bg);color:#2a7a55;">✅</span></td>
+          <td><span class="editable" contenteditable="true">Эталонный завтрак. Овсянка долгой варки — низкий ГИ. Черника — антиоксиданты. Семечки — магний для нервной системы.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+        <tr>
+          <td><span class="editable" contenteditable="true">Омлет из 2 яиц с цукини + салат из огурца</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="tag" style="background:var(--green-bg);color:#2a7a55;">✅</span></td>
+          <td><span class="editable" contenteditable="true">Белковый завтрак. Яйца свежие (до 5–7 дн). Цукини и огурец — низкий гистамин. Заправить оливковым маслом.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+        <tr>
+          <td><span class="editable" contenteditable="true">Творог свежий с грушей и льняным семенем</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="editable" contenteditable="true" style="color:var(--green);">низкий</span></td>
+          <td><span class="tag" style="background:var(--green-bg);color:#2a7a55;">✅</span></td>
+          <td><span class="editable" contenteditable="true">Хороший ужин. Творог — только свежий (24 ч). Груша — низкий ГИ. Лён — омега-3.</span></td>
+          <td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:0.5rem;">
+    <button class="btn-reset" onclick="addCheckerRow()" style="font-size:0.78rem;padding:0.3rem 0.8rem;">＋ Добавить свою запись</button>
+    <span style="font-size:0.7rem;color:var(--text-faint);margin-left:0.5rem;">(все поля editable — кликните чтобы изменить)</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">◇ Справочник продуктов: низкогистаминовое питание с низким ГИ</div>
+  <p style="font-size:0.74rem;color:var(--text-dim);margin-bottom:0.8rem;">
+    Группировка по приёмам пищи. ГИ — гликемический индекс. Уровень гистамина: <span style="color:var(--green);">● низкий</span> · <span style="color:var(--amber);">● средний</span> · <span style="color:var(--red);">● высокий</span>.
+    Выбирайте свежие, неферментированные, термически необработанные длительно продукты.
+  </p>
+
+  <div class="sub-tabs">
+    <button class="sub-btn active" data-food="morning">🌅 Утро (завтрак)</button>
+    <button class="sub-btn" data-food="day">☀️ День (обед)</button>
+    <button class="sub-btn" data-food="evening">🌆 Вечер (ужин)</button>
+  </div>
+
+  <!-- Food: Morning -->
+  <div class="sub-block active" id="food-morning">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th>Продукт</th><th>Категория</th><th>ГИ</th><th>Гистамин</th><th>Примечание</th></tr></thead>
+        <tbody>
+          <tr><td>Овсянка (долгая варка)</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Цельнозерновая, не мгновенная</td></tr>
+          <tr><td>Гречка зелёная/пропаренная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Безглютеновый источник сложных углеводов</td></tr>
+          <tr><td>Киноа</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Полноценный белок, все аминокислоты</td></tr>
+          <tr><td>Яйца (свежие, всмятку/омлет)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Хранить не более 5–7 дней</td></tr>
+          <tr><td>Творог нежирный свежий</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Только свежий (до 24 ч), без заквасок</td></tr>
+          <tr><td>Груша</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Свежая, с кожурой</td></tr>
+          <tr><td>Черника/голубика</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Замороженная тоже OK</td></tr>
+          <tr><td>Яблоко зелёное</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Свежее, без кожицы при чувствительности</td></tr>
+          <tr><td>Тыквенные семечки</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Магний, цинк — поддержка нервной системы</td></tr>
+          <tr><td>Миндаль (сырой, замоченный)</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Не более горсти; замачивать 8 ч</td></tr>
+          <tr><td>Кокосовое масло</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Для жарки или в кашу</td></tr>
+          <tr><td>Ромашковый/имбирный чай</td><td><span class="cat-tag" style="background:#dceafa;color:#2a5f8a;">Напиток</span></td><td style="color:var(--green);">—</td><td style="color:var(--green);">низкий</td><td>Без кофеина, противовоспалительный</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Food: Day -->
+  <div class="sub-block" id="food-day">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th>Продукт</th><th>Категория</th><th>ГИ</th><th>Гистамин</th><th>Примечание</th></tr></thead>
+        <tbody>
+          <tr><td>Куриная грудка (свежая, паровая)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Приготовить сразу после покупки</td></tr>
+          <tr><td>Филе индейки</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Не мариновать, готовить в день покупки</td></tr>
+          <tr><td>Рыба белая свежая (треска/судак)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Парная/свежемороженая; приготовить в день разморозки</td></tr>
+          <tr><td>Рис басмати</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Углеводы</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Коричневый — низкий ГИ</td></tr>
+          <tr><td>Картофель отварной (охлаждённый)</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Углеводы</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>После охлаждения — резистентный крахмал</td></tr>
+          <tr><td>Батат</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Углеводы</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Запечённый, богат бета-каротином</td></tr>
+          <tr><td>Брокколи</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>На пару — сохраняет сульфорафан</td></tr>
+          <tr><td>Цветная капуста</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Запечь или на пару</td></tr>
+          <tr><td>Кабачок/цуккини</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Тушёный или гриль</td></tr>
+          <tr><td>Морковь (свежая, тушёная)</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Сырая — ниже ГИ</td></tr>
+          <tr><td>Листовой салат/руккола</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Без заправок на уксусе</td></tr>
+          <tr><td>Огурец свежий</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Гидратация, кремний</td></tr>
+          <tr><td>Сельдерей</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Натуральный диуретик, противовоспалительный</td></tr>
+          <tr><td>Оливковое масло EV</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">—</td><td style="color:var(--green);">низкий</td><td>Полифенолы, олеокантал — ↓ воспаление</td></tr>
+          <tr><td>Чечевица красная/зелёная</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Хорошо промыть, замочить 4 ч</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Food: Evening -->
+  <div class="sub-block" id="food-evening">
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th>Продукт</th><th>Категория</th><th>ГИ</th><th>Гистамин</th><th>Примечание</th></tr></thead>
+        <tbody>
+          <tr><td>Овощной суп (без зажарки)</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Кабачок, морковь, брокколи, сельдерей</td></tr>
+          <tr><td>Тыква запечёная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Магний, триптофан (→ серотонин)</td></tr>
+          <tr><td>Спаржа зелёная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>На пару, источник фолатов</td></tr>
+          <tr><td>Свёкла варёная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Нитраты → NO → вазодилатация</td></tr>
+          <tr><td>Печёное яблоко (без кожуры)</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--amber);">средний</td><td style="color:var(--green);">низкий</td><td>Пектин, лёгкое переваривание</td></tr>
+          <tr><td>Груша запечёная</td><td><span class="cat-tag" style="background:#e6f3ed;color:#2a7a55;">Клетчатка</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Альтернатива яблоку</td></tr>
+          <tr><td>Кролик (филе, тушёное)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Гипоаллергенный белок</td></tr>
+          <tr><td>Рыба белая (минтай/хек, паровая)</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Свежемороженая, приготовить сразу</td></tr>
+          <tr><td>Творог нежирный свежий</td><td><span class="cat-tag" style="background:#f0e6fa;color:#6a4a8a;">Белок</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Только сегодняшний; можно с зеленью</td></tr>
+          <tr><td>Лён (семена, молотые)</td><td><span class="cat-tag" style="background:#fcf2e0;color:#8a6a2a;">Жиры</span></td><td style="color:var(--green);">низкий</td><td style="color:var(--green);">низкий</td><td>Омега-3, клетчатка; 1 ст.л. в день</td></tr>
+          <tr><td>Чай из ромашки/мелиссы</td><td><span class="cat-tag" style="background:#dceafa;color:#2a5f8a;">Напиток</span></td><td style="color:var(--green);">—</td><td style="color:var(--green);">низкий</td><td>Успокаивает ЦНС, ↓ тревогу</td></tr>
+          <tr><td>Вода тёплая с лимоном (долька)</td><td><span class="cat-tag" style="background:#dceafa;color:#2a5f8a;">Напиток</span></td><td style="color:var(--green);">—</td><td style="color:var(--green);">низкий</td><td>Витамин C, гидратация</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="border-left: 4px solid var(--green);">
+  <div class="card-title">◇ Правила низкогистаминового питания</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;font-size:0.76rem;">
+    <div>
+      <div style="font-weight:600;color:var(--green);margin-bottom:0.3rem;">✓ Можно</div>
+      <ul style="padding-left:1.2rem;">
+        <li>Свежие овощи и фрукты (кроме томатов, шпината, баклажанов)</li>
+        <li>Свежее мясо/рыба (приготовить в день покупки)</li>
+        <li>Крупы: гречка, киноа, овёс, рис басмати</li>
+        <li>Яйца, свежий творог, кокосовое/оливковое масло</li>
+        <li>Травяные чаи, вода с лимоном</li>
+      </ul>
+    </div>
+    <div>
+      <div style="font-weight:600;color:var(--red);margin-bottom:0.3rem;">✗ Исключить на 3-4 недели</div>
+      <ul style="padding-left:1.2rem;">
+        <li>Ферментированное: квашеная капуста, кимчи, кефир, йогурт</li>
+        <li>Выдержанные сыры, колбасы, копчёности, консервы</li>
+        <li>Алкоголь (особенно пиво, вино)</li>
+        <li>Белки с хранением >24 ч (остатки еды)</li>
+        <li>Шоколад, какао, кофе, чёрный чай</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>Низкогистаминовая диета — временная мера (3–4 недели) для снижения нагрузки на тучные клетки</p>
+  <p>После стихания симптомов — постепенное расширение рациона по 1 продукту в 2–3 дня</p>
+</footer>
+
+</div><!-- /tab-food -->
+
+</div><!-- /app -->
+
+<script>
+(function() {
+  'use strict';
+
+  const STORAGE_KEY = 'vestibular_dashboard_v2';
+
+  // ─── today date ───
+  function setToday() {
+    const d = new Date();
+    const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+    document.getElementById('todayDisplay').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  setToday();
+
+  // ─── LocalStorage ───
+  function saveAll() {
+    const data = {};
+    document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+      const key = el.dataset.key;
+      if (key) data[key] = el.innerText;
+    });
+    document.querySelectorAll('#dailyChecklist input[type="checkbox"]').forEach(cb => {
+      data[cb.dataset.key] = cb.checked;
+    });
+    try {
+      data.weeklyLog = JSON.parse(localStorage.getItem('weeklyLog_v2') || '[]');
+    } catch(e) { data.weeklyLog = []; }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function loadAll() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      Object.entries(data).forEach(([key, val]) => {
+        if (key === 'weeklyLog') return;
+        if (typeof val === 'boolean') {
+          const cb = document.querySelector(`#dailyChecklist input[data-key="${key}"]`);
+          if (cb) { cb.checked = val; updateCheckCount(); }
+        } else {
+          const el = document.querySelector(`[data-key="${key}"]`);
+          if (el && el.isContentEditable) el.innerText = val;
+        }
+      });
+    } catch(e) { /* ignore */ }
+  }
+
+  document.addEventListener('input', () => { saveAll(); updateBars(); updateStats(); });
+  document.querySelectorAll('#dailyChecklist input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => { saveAll(); updateCheckCount(); updateStats(); });
+  });
+
+  // ─── Checklist ───
+  function updateCheckCount() {
+    const cbs = document.querySelectorAll('#dailyChecklist input[type="checkbox"]');
+    const checked = Array.from(cbs).filter(cb => cb.checked).length;
+    document.getElementById('checkCount').textContent = checked;
+    cbs.forEach(cb => {
+      cb.closest('li').classList.toggle('checked', cb.checked);
+    });
+    updateStats();
+  }
+
+  window.resetChecklist = function() {
+    if (!confirm('Сбросить все отметки на сегодня?')) return;
+    document.querySelectorAll('#dailyChecklist input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+    updateCheckCount(); saveAll();
+  };
+
+  // ─── Symptom bars ───
+  function updateBars() {
+    const pairs = [
+      { id:'scoreVertigo', bar:'barVertigo' },
+      { id:'scoreAnxiety', bar:'barAnxiety' },
+      { id:'scoreNeck', bar:'barNeck' },
+      { id:'scoreFatigue', bar:'barFatigue' },
+    ];
+    pairs.forEach(p => {
+      const el = document.getElementById(p.id);
+      const bar = document.getElementById(p.bar);
+      if (el && bar) {
+        let v = parseFloat(el.innerText) || 0;
+        v = Math.max(0, Math.min(10, v));
+        bar.style.width = (v * 10) + '%';
+      }
+    });
+  }
+  document.querySelectorAll('.sym-item .editable').forEach(el => {
+    el.addEventListener('input', () => { updateBars(); saveAll(); });
+    el.addEventListener('blur', () => {
+      let v = parseFloat(el.innerText) || 0;
+      v = Math.max(0, Math.min(10, v));
+      el.innerText = Math.round(v);
+      updateBars(); saveAll();
+    });
+  });
+
+  window.clearNote = function() {
+    document.getElementById('dailyNote').innerText = '';
+    saveAll();
+  };
+
+  // ─── Weekly log ───
+  function getWeekLog() {
+    try { return JSON.parse(localStorage.getItem('weeklyLog_v2') || '[]'); } catch(e) { return []; }
+  }
+  function setWeekLog(log) {
+    localStorage.setItem('weeklyLog_v2', JSON.stringify(log));
+    renderWeekLog();
+  }
+  function renderWeekLog() {
+    const log = getWeekLog();
+    const tbody = document.getElementById('weeklyBody');
+    tbody.innerHTML = '';
+    if (!log.length) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-faint);padding:0.8rem;">Нет записей. Добавьте первую.</td></tr>';
+      return;
+    }
+    log.slice().reverse().forEach(entry => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${entry.date||'?'}</td><td>${entry.vertigo??'—'}</td><td>${entry.anxiety??'—'}</td><td>${entry.check??'—'}/7</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${entry.note||''}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.saveWeekDay = function() {
+    const d = new Date();
+    const m = d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
+    const vertigo = parseFloat(document.getElementById('scoreVertigo').innerText) || 0;
+    const anxiety = parseFloat(document.getElementById('scoreAnxiety').innerText) || 0;
+    const checks = document.querySelectorAll('#dailyChecklist input[type="checkbox"]');
+    const done = Array.from(checks).filter(cb => cb.checked).length;
+    const note = document.getElementById('dailyNote')?.innerText?.slice(0, 60) || '';
+    const log = getWeekLog();
+    const todayStr = d.toLocaleDateString('ru-RU');
+    const idx = log.findIndex(e => e.fullDate === todayStr);
+    if (idx >= 0) {
+      log[idx] = { date:m, fullDate:todayStr, vertigo, anxiety, check:done, note };
+    } else {
+      log.push({ date:m, fullDate:todayStr, vertigo, anxiety, check:done, note });
+    }
+    setWeekLog(log);
+    updateStats();
+  };
+
+  window.clearWeek = function() {
+    if (!confirm('Очистить недельный лог?')) return;
+    localStorage.setItem('weeklyLog_v1', '[]');
+    renderWeekLog();
+    updateStats();
+  };
+
+  // ─── Food checker ───
+  window.addCheckerRow = function() {
+    const tbody = document.getElementById('checkerBody');
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><span class="editable" contenteditable="true">Новый продукт</span></td>' +
+      '<td><span class="editable" contenteditable="true" style="color:var(--amber);">—</span></td>' +
+      '<td><span class="editable" contenteditable="true" style="color:var(--amber);">—</span></td>' +
+      '<td><span class="tag" style="background:var(--amber-bg);color:#8a6a2a;">⚠️</span></td>' +
+      '<td><span class="editable" contenteditable="true">Добавьте описание</span></td>' +
+      '<td><span class="del-row" onclick="delRow(this)" style="cursor:pointer;color:var(--red);font-size:0.8rem;">✕</span></td>';
+    tbody.appendChild(tr);
+    saveAll();
+  };
+
+  window.delRow = function(el) {
+    if (!confirm('Удалить эту запись?')) return;
+    const tr = el.closest('tr');
+    if (tr) tr.remove();
+    saveAll();
+  };
+
+  // ─── Stats ───
+  function updateStats() {
+    const log = getWeekLog();
+    document.getElementById('statDays').textContent = log.length;
+    const totalChecks = log.reduce((s, e) => s + (e.check||0), 0);
+    const maxChecks = log.length * 7;
+    document.getElementById('statCheckRate').textContent = maxChecks > 0 ? Math.round((totalChecks/maxChecks)*100) + '%' : '0%';
+    if (log.length >= 2) {
+      const sorted = log.slice().sort((a,b) => (a.fullDate||'').localeCompare(b.fullDate||''));
+      const first = sorted[0].vertigo??0;
+      const last = sorted[sorted.length-1].vertigo??0;
+      const diff = first - last;
+      if (diff > 0) document.getElementById('statTrend').textContent = '↓ ' + diff + ' (улучшение)';
+      else if (diff < 0) document.getElementById('statTrend').textContent = '↑ ' + Math.abs(diff) + ' (ухудшение)';
+      else document.getElementById('statTrend').textContent = '→ без изменений';
+    } else {
+      document.getElementById('statTrend').textContent = '—';
+    }
+  }
+
+  // ─── Init ───
+  loadAll();
+  updateCheckCount();
+  updateBars();
+  renderWeekLog();
+  updateStats();
+  window.addEventListener('beforeunload', () => { saveWeekDay(); saveAll(); });
+
+  // ─── Tabs: main ───
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ─── Sub-tabs: exercises time-of-day ───
+  document.querySelectorAll('.sub-tabs .sub-btn[data-ex]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const target = this.dataset.ex;
+      const parent = this.closest('.card');
+      parent.querySelectorAll('.sub-btn[data-ex]').forEach(b => b.classList.remove('active'));
+      parent.querySelectorAll('.sub-block[id^="ex-"]').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      parent.querySelector('#ex-' + target).classList.add('active');
+    });
+  });
+
+  // ─── Sub-tabs: food ───
+  document.querySelectorAll('.sub-tabs .sub-btn[data-food]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const target = this.dataset.food;
+      const parent = this.closest('.card');
+      parent.querySelectorAll('.sub-btn[data-food]').forEach(b => b.classList.remove('active'));
+      parent.querySelectorAll('.sub-block[id^="food-"]').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      parent.querySelector('#food-' + target).classList.add('active');
+    });
+  });
+
+})();
+</script>
+</body>
+</html>

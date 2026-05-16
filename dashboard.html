@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дашборд: Медицинские данные</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+    --accent: #6366f1;
+    --accent-dim: #4f46e5;
+    --danger: #ef4444;
+    --amber: #f59e0b;
+    --emerald: #10b981;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  }
+  html { font-size: 15px; }
+  body {
+    font-family: var(--font);
+    background: var(--slate-50);
+    color: var(--slate-800);
+    line-height: 1.6;
+    padding: 0;
+  }
+  .app { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
+  @media (min-width: 768px) { .app { padding: 3rem 2.5rem; } }
+
+  .header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--slate-200); }
+  .header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; color: var(--slate-900); }
+  .header h1 span { color: var(--accent); }
+  .header .meta { margin-top: 0.5rem; color: var(--slate-500); font-size: 0.85rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .header .badge { display: inline-block; font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.65rem; border-radius: 999px; background: var(--accent); color: #fff; }
+
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--slate-200);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+  .card-title { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--slate-500); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+  .card-title .icon { color: var(--accent); }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+  .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  thead th {
+    text-align: left; padding: 0.65rem 0.75rem; font-weight: 600; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.03em; color: var(--slate-500);
+    border-bottom: 2px solid var(--slate-200); white-space: nowrap;
+  }
+  tbody td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--slate-100); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--slate-50); }
+
+  .tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 500; padding: 0.15rem 0.5rem;
+    border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .tag-green { background: #f0fdf4; color: #15803d; }
+  .tag-yellow { background: #fefce8; color: #a16207; }
+  .tag-red { background: #fef2f2; color: #b91c1c; }
+  .tag-blue { background: #f0f9ff; color: #0369a1; }
+
+  .status { display: flex; align-items: center; gap: 0.4rem; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .status-dot.green { background: var(--emerald); }
+  .status-dot.yellow { background: var(--amber); }
+  .status-dot.red { background: var(--danger); }
+
+  .hypothesis { margin-bottom: 0.75rem; }
+  .hypothesis:last-child { margin-bottom: 0; }
+  .hypothesis .h-title { font-weight: 600; font-size: 0.9rem; }
+  .hypothesis .h-title .prob { font-weight: 400; font-size: 0.75rem; }
+  .hypothesis .h-body { font-size: 0.82rem; color: var(--slate-600); margin-top: 0.15rem; }
+
+  .rec-step { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.6rem 0; border-bottom: 1px solid var(--slate-100); }
+  .rec-step:last-child { border-bottom: none; }
+  .rec-num { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+  .rec-num.danger { background: var(--danger); }
+  .rec-num.amber { background: var(--amber); }
+  .rec-body { font-size: 0.85rem; }
+  .rec-body strong { color: var(--slate-900); }
+
+  .footer { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); font-size: 0.75rem; color: var(--slate-400); text-align: center; }
+
+  hr { border: none; border-top: 1px solid var(--slate-200); margin: 1rem 0; }
+
+  .questions li { padding: 0.4rem 0; font-size: 0.85rem; color: var(--slate-600); border-bottom: 1px solid var(--slate-100); }
+  .questions li:last-child { border-bottom: none; }
+  .questions li::marker { color: var(--accent); }
+
+  .dos-donts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem; font-size: 0.82rem; }
+  .dos-donts .do { color: var(--emerald); }
+  .dos-donts .dont { color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="header">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <h1><span>◆</span> Медицинский дашборд</h1>
+      <span class="badge">18 апреля 2026</span>
+    </div>
+    <div class="meta">
+      <span>Женщина</span>
+      <span>Жалобы: головокружение (~10 дн.), боли в шее</span>
+      <span>Направление: невролог → КТ</span>
+    </div>
+  </header>
+
+  <!-- ========== 0. ДИАГНОЗ ========== -->
+  <div class="card" style="border-left: 4px solid var(--accent);">
+    <div class="card-title"><span class="icon">◆</span> 0. Диагноз</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Диагноз</th><th>Дата</th><th>Статус</th><th>Источник</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Вестибулярный неврит</strong> (AB31.0)</td>
+            <td>18.04.2026</td>
+            <td><span class="tag tag-green">Подтверждён</span></td>
+            <td>Невролог (очный приём)</td>
+          </tr>
+          <tr>
+            <td><strong>Очаги литического хар-ра С4-С5</strong></td>
+            <td>18.04.2026</td>
+            <td><span class="tag tag-yellow">Требует МРТ</span></td>
+            <td>Рентгенолог (МСКТ)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== 1. ИССЛЕДОВАНИЯ ========== -->
+  <div class="card">
+    <div class="card-title"><span class="icon">◆</span> 1. Инструментальные исследования</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Исследование</th><th>Дата</th><th>Результат</th><th>Статус</th><th>Комментарий</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>МСКТ головного мозга</strong></td>
+            <td>18.04.2026</td>
+            <td>Патологий не выявлено. Кальцинаты (физиол.). Асимметрия желудочков.</td>
+            <td><span class="status"><span class="status-dot green"></span> Норма</span></td>
+            <td>Опухоли, кровоизлияния, очаги исключены</td>
+          </tr>
+          <tr>
+            <td><strong>МСКТ шейного отдела</strong></td>
+            <td>18.04.2026</td>
+            <td>Очаги литического хар-ра: С4 (3×5 мм), С5 (5×4 мм). Генез неясный.</td>
+            <td><span class="status"><span class="status-dot yellow"></span> Требует уточнения</span></td>
+            <td>МРТ необходимо для определения структуры</td>
+          </tr>
+          <tr>
+            <td><strong>Маммография</strong></td>
+            <td>19.09.2025</td>
+            <td>BI-RADS 2. Кисты до 0.6 см. Доброкачественно.</td>
+            <td><span class="status"><span class="status-dot green"></span> Норма</span></td>
+            <td>К раку отношения не имеет</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ========== 2. ЛАБОРАТОРНЫЕ АНАЛИЗЫ ========== -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">◆</span> 2A. Биохимия крови (11.04.2026)</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Показатель</th><th>Значение</th><th>Референс</th><th>Статус</th></tr></thead>
+          <tbody>
+            <tr><td>Магний</td><td>0.94 ммоль/л</td><td>0.66–1.07</td><td><span class="tag tag-green">Норма</span></td></tr>
+            <tr><td>СРБ</td><td>&lt; 0.33 мг/л</td><td>0.00–5.00</td><td><span class="tag tag-green">Норма</span></td></tr>
+            <tr><td>Железо</td><td>22.01 мкмоль/л</td><td>&nbsp;</td><td><span class="tag tag-green">Норма</span></td></tr>
+            <tr><td>Ферритин</td><td>85.40 нг/мл</td><td>&nbsp;</td><td><span class="tag tag-green">Норма</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">◆</span> 2B. ОАК + формула (11.04.2026)</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Показатель</th><th>Значение</th><th>Референс</th><th>Статус</th></tr></thead>
+          <tbody>
+            <tr><td>Гемоглобин</td><td>145 г/л</td><td>120–145 (♀)</td><td><span class="tag tag-yellow">Верхняя граница</span></td></tr>
+            <tr><td>Эритроциты</td><td>5.16</td><td>3.8–5.1</td><td><span class="tag tag-yellow">Верхняя граница</span></td></tr>
+            <tr><td>Гематокрит</td><td>46.6%</td><td>35–45%</td><td><span class="tag tag-yellow">Верхняя граница</span></td></tr>
+            <tr><td>Лейкоциты</td><td>4.18</td><td>4.0–9.0</td><td><span class="tag tag-yellow">Нижняя граница</span></td></tr>
+            <tr><td>Тромбоциты</td><td>229</td><td>150–400</td><td><span class="tag tag-green">Норма</span></td></tr>
+            <tr><td>СОЭ</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма</span></td></tr>
+            <tr><td>Лейкоформула</td><td colspan="2">Все показатели в норме</td><td><span class="tag tag-green">Норма</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 3. КЛИНИЧЕСКИЕ ДАННЫЕ ========== -->
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title"><span class="icon">◆</span> Симптомы</div>
+      <table>
+        <tbody>
+          <tr><td>Боли в шее</td><td><span class="tag tag-red">Да</span></td></tr>
+          <tr><td>Головокружение (стабильное, 10 дн.)</td><td><span class="tag tag-red">Да</span></td></tr>
+          <tr><td>Усиление при движении</td><td><span class="tag tag-red">Да</span></td></tr>
+          <tr><td>Улучшение лёжа + закрытые глаза</td><td><span class="tag tag-green">Да</span></td></tr>
+          <tr><td>Улучшение от массажа шеи</td><td><span class="tag tag-green">Да</span></td></tr>
+          <tr><td>Проба Дикса-Холлпайка (ДППГ)</td><td><span class="tag tag-green">Отрицательно</span></td></tr>
+          <tr><td>Эффект от магния</td><td><span class="tag tag-green">Помогает</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">◆</span> Гипотезы</div>
+      <div class="hypothesis">
+        <div class="h-title">Гемангиомы С4-С5 <span class="prob">🔴 Наиболее вероятно</span></div>
+        <div class="h-body">Доброкачественные сосудистые образования. Частая находка на КТ после 30–40 лет. Не влияют на анализы крови.</div>
+      </div>
+      <div class="hypothesis">
+        <div class="h-title">Цервикогенное головокружение <span class="prob">🔴 Высокая</span></div>
+        <div class="h-body">Связь с болью в шее, положительная динамика от массажа, улучшение лёжа.</div>
+      </div>
+      <div class="hypothesis">
+        <div class="h-title">Психогенное (тревожное) <span class="prob">🟡 Умеренная</span></div>
+        <div class="h-body">Стресс + тревога из-за результатов КТ. Замкнутый круг.</div>
+      </div>
+      <div class="hypothesis">
+        <div class="h-title">Метастатическое поражение <span class="prob">🟢 Крайне маловероятно</span></div>
+        <div class="h-body">Нормальные СРБ, СОЭ, ферритин, гемоглобин. Маммография и КТ головы — без патологий.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="icon">◆</span> Ключевой вывод</div>
+      <p style="font-size:0.9rem;color:var(--slate-700);">
+        Все дороги ведут к <strong>МРТ шейного отдела</strong>. 
+        Без него тревога не уйдёт, а упражнения нельзя делать вслепую.
+      </p>
+      <hr>
+      <p style="font-size:0.82rem;color:var(--slate-500);">
+        Анализы крови — <strong>щит</strong> против страшных диагнозов.
+        Нет анемии, нет воспаления, нет опухолей по данным КТ и маммографии.
+      </p>
+    </div>
+  </div>
+
+  <!-- ========== 4. РЕКОМЕНДАЦИИ ========== -->
+  <div class="card">
+    <div class="card-title"><span class="icon">◆</span> 4. Рекомендации</div>
+
+    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Приоритетные действия</div>
+    <div class="rec-step">
+      <span class="rec-num danger">1</span>
+      <div class="rec-body"><strong>МРТ шейного отдела позвоночника</strong> — определить природу очагов С4-С5. Золотой стандарт. Без него упражнения противопоказаны.</div>
+    </div>
+    <div class="rec-step">
+      <span class="rec-num danger">2</span>
+      <div class="rec-body"><strong>Приём невролога</strong> (запланирован) — с анализами крови, КТ, вопросами.</div>
+    </div>
+    <div class="rec-step">
+      <span class="rec-num amber">3</span>
+      <div class="rec-body"><strong>УЗИ сосудов шеи (БЦА)</strong> — по назначению невролога, оценка кровотока.</div>
+    </div>
+
+    <hr>
+
+    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Образ жизни</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div>
+        <p style="font-weight:600;font-size:0.8rem;color:var(--emerald);margin-bottom:0.25rem;">Можно и нужно</p>
+        <ul class="questions" style="font-size:0.82rem;">
+          <li>Пить больше воды (гематокрит повышен)</li>
+          <li>Ортопедическая подушка с валиком под шею</li>
+          <li>Изометрическая гимнастика («двойной подбородок»)</li>
+          <li>Диафрагмальное дыхание (животом)</li>
+          <li>Приём магния (глицинат/цитрат 300–400 мг/сут)</li>
+          <li>Мягкий массаж шеи (продолжать)</li>
+          <li>Дневник головокружения (когда/что провоцирует)</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-weight:600;font-size:0.8rem;color:var(--danger);margin-bottom:0.25rem;">Нельзя до МРТ</p>
+        <ul class="questions" style="font-size:0.82rem;">
+          <li>Активные упражнения для шеи (повороты, наклоны)</li>
+          <li>Спать на животе (шея выкручена)</li>
+          <li>Резкие движения головой</li>
+          <li>Игнорировать боль в шее</li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Вопросы к неврологу на приём</div>
+    <ol class="questions">
+      <li>Можно ли считать очаги в С4-С5 доброкачественными (гемангиомы) с учётом нормальных анализов крови?</li>
+      <li>Нужно ли МРТ с ангиографией (сосуды шеи) или достаточно стандартного режима?</li>
+      <li>Какие упражнения для шеи безопасны до получения МРТ?</li>
+      <li>Можно ли направить на УЗИ БЦА (сосуды шеи)?</li>
+      <li>Стоит ли рассмотреть вестибулярную реабилитацию или физиотерапию?</li>
+      <li>Может ли головокружение быть связано со спазмом мышц шеи (цервикогенное)?</li>
+    </ol>
+  </div>
+
+  <!-- ========== 5. СВОДКА ========== -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">◆</span> Что исключено (с высокой вероятностью)</div>
+      <ul class="questions">
+        <li>Опухоль головного мозга — КТ чистое</li>
+        <li>Инсульт/кровоизлияние — КТ чистое</li>
+        <li>Анемия — гемоглобин, ферритин, железо в норме</li>
+        <li>Острое воспаление — СРБ и СОЭ минимальны</li>
+        <li>Инфекция — лейкоциты и формула в норме</li>
+        <li>ДППГ (позиционное головокружение) — проба отрицательна</li>
+        <li>Рак молочной железы — BI-RADS 2 (09.2025)</li>
+        <li>Системное метастатическое поражение — кровь чистая, КТ и маммография чисты</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">◆</span> Что требует подтверждения</div>
+      <ul class="questions">
+        <li><strong>Природа очагов в С4-С5</strong> — МРТ шейного отдела</li>
+        <li><strong>Цервикогенное головокружение</strong> — оценка невролога + МРТ</li>
+        <li><strong>Сосудистый фактор</strong> — УЗИ БЦА (по показаниям)</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>Информация носит справочный характер. Для постановки диагноза и назначения лечения необходима очная консультация врача.</p>
+    <p style="margin-top:0.25rem;">Май 2026</p>
+  </footer>
+
+</div>
+</body>
+</html>
