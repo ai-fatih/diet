@@ -3,25 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f4f7fa">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<link rel="alternate" hreflang="ru" href="https://vestibular-rehabilitation.vercel.app/">
 <meta name="description" content="Персонализированный дашборд вестибулярной реабилитации: VRT-упражнения, вагусная стимуляция, стабилизация тучных клеток, низкогистаминовая диета, сон и сенсорная защита. Научно обоснованный протокол при вестибулярном неврите.">
 <meta name="keywords" content="вестибулярная реабилитация, вестибулярный неврит, VRT, VOR, вагусная стимуляция, низкогистаминовая диета, тучные клетки, кверцетин, Cawthorne-Cooksey, головокружение, нейровоспаление">
 <meta name="robots" content="index, follow, max-image-preview:large">
-<meta name="author" content="Vestibular Rehabilitation Dashboard">
+<meta name="author" content="Vestibular Rehabilitation Project">
 <meta name="publisher" content="Vestibular Rehabilitation Project">
 <link rel="canonical" href="https://vestibular-rehabilitation.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://vestibular-rehabilitation.vercel.app/">
-<meta property="og:title" content="Дашборд вестибулярной реабилитации">
-<meta property="og:description" content="Персонализированный протокол вестибулярной реабилитации: VRT, вагус, стабилизация тучных клеток, питание и сенсорная защита на основе научных данных.">
+<meta property="og:title" content="Дашборд вестибулярной реабилитации | VRT, вагус, питание">
+<meta property="og:description" content="Персонализированный дашборд вестибулярной реабилитации: VRT-упражнения, вагусная стимуляция, стабилизация тучных клеток, низкогистаминовая диета, сон и сенсорная защита. Научно обоснованный протокол при вестибулярном неврите.">
 <meta property="og:image" content="https://vestibular-rehabilitation.vercel.app/og-image.png">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:site_name" content="Vestibular Rehabilitation Dashboard">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Дашборд вестибулярной реабилитации">
-<meta name="twitter:description" content="Персонализированный протокол восстановления при вестибулярном неврите: упражнения, питание, вагусная стимуляция, сон.">
+<meta name="twitter:title" content="Дашборд вестибулярной реабилитации | VRT, вагус, питание">
+<meta name="twitter:description" content="Персонализированный дашборд вестибулярной реабилитации: VRT-упражнения, вагусная стимуляция, стабилизация тучных клеток, низкогистаминовая диета, сон и сенсорная защита.">
 <meta name="twitter:image" content="https://vestibular-rehabilitation.vercel.app/og-image.png">
 <script type="application/ld+json">
-{
+[{
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Дашборд вестибулярной реабилитации",
@@ -30,8 +35,25 @@
   "applicationCategory": "HealthApplication",
   "operatingSystem": "Any",
   "author": { "@type": "Organization", "name": "Vestibular Rehabilitation Project" },
-  "inLanguage": "ru"
-}
+  "inLanguage": "ru",
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Вестибулярный неврит",
+    "code": {
+      "@type": "MedicalCode",
+      "code": "AB31.0",
+      "codingSystem": "ICD-11"
+    }
+  }
+},
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://vestibular-rehabilitation.vercel.app/" },
+    { "@type": "ListItem", "position": 2, "name": "Дашборд реабилитации", "item": "https://vestibular-rehabilitation.vercel.app/#dashboard" }
+  ]
+}]
 </script>
 <title>Дашборд вестибулярной реабилитации | VRT, вагус, питание</title>
 <style>
@@ -290,7 +312,7 @@
   <div class="subtitle">Протокол на основе научных данных носит рекомендательный характер, важно проконсультироваться с лечащим врачом</div>
   <div class="wishes-bar" id="wishesBar"></div>
   <div class="meta-grid">
-    <div class="meta-field"><label>Диагноз</label><div class="editable" contenteditable="true" data-key="diagnosis">Вестибулярный неврит (AB31.0)</div></div>
+    <div class="meta-field"><label>Проблема</label><div data-key="diagnosis" style="font-size:0.85rem;padding:0.2rem 0.4rem;">Вестибулярный неврит (AB31.0)</div></div>
   </div>
 </header>
 
@@ -308,7 +330,7 @@
 <div class="tab-content active" id="tab-dashboard">
 
 <div class="card">
-  <div class="card-title">◇ Таймлайн восстановления</div>
+  <h2 class="card-title">◇ Таймлайн восстановления</div>
   <div class="tl">
     <div class="ph">
       <div class="dot done"></div>
@@ -341,7 +363,7 @@
 
 <!-- Entity Map -->
 <div class="card">
-  <div class="card-title">◇ Карта связей: порочный круг и точки вмешательства <span class="tag tag-purple">ключевой блок</span></div>
+  <h2 class="card-title">◇ Карта связей: порочный круг и точки вмешательства <span class="tag tag-purple">ключевой блок</span></div>
   <div class="emap">
     <div class="emap-row">
       <div class="emap-lvl l1">Ур.1: Хронический стресс / тревога</div>
@@ -381,7 +403,7 @@
 
 <!-- Biomarkers -->
 <div class="card">
-  <div class="card-title">◇ Биомаркеры воспаления и нейровосстановления</div>
+  <h2 class="card-title">◇ Биомаркеры воспаления и нейровосстановления</div>
   <div class="table-wrap">
     <table class="tbl">
       <thead><tr><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
@@ -407,7 +429,7 @@
 <!-- 4 rec cards -->
 <div class="grid-4">
   <div class="card">
-    <div class="card-title">◇ Вестибулярная реабилитация</div>
+    <h2 class="card-title">◇ Вестибулярная реабилитация</div>
     <p style="font-size:0.74rem;color:var(--text-dim);margin-bottom:0.4rem;">Последовательность по фазам:</p>
     <div class="rec-phase-grid">
       <div class="rec-phase"><div class="phdr acute">Фаза 1: Острая (1–3 дн)</div><ul><li>Постельный режим</li><li>Антиэметики при тошноте</li><li>Без резких движений</li></ul></div>
@@ -425,7 +447,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">◇ Вагусная стимуляция</div>
+    <h2 class="card-title">◇ Вагусная стимуляция</div>
     <table class="tbl">
       <thead><tr><th>Время</th><th>Практика</th><th>Длительность</th></tr></thead>
       <tbody>
@@ -439,15 +461,15 @@
   </div>
 
   <div class="card card-mc">
-    <div class="card-title"><span class="mc-accent">★ Приоритет</span> ◇ Стабилизация тучных клеток</div>
+    <h2 class="card-title"><span class="mc-accent">★ Приоритет</span> ◇ Стабилизация тучных клеток</div>
     <div class="rec-block">
-      <h4>🥗 Низкогистаминовая диета <span class="sub">SIGHI ×3-4 нед</span></h4>
+      <h3>🥗 Низкогистаминовая диета <span class="sub">SIGHI ×3-4 нед</span></h3>
       <div class="dd"><span class="do">✓</span> Исключить: ферментированное, выдержанные сыры, алкоголь, консервы, остатки >24ч</div>
       <div class="dd"><span class="do">✓</span> Основы: свежие овощи, зелень, куркума, имбирь, лук</div>
       <div class="dd"><span class="do">✓</span> Свежее мясо/рыба — приготовить в день покупки</div>
     </div>
     <div class="rec-block">
-      <h4>💊 Нутрицевтики для стабилизации MC</h4>
+      <h3>💊 Нутрицевтики для стабилизации MC</h3>
       <div class="dd">✓ <strong>Кверцетин</strong> 2000–4000 мг/д (флавонол, ингибирует дегрануляцию)</div>
       <div class="dd">✓ <strong>Лютеолин</strong> 100–200 мг/д (синергист кверцетина, ингибирует CRHR-1)</div>
       <div class="dd">✓ Витамин C 1–3 г/д (антиоксидант, ↓ гистамина)</div>
@@ -456,7 +478,7 @@
       <div class="dd">✓ Куркумин 1–4 г/д (↓TNF-α, ↓ активации MC, пиперин для усвоения)</div>
     </div>
     <div class="rec-block">
-      <h4>🧪 Мишени воздействия</h4>
+      <h3>🧪 Мишени воздействия</h3>
       <div class="dd">• MRGPRX2 — рецептор SP на MC → блокируется кверцетином</div>
       <div class="dd">• CRHR-1 — рецептор CRH на MC → блокируется лютеолином</div>
       <div class="dd">• ↓ гистамина → ↓ проницаемости BLB → ↓ отёка нерва</div>
@@ -464,28 +486,28 @@
   </div>
 
   <div class="card">
-    <div class="card-title">◇ Сон + сенсорная защита</div>
+    <h2 class="card-title">◇ Сон + сенсорная защита</div>
     <div class="rec-block">
-      <h4>🌙 Гигиена сна</h4>
+      <h3>🌙 Гигиена сна</h3>
       <div class="dd"><span class="do">✓</span> Пробуждение в одно время ±30 мин</div>
       <div class="dd"><span class="do">✓</span> Яркий свет утром (10–30 мин)</div>
       <div class="dd"><span class="do">✓</span> ↓ Синий свет с 20:00</div>
     </div>
     <div class="rec-block">
-      <h4>🧸 Сенсорная защита — базовый протокол</h4>
+      <h3>🧸 Сенсорная защита — базовый протокол</h3>
       <div class="dd">✓ Утяжелённое одеяло (глубокое давление → ↓ тревоги, ↑ серотонина)</div>
       <div class="dd">✓ Wilbarger-протокол (щётка + компрессия суставов) 2–3×/д</div>
       <div class="dd">✓ Магний глицинат 300–400 мг вечером</div>
     </div>
     <div class="rec-block">
-      <h4>🔇 Защита слуха при сиренах в городе</h4>
+      <h3>🔇 Защита слуха при сиренах в городе</h3>
       <div class="dd">✓ Беруши многоразовые силиконовые или пенные (снижают резкие звуки на 25–33 дБ)</div>
       <div class="dd">✓ Наушники шумоподавляющие с ANC (активное шумоподавление — например Anker Soundcore / Sony WH)</div>
       <div class="dd">✓ Белый или розовый шум ночью (вентилятор / приложение) — маскирует внезапные звуки</div>
       <div class="dd">✓ Маска для сна плотная анатомическая — блокирует свет, помогает быстрее успокоиться</div>
     </div>
     <div class="rec-block">
-      <h4>🧘 При пробуждении от сирен</h4>
+      <h3>🧘 При пробуждении от сирен</h3>
       <div class="dd">✓ Дыхание 4-7-8 (вдох 4 с → задержка 7 с → выдох 8 с) — снижает резкий выброс кортизола</div>
       <div class="dd">✓ Квадратное дыхание 4-4-4-4 — переключает нервную систему в парасимпатический режим</div>
       <div class="dd">✓ Гудение / Brahmari — вибрация голосовых связок стимулирует вагус, успокаивает</div>
@@ -493,7 +515,7 @@
       <div class="dd">✓ Маска на глаза — создаёт «безопасную темноту», блокирует дезориентирующий свет</div>
     </div>
     <div class="rec-block">
-      <h4>📋 Подготовка — снижает тревогу ожидания</h4>
+      <h3>📋 Подготовка — снижает тревогу ожидания</h3>
       <div class="dd">✓ Базовый набор на прикроватной тумбе: беруши + маска + power bank + документы</div>
       <div class="dd">✓ Заранее продуманный простой план (1–2 действия): надеть наушники → маска → дыхание</div>
       <div class="dd">✓ Наушники или беруши всегда в одном и том же месте — не надо искать в темноте</div>
@@ -504,7 +526,7 @@
 
 <!-- Daily routine (editable, grouped) -->
 <div class="card">
-  <div class="card-title">◇ Полный режим дня <span style="font-weight:400;color:var(--text-faint);text-transform:none;letter-spacing:0;">— редактируйте, добавляйте, удаляйте</span></div>
+  <h2 class="card-title">◇ Полный режим дня <span style="font-weight:400;color:var(--text-faint);text-transform:none;letter-spacing:0;">— редактируйте, добавляйте, удаляйте</span></div>
   <div class="routine-grid" id="routineGrid">
     <div class="routine-group" data-group="exercises">
       <div class="rg-header"><span class="rg-title">🏃 Упражнения</span><button class="rg-add" onclick="addRoutineItem('exercises')">+</button></div>
@@ -549,7 +571,7 @@
 
 <div class="grid-2">
   <div class="card">
-    <div class="card-title">◇ Ежедневный чеклист</div>
+    <h2 class="card-title">◇ Ежедневный чеклист</div>
     <ul class="cl" id="dailyChecklist">
       <li><input type="checkbox" data-key="cb_vagus_morning"><span>☀️ Утренняя вагусная практика (холод/дыхание)</span></li>
       <li><input type="checkbox" data-key="cb_vor"><span>👁 VOR-упражнения (3×1–2 мин)</span></li>
@@ -566,7 +588,7 @@
   </div>
 
   <div class="card">
-    <div class="card-title">◇ Шкала симптомов (сегодня)</div>
+    <h2 class="card-title">◇ Шкала симптомов (сегодня)</div>
     <div class="sym-item">
       <label>Вертиго</label>
       <div class="bw"><div class="bf v1" id="barVertigo"></div></div>
@@ -598,7 +620,7 @@
 
 <!-- Positive reinforcement -->
 <div class="card">
-  <div class="card-title">◇ Позитивное подкрепление</div>
+  <h2 class="card-title">◇ Позитивное подкрепление</div>
   <div class="prog-grid" id="progressStats">
     <div class="sc"><div class="num" id="statDays">0</div><div class="lbl">дней в протоколе</div></div>
     <div class="sc"><div class="num" id="statCheckRate">0%</div><div class="lbl">выполнение чеклиста</div></div>
@@ -619,7 +641,7 @@
 
 <!-- Weekly log -->
 <div class="card">
-  <div class="card-title">◇ Недельный лог</div>
+  <h2 class="card-title">◇ Недельный лог</div>
   <div class="table-wrap">
     <table class="tbl" id="weeklyLog">
       <thead><tr><th>День</th><th>Вертиго (0-10)</th><th>Тревога (0-10)</th><th>Чеклист (/7)</th><th>Заметка</th></tr></thead>
@@ -646,7 +668,7 @@
 
 <!-- SOURCES -->
 <div class="card">
-  <div class="card-title">◇ Источники и научная база методик</div>
+  <h2 class="card-title">◇ Источники и научная база методик</div>
   <div class="src-grid">
     <div class="src-item">
       <div class="src-field">Вестибулярная реабилитация</div>
@@ -713,7 +735,7 @@
 
 <!-- PRINCIPLES -->
 <div class="card">
-  <div class="card-title">◇ Основные принципы выполнения</div>
+  <h2 class="card-title">◇ Основные принципы выполнения</div>
   <div class="principles">
     <div class="principle"><strong>1. Прогрессия от простого к сложному:</strong> лёжа → сидя → стоя → в движении. Не переходите к следующему уровню, пока текущий не перестанет вызывать дискомфорт.</div>
     <div class="principle"><strong>2. Короткие сессии, часто:</strong> 1–2 минуты, 5 раз в день. Лучше 5×1 мин, чем 1×5 мин. Регулярность — основа нейропластичности.</div>
@@ -724,7 +746,7 @@
 
 <!-- TIME-OF-DAY SUB-TABS -->
 <div class="card">
-  <div class="card-title">◇ Таблица упражнений по времени дня</div>
+  <h2 class="card-title">◇ Таблица упражнений по времени дня</div>
   <div class="sub-tabs">
     <button class="sub-btn active" data-ex="morning">🌅 Утро</button>
     <button class="sub-btn" data-ex="day">☀️ День</button>
@@ -933,7 +955,7 @@
 <div class="tab-content" id="tab-food">
 
 <div class="card" style="border-left: 4px solid var(--accent);">
-  <div class="card-title">◇ Быстрая оценка продуктов и блюд</div>
+  <h2 class="card-title">◇ Быстрая оценка продуктов и блюд</div>
   <p style="font-size:0.74rem;color:var(--text-dim);margin-bottom:0.6rem;">
     <span class="tag" style="background:var(--green-bg);color:#2a7a55;">✅ Разрешено</span>
     <span class="tag" style="background:var(--amber-bg);color:#8a6a2a;">⚠️ С оговорками</span>
@@ -1026,7 +1048,7 @@
 </div>
 
 <div class="card">
-  <div class="card-title">◇ Справочник продуктов: низкогистаминовое питание с низким ГИ</div>
+  <h2 class="card-title">◇ Справочник продуктов: низкогистаминовое питание с низким ГИ</div>
   <p style="font-size:0.74rem;color:var(--text-dim);margin-bottom:0.8rem;">
     Группировка по приёмам пищи. ГИ — гликемический индекс. Уровень гистамина: <span style="color:var(--green);">● низкий</span> · <span style="color:var(--amber);">● средний</span> · <span style="color:var(--red);">● высокий</span>.
     Выбирайте свежие, неферментированные, термически необработанные длительно продукты.
@@ -1112,7 +1134,7 @@
 </div>
 
 <div class="card" style="border-left: 4px solid var(--green);">
-  <div class="card-title">◇ Правила низкогистаминового питания</div>
+  <h2 class="card-title">◇ Правила низкогистаминового питания</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;font-size:0.76rem;">
     <div>
       <div style="font-weight:600;color:var(--green);margin-bottom:0.3rem;">✓ Можно</div>
