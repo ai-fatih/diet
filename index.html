@@ -110,6 +110,12 @@
   .meta-field .editable:focus { outline: none; border-color: var(--accent); background: #fff; }
   .badge-date { display: inline-block; font-size: 0.65rem; font-weight: 500; padding: 0.2rem 0.6rem; border-radius: 999px; background: var(--accent); color: #fff; }
 
+  /* ─── Language & size bar ─── */
+  .lang-bar { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.8rem; }
+  .lang-bar label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); white-space: nowrap; }
+  .lang-select { font-size: 0.78rem; padding: 0.25rem 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; font-family: var(--font); }
+  .lang-select:focus { outline: none; border-color: var(--accent); }
+
   /* ─── Cards ─── */
   .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 1.2rem; margin-bottom: 1.2rem; box-shadow: var(--shadow); }
   .card-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.4rem; }
@@ -117,8 +123,7 @@
   @media (min-width: 700px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
   .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; }
   @media (min-width: 800px) { .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
-  .grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-  @media (min-width: 1024px) { .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; } }
+  .rec-stack { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem; }
 
   /* ─── Tables ─── */
   .table-wrap { overflow-x: auto; }
@@ -327,6 +332,15 @@
 
 <!-- ════════ HEADER ════════ -->
 <header class="header">
+  <div class="lang-bar" id="langBar">
+    <label>Язык:</label>
+    <label style="margin-left:0.8rem;">Размер:</label>
+    <select id="sizeSelect" class="lang-select">
+      <option value="small">Маленький</option>
+      <option value="medium" selected>Средний</option>
+      <option value="large">Большой</option>
+    </select>
+  </div>
   <div class="flex-between">
     <h1>◇ Дашборд реабилитации <small>вестибулярная нейроиммунология</small></h1>
     <span class="badge-date" id="todayDisplay"></span>
@@ -344,6 +358,8 @@
   <button class="tab-btn" data-tab="today">📋 Я Сегодня</button>
   <button class="tab-btn" data-tab="exercises">🏋️ Упражнения</button>
   <button class="tab-btn" data-tab="food">🥗 Питание</button>
+  <button class="tab-btn" data-tab="recommendations">📋 Рекомендации</button>
+  <button class="tab-btn" data-tab="glossary">📖 Словарь</button>
 </div>
 
 <!-- ════════════════════════════════════════════════════════════ -->
@@ -404,7 +420,7 @@
 </div>
 
 <!-- 4 rec cards -->
-<div class="grid-4">
+<div class="rec-stack">
   <div class="card">
     <h2 class="card-title">◇ Вестибулярная реабилитация</h2>
     <p style="font-size:0.74rem;color:var(--text-dim);margin-bottom:0.4rem;">Последовательность по фазам:</p>
@@ -499,6 +515,7 @@
       <div class="dd">✓ Вода и телефон с фонариком рядом — снижают ощущение беспомощности</div>
     </div>
   </div>
+</div>
 </div>
 
 <!-- Daily routine (editable, grouped) -->
@@ -1135,8 +1152,86 @@
 
 </div><!-- /tab-food -->
 
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- ═══ TAB: РЕКОМЕНДАЦИИ ═══ -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-recommendations">
+
+<div class="card">
+  <h2 class="card-title">◇ Биомаркеры воспаления и нейровосстановления</h2>
+  <div class="table-wrap">
+    <table class="tbl">
+      <thead><tr><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CRP</strong></td><td>Острое воспаление</td><td>&lt;0.33 мг/л</td><td>0–5</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>СОЭ (ESR)</strong></td><td>Системное воспаление</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Ферритин</strong></td><td>Депо железа, острофазный белок</td><td>85.4 нг/мл</td><td>10–150</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Гемоглобин</strong></td><td>Кислородная ёмкость</td><td>145 г/л</td><td>120–145</td><td><span class="tag tag-amber">Верхняя граница</span></td></tr>
+        <tr><td><strong>Гематокрит</strong></td><td>Густота крови</td><td>46.6%</td><td>35–45</td><td><span class="tag tag-amber">↑ Выше нормы</span></td></tr>
+        <tr><td><strong>NLR</strong></td><td>Нейтрофильно-лимфоцитарное соотношение</td><td>~1.2 (расчёт)</td><td>&lt;3.0</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Магний</strong></td><td>Нейропротекция, передача импульса</td><td>0.94 ммоль/л</td><td>0.66–1.07</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>IL-6</strong></td><td>Нейровоспаление, активация HPA</td><td><span class="editable" contenteditable="true" data-key="il6">—</span></td><td>&lt;7 пг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>25-HC</strong></td><td>Биомаркер вестибулярного неврита</td><td><span class="editable" contenteditable="true" data-key="ohc">—</span></td><td>—</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>Кортизол утренний</strong></td><td>Функция HPA-оси</td><td><span class="editable" contenteditable="true" data-key="cortisol">—</span></td><td>6.2–19.4 мкг/дл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>HRV (RMSSD)</strong></td><td>Вагусный тонус</td><td><span class="editable" contenteditable="true" data-key="hrv">—</span></td><td>&gt;30 мс</td><td><span class="tag tag-blue">Через браслет/часы</span></td></tr>
+        <tr><td><strong>Витамин D</strong></td><td>Иммуномодуляция, нейропластичность</td><td><span class="editable" contenteditable="true" data-key="vitd">—</span></td><td>30–80 нг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>Гомоцистеин</strong></td><td>Эндотелий + BLB</td><td><span class="editable" contenteditable="true" data-key="hcy">—</span></td><td>&lt;12 мкмоль/л</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>📋 Рекомендации основаны на международных исследованиях (Nature, Cochrane, J Neuroinflammation, Frontiers 2024–2026)</p>
+  <p>⚠️ Все данные носят рекомендательный характер. Проконсультируйтесь с врачом.</p>
+</footer>
+
+</div><!-- /tab-recommendations -->
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- ═══ TAB: СЛОВАРЬ ТЕРМИНОВ ═══ -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-glossary">
+
+<div class="card">
+  <h2 class="card-title">📖 Словарь терминов и аббревиатур</h2>
+  <div class="gloss-list">
+    <div class="gloss-term"><span class="gloss-abbr">VRT</span><span class="gloss-def"><strong>Vestibular Rehabilitation Therapy</strong> — Вестибулярная реабилитационная терапия. Система упражнений для компенсации вестибулярных нарушений.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">VOR</span><span class="gloss-def"><strong>Vestibulo-Ocular Reflex</strong> — Вестибуло-окулярный рефлекс. Рефлекс, стабилизирующий взгляд при движении головы. Основная мишень VRT.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">MC / ТК</span><span class="gloss-def"><strong>Mast Cells</strong> / Тучные клетки. Иммунные клетки, выделяющие гистамин и другие медиаторы воспаления при активации.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">BLB</span><span class="gloss-def"><strong>Blood-Labyrinth Barrier</strong> — Гемато-лабиринтный барьер. Аналог ГЭБ (гемато-энцефалического барьера) для внутреннего уха.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">HPA</span><span class="gloss-def"><strong>Hypothalamic-Pituitary-Adrenal axis</strong> — Гипоталамо-гипофизарно-надпочечниковая ось. Центральная стресс-регулирующая система организма.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">CRP / СРБ</span><span class="gloss-def"><strong>C-Reactive Protein</strong> — С-реактивный белок. Маркер острого воспаления.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">NLR</span><span class="gloss-def"><strong>Neutrophil-to-Lymphocyte Ratio</strong> — Нейтрофильно-лимфоцитарное соотношение. Показатель системного воспаления и стресса.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">HRV / ВСР</span><span class="gloss-def"><strong>Heart Rate Variability</strong> — Вариабельность сердечного ритма. Показатель баланса вегетативной нервной системы.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">RMSSD</span><span class="gloss-def"><strong>Root Mean Square of Successive Differences</strong> — Среднеквадратичное различие последовательных интервалов RR. Основной показатель вагусного тонуса.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">IL-6</span><span class="gloss-def"><strong>Interleukin 6</strong> — Интерлейкин 6. Провоспалительный цитокин, ключевой маркер нейровоспаления.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">TNF-α</span><span class="gloss-def"><strong>Tumor Necrosis Factor α</strong> — Фактор некроза опухоли α. Провоспалительный цитокин.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">NAC</span><span class="gloss-def"><strong>N-Acetyl Cysteine</strong> — N-ацетилцистеин. Аминокислота, предшественник глутатиона, антиоксидант.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">SIGHI</span><span class="gloss-def"><strong>Swiss Interest Group for Histamine Intolerance</strong> — Швейцарская группа по непереносимости гистамина. Разработчики протокола низкогистаминовой диеты.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">GI / ГИ</span><span class="gloss-def"><strong>Glycemic Index</strong> — Гликемический индекс. Показатель скорости повышения уровня сахара в крови после употребления продукта.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">DPPT</span><span class="gloss-def"><strong>Deep Pressure Proprioceptive Technique</strong> — Техника глубокого проприоцептивного давления. Wilbarger-протокол для сенсорной регуляции.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">MCAS</span><span class="gloss-def"><strong>Mast Cell Activation Syndrome</strong> — Синдром активации тучных клеток. Хроническое состояние с избыточной активацией MC.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">SP / СП</span><span class="gloss-def"><strong>Substance P</strong> — Субстанция Р. Нейропептид, участвующий в передаче болевых сигналов и активации тучных клеток.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">CRH</span><span class="gloss-def"><strong>Corticotropin-Releasing Hormone</strong> — Кортикотропин-рилизинг-гормон. Ключевой гормон стресса, активирующий HPA-ось.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">CRHR-1</span><span class="gloss-def">Рецептор кортикотропин-рилизинг-гормона типа 1. Находится на тучных клетках, опосредует дегрануляцию MC.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">MRGPRX2</span><span class="gloss-def">Рецептор на тучных клетках, связывающий субстанцию Р. Мишень кверцетина для блокады дегрануляции.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">25-HC</span><span class="gloss-def"><strong>25-Hydroxycholesterol</strong> — Потенциальный биомаркер вестибулярного неврита. Оксистерол, отражающий воспаление во внутреннем ухе.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">BESS</span><span class="gloss-def"><strong>Balance Error Scoring System</strong> — Система оценки ошибок равновесия. Тест для оценки постуральной устойчивости.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">ANC</span><span class="gloss-def"><strong>Active Noise Cancellation</strong> — Активное шумоподавление. Технология подавления внешнего шума в наушниках.</span></div>
+    <div class="gloss-term"><span class="gloss-abbr">CBT / КПТ</span><span class="gloss-def"><strong>Cognitive Behavioral Therapy</strong> — Когнитивно-поведенческая терапия. Психотерапевтический метод для работы с тревогой и страхами.</span></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>📖 Словарь составлен на основе протокола вестибулярной нейроиммунологии</p>
+</footer>
+
+</div><!-- /tab-glossary -->
+
 </div><!-- /app -->
 
+<script src="translations.js"></script>
 <script>
 (function() {
   'use strict';
@@ -1697,6 +1792,179 @@
     });
   });
 
+  // ─── Food reference data ───
+  const FOOD_REF_DATA = [
+    { meal:'morning', product:'Овсянка (долгая варка)', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Цельнозерновая, не мгновенная' },
+    { meal:'morning', product:'Гречка зелёная/пропаренная', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Безглютеновый источник сложных углеводов' },
+    { meal:'morning', product:'Киноа', category:'Белок', gi:'низкий', histamine:'низкий', note:'Полноценный белок, все аминокислоты' },
+    { meal:'morning', product:'Яйца (свежие, всмятку/омлет)', category:'Белок', gi:'низкий', histamine:'низкий', note:'Хранить не более 5–7 дней' },
+    { meal:'morning', product:'Творог нежирный свежий', category:'Белок', gi:'низкий', histamine:'низкий', note:'Только свежий (до 24 ч), без заквасок' },
+    { meal:'morning', product:'Груша', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Свежая, с кожурой' },
+    { meal:'morning', product:'Черника/голубика', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Замороженная тоже OK' },
+    { meal:'morning', product:'Яблоко зелёное', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Свежее, без кожицы при чувствительности' },
+    { meal:'morning', product:'Тыквенные семечки', category:'Жиры', gi:'низкий', histamine:'низкий', note:'Магний, цинк — поддержка нервной системы' },
+    { meal:'morning', product:'Миндаль (сырой, замоченный)', category:'Жиры', gi:'низкий', histamine:'низкий', note:'Не более горсти; замачивать 8 ч' },
+    { meal:'morning', product:'Кокосовое масло', category:'Жиры', gi:'—', histamine:'низкий', note:'Для жарки или в кашу' },
+    { meal:'morning', product:'Ромашковый/имбирный чай', category:'Напиток', gi:'—', histamine:'низкий', note:'Без кофеина, противовоспалительный' },
+    { meal:'morning', product:'Амарант', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Псевдозерновая культура, богата магнием и железом' },
+    { meal:'morning', product:'Клубника свежая', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Сезонная, богата витамином C' },
+    { meal:'day', product:'Куриная грудка (свежая, паровая)', category:'Белок', gi:'низкий', histamine:'низкий', note:'Приготовить сразу после покупки' },
+    { meal:'day', product:'Филе индейки', category:'Белок', gi:'низкий', histamine:'низкий', note:'Не мариновать, готовить в день покупки' },
+    { meal:'day', product:'Рыба белая свежая (треска/судак)', category:'Белок', gi:'низкий', histamine:'низкий', note:'Парная/свежемороженая; приготовить в день разморозки' },
+    { meal:'day', product:'Рис басмати', category:'Углеводы', gi:'средний', histamine:'низкий', note:'Коричневый — низкий ГИ' },
+    { meal:'day', product:'Картофель отварной (охлаждённый)', category:'Углеводы', gi:'низкий', histamine:'низкий', note:'После охлаждения — резистентный крахмал' },
+    { meal:'day', product:'Батат', category:'Углеводы', gi:'средний', histamine:'низкий', note:'Запечённый, богат бета-каротином' },
+    { meal:'day', product:'Брокколи', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'На пару — сохраняет сульфорафан' },
+    { meal:'day', product:'Цветная капуста', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Запечь или на пару' },
+    { meal:'day', product:'Кабачок/цуккини', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Тушёный или гриль' },
+    { meal:'day', product:'Морковь (свежая, тушёная)', category:'Клетчатка', gi:'средний', histamine:'низкий', note:'Сырая — ниже ГИ' },
+    { meal:'day', product:'Листовой салат/руккола', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Без заправок на уксусе' },
+    { meal:'day', product:'Огурец свежий', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Гидратация, кремний' },
+    { meal:'day', product:'Сельдерей', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Натуральный диуретик, противовоспалительный' },
+    { meal:'day', product:'Оливковое масло EV', category:'Жиры', gi:'—', histamine:'низкий', note:'Полифенолы, олеокантал — ↓ воспаление' },
+    { meal:'day', product:'Чечевица красная/зелёная', category:'Белок', gi:'низкий', histamine:'низкий', note:'Хорошо промыть, замочить 4 ч' },
+    { meal:'day', product:'Тофу свежий (шёлковый)', category:'Белок', gi:'низкий', histamine:'низкий', note:'Только свежий, хранить не более 1 дня' },
+    { meal:'day', product:'Нут отварной', category:'Белок', gi:'низкий', histamine:'низкий', note:'Хорошо промыть, замочить на 8 ч' },
+    { meal:'day', product:'Брюссельская капуста', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Запечь, богата витамином K' },
+    { meal:'day', product:'Лук репчатый (тушёный)', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Кверцетин, противовоспалительный' },
+    { meal:'evening', product:'Овощной суп (без зажарки)', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Кабачок, морковь, брокколи, сельдерей' },
+    { meal:'evening', product:'Тыква запечёная', category:'Клетчатка', gi:'средний', histamine:'низкий', note:'Магний, триптофан (→ серотонин)' },
+    { meal:'evening', product:'Спаржа зелёная', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'На пару, источник фолатов' },
+    { meal:'evening', product:'Свёкла варёная', category:'Клетчатка', gi:'средний', histamine:'низкий', note:'Нитраты → NO → вазодилатация' },
+    { meal:'evening', product:'Печёное яблоко (без кожуры)', category:'Клетчатка', gi:'средний', histamine:'низкий', note:'Пектин, лёгкое переваривание' },
+    { meal:'evening', product:'Груша запечёная', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Альтернатива яблоку' },
+    { meal:'evening', product:'Кролик (филе, тушёное)', category:'Белок', gi:'низкий', histamine:'низкий', note:'Гипоаллергенный белок' },
+    { meal:'evening', product:'Рыба белая (минтай/хек, паровая)', category:'Белок', gi:'низкий', histamine:'низкий', note:'Свежемороженая, приготовить сразу' },
+    { meal:'evening', product:'Творог нежирный свежий', category:'Белок', gi:'низкий', histamine:'низкий', note:'Только сегодняшний; можно с зеленью' },
+    { meal:'evening', product:'Лён (семена, молотые)', category:'Жиры', gi:'низкий', histamine:'низкий', note:'Омега-3, клетчатка; 1 ст.л. в день' },
+    { meal:'evening', product:'Чай из ромашки/мелиссы', category:'Напиток', gi:'—', histamine:'низкий', note:'Успокаивает ЦНС, ↓ тревогу' },
+    { meal:'evening', product:'Вода тёплая с лимоном (долька)', category:'Напиток', gi:'—', histamine:'низкий', note:'Витамин C, гидратация' },
+    { meal:'evening', product:'Авокадо', category:'Жиры', gi:'низкий', histamine:'низкий', note:'Здоровые жиры, калий; в небольших количествах' },
+    { meal:'evening', product:'Артишок', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'На пару, гепатопротектор, пребиотик' },
+    { meal:'evening', product:'Фенхель (тушёный)', category:'Клетчатка', gi:'низкий', histamine:'низкий', note:'Лёгкое переваривание, успокаивает ЖКТ' },
+    { meal:'evening', product:'Чай из фенхеля', category:'Напиток', gi:'—', histamine:'низкий', note:'Успокаивает ЖКТ, без кофеина' },
+  ];
+
+  const CAT_COLORS = {
+    'Клетчатка': { bg:'#e6f3ed', fg:'#2a7a55' },
+    'Белок':     { bg:'#f0e6fa', fg:'#6a4a8a' },
+    'Жиры':      { bg:'#fcf2e0', fg:'#8a6a2a' },
+    'Углеводы':  { bg:'#fcf2e0', fg:'#8a6a2a' },
+    'Напиток':   { bg:'#dceafa', fg:'#2a5f8a' },
+  };
+
+  const GI_ORDER = { 'низкий': 0, 'средний': 1, '—': 2 };
+  const HIST_ORDER = { 'низкий': 0, 'средний': 1, 'высокий': 2, '—': 3 };
+
+  let foodSortColumn = 'product';
+  let foodSortDir = 'asc';
+
+  function getActiveMeal() {
+    const active = document.querySelector('.sub-tabs .sub-btn[data-food].active');
+    return active ? active.dataset.food : 'morning';
+  }
+
+  function getFoodCategoryColor(cat) {
+    return CAT_COLORS[cat] || { bg:'var(--bg)', fg:'var(--text-dim)' };
+  }
+
+  function getGIColor(val) {
+    if (val === 'низкий') return 'var(--green)';
+    if (val === 'средний') return 'var(--amber)';
+    return 'var(--text-faint)';
+  }
+
+  function getHistColor(val) {
+    if (val === 'низкий') return 'var(--green)';
+    if (val === 'средний') return 'var(--amber)';
+    if (val === 'высокий') return 'var(--red)';
+    return 'var(--text-faint)';
+  }
+
+  function filterAndSortData(meal, query, category) {
+    let data = FOOD_REF_DATA.filter(d => d.meal === meal);
+    if (query) {
+      const q = query.toLowerCase();
+      data = data.filter(d =>
+        d.product.toLowerCase().includes(q) ||
+        d.category.toLowerCase().includes(q) ||
+        d.note.toLowerCase().includes(q)
+      );
+    }
+    if (category && category !== 'all') {
+      data = data.filter(d => d.category === category);
+    }
+    data.sort((a, b) => {
+      let cmp = 0;
+      if (foodSortColumn === 'product' || foodSortColumn === 'category') {
+        cmp = a[foodSortColumn].localeCompare(b[foodSortColumn]);
+      } else if (foodSortColumn === 'gi') {
+        cmp = (GI_ORDER[a.gi] ?? 99) - (GI_ORDER[b.gi] ?? 99);
+      } else if (foodSortColumn === 'histamine') {
+        cmp = (HIST_ORDER[a.histamine] ?? 99) - (HIST_ORDER[b.histamine] ?? 99);
+      }
+      return foodSortDir === 'asc' ? cmp : -cmp;
+    });
+    return data;
+  }
+
+  function renderFoodRef() {
+    const meal = getActiveMeal();
+    const query = document.getElementById('foodSearch')?.value || '';
+    const activeChip = document.querySelector('.food-filter-chip.active');
+    const category = activeChip ? activeChip.dataset.cat : 'all';
+    const data = filterAndSortData(meal, query, category);
+
+    const mealId = meal.charAt(0).toUpperCase() + meal.slice(1);
+    const tbody = document.getElementById('foodRef' + mealId + 'Body');
+    if (!tbody) return;
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-faint);padding:1rem;">Ничего не найдено. Попробуйте изменить критерии поиска.</td></tr>';
+    } else {
+      tbody.innerHTML = data.map(d => {
+        const cc = getFoodCategoryColor(d.category);
+        const giColor = getGIColor(d.gi);
+        const histColor = getHistColor(d.histamine);
+        return '<tr><td>' + d.product + '</td><td><span class="cat-tag" style="background:' + cc.bg + ';color:' + cc.fg + ';">' + d.category + '</span></td><td style="color:' + giColor + ';">' + d.gi + '</td><td style="color:' + histColor + ';">' + d.histamine + '</td><td>' + d.note + '</td></tr>';
+      }).join('');
+    }
+
+    const total = FOOD_REF_DATA.filter(d => d.meal === meal).length;
+    const countEl = document.getElementById('foodResultsCount');
+    if (countEl) countEl.textContent = 'Показано ' + data.length + ' из ' + total + ' продуктов';
+
+    document.querySelectorAll('.sort-header').forEach(th => {
+      th.classList.remove('sort-asc', 'sort-desc');
+      if (th.dataset.sort === foodSortColumn) th.classList.add('sort-' + foodSortDir);
+    });
+  }
+
+  window.filterFoodCategory = function(el) {
+    document.querySelectorAll('.food-filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderFoodRef();
+  };
+
+  window.sortFoodRef = function(column) {
+    if (foodSortColumn === column) {
+      foodSortDir = foodSortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      foodSortColumn = column;
+      foodSortDir = 'asc';
+    }
+    renderFoodRef();
+  };
+
+  window.resetFoodFilters = function() {
+    document.getElementById('foodSearch').value = '';
+    document.querySelectorAll('.food-filter-chip').forEach(c => c.classList.remove('active'));
+    document.querySelector('.food-filter-chip[data-cat="all"]').classList.add('active');
+    foodSortColumn = 'product';
+    foodSortDir = 'asc';
+    renderFoodRef();
+  };
+
   // ─── Sub-tabs: food ───
   document.querySelectorAll('.sub-tabs .sub-btn[data-food]').forEach(btn => {
     btn.addEventListener('click', function() {
@@ -1706,8 +1974,13 @@
       parent.querySelectorAll('.sub-block[id^="food-"]').forEach(c => c.classList.remove('active'));
       this.classList.add('active');
       parent.querySelector('#food-' + target).classList.add('active');
+      renderFoodRef();
     });
   });
+
+  document.getElementById('foodSearch').addEventListener('input', renderFoodRef);
+
+  renderFoodRef();
 
 })();
 </script>
