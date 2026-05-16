@@ -76,12 +76,19 @@
   table.tbl .instr { font-size: 0.78rem; color: var(--text-dim); }
   table.tbl .why-cell { font-size: 0.78rem; color: var(--text-dim); }
 
+  /* ─── Wishes slideshow ─── */
+  .wishes-bar { position: relative; margin: 0.6rem 0 0.2rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, var(--accent-light), var(--green-bg)); border-radius: 10px; border: 1px solid rgba(82,121,168,0.15); min-height: 3rem; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .wishes-bar .wish-slide { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 0.5rem 1.5rem; opacity: 0; transition: opacity 0.8s ease; font-size: 0.88rem; color: var(--text); font-weight: 450; text-align: center; line-height: 1.5; pointer-events: none; }
+  .wishes-bar .wish-slide.active { opacity: 1; pointer-events: auto; }
+  .wishes-bar .wish-icon { margin-right: 0.5rem; font-size: 1.1rem; flex-shrink: 0; }
+
   /* ─── Tags ─── */
   .tag { display: inline-block; font-size: 0.65rem; font-weight: 500; padding: 0.08rem 0.4rem; border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap; }
   .tag-green { background: var(--green-bg); color: #2a7a55; }
   .tag-amber { background: var(--amber-bg); color: #8a6a2a; }
   .tag-red { background: var(--red-bg); color: #a04545; }
   .tag-blue { background: var(--accent-light); color: #3a5f8a; }
+  .tag-purple { background: var(--purple-bg); color: #6a4a8a; }
 
   /* ─── Timeline ─── */
   .tl { display: flex; align-items: flex-start; justify-content: space-between; position: relative; padding: 0.8rem 0; margin: 0.3rem 0; }
@@ -95,6 +102,7 @@
   .tl .pl.active { color: var(--accent); }
   .tl .pd { font-size: 0.65rem; color: var(--text-faint); margin-top: 0.1rem; }
   .tl .pdesc { font-size: 0.68rem; color: var(--text-dim); max-width: 120px; margin-top: 0.15rem; line-height: 1.3; }
+  .tl .you-here { position: absolute; top: -0.6rem; left: 50%; transform: translateX(-50%); z-index: 2; font-size: 0.58rem; font-weight: 700; background: var(--green); color: #fff; padding: 0.1rem 0.5rem; border-radius: 999px; white-space: nowrap; letter-spacing: 0.02em; }
   .tl-legend { font-size: 0.72rem; color: var(--text-dim); text-align: center; margin-top: 0.2rem; }
 
   /* ─── Entity Map ─── */
@@ -106,12 +114,16 @@
   .emap-lvl.l3 { background: var(--purple-bg); border-color: var(--purple); color: #6a4a8a; }
   .emap-lvl.l4 { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
   .emap-lvl.l5 { background: var(--green-bg); border-color: var(--green); color: #2a7a55; }
+  .emap-lvl.l6 { background: #fce4ec; border-color: #e57373; color: #c62828; }
   .emap-arrow { font-size: 0.65rem; color: var(--text-faint); padding: 0 0.3rem; flex-shrink: 0; }
   .emap-int { font-size: 0.65rem; padding: 0.08rem 0.4rem; border-radius: 999px; font-weight: 600; flex-shrink: 0; margin-left: 0.4rem; white-space: nowrap; cursor: default; }
   .emap-int.vagus { background: var(--purple-bg); color: #6a4a8a; }
   .emap-int.mc { background: var(--green-bg); color: #2a7a55; }
   .emap-int.barrier { background: var(--accent-light); color: var(--accent); }
   .emap-int.vrt { background: var(--amber-bg); color: #8a6a2a; }
+  .emap-int.diet { background: #fce4ec; color: #c62828; }
+  .emap-int.sleep { background: #e8eaf6; color: #283593; }
+  .emap-int.cbt { background: #f3e5f5; color: #6a1b9a; }
   @media (max-width: 600px) {
     .emap-row { flex-wrap: wrap; margin-bottom: 0.2rem; }
     .emap-lvl { width: 100%; margin-bottom: 0.15rem; }
@@ -127,7 +139,11 @@
   .rec-phase .phdr.acute { color: var(--red); }
   .rec-phase .phdr.subacute { color: var(--amber); }
   .rec-phase .phdr.rehab { color: var(--accent); }
+  .rec-phase .phdr.rehab-31 { color: #4a7aaa; }
+  .rec-phase .phdr.rehab-32 { color: #3a8a6a; }
   .rec-phase .phdr.maint { color: var(--green); }
+  .rec-phase .phdr.maint-41 { color: #5a9a5a; }
+  .rec-phase .phdr.maint-42 { color: #4a8a7a; }
   .rec-phase ul { padding-left: 1rem; margin-top: 0.15rem; }
   .rec-phase li { margin-bottom: 0.1rem; line-height: 1.4; font-size: 0.72rem; }
 
@@ -181,6 +197,8 @@
   .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
   .btn-sm { font-size: 0.65rem; color: var(--text-faint); background: none; border: 1px solid var(--border); padding: 0.15rem 0.5rem; border-radius: 4px; cursor: pointer; }
   .btn-sm:hover { background: var(--border); }
+  .btn-reset { font-size: 0.78rem; padding: 0.3rem 0.8rem; background: var(--accent-light); border: 1px solid var(--accent); color: var(--accent); border-radius: 6px; cursor: pointer; }
+  .btn-reset:hover { background: var(--accent); color: #fff; }
   .note-edit { font-size: 0.75rem; padding: 0.35rem 0.5rem; border: 1px dashed var(--border); border-radius: 6px; min-height: 36px; cursor: text; }
   .note-edit:focus { outline: none; border-color: var(--accent); }
   hr { border: none; border-top: 1px solid var(--border); margin: 0.8rem 0; }
@@ -190,6 +208,29 @@
   body .editable:focus { outline: 1px solid var(--accent); background: #fff; }
   table.tbl .editable-symptom { cursor: text; padding: 0.1rem 0.25rem; border-radius: 3px; min-width: 24px; }
   table.tbl .editable-symptom:focus { outline: 1px solid var(--accent); background: #fff; }
+
+  /* ─── Editable daily routine groups ─── */
+  .routine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  @media (max-width: 600px) { .routine-grid { grid-template-columns: 1fr; } }
+  .routine-group { border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem; background: var(--bg); }
+  .routine-group .rg-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.3rem; }
+  .routine-group .rg-title { font-weight: 600; font-size: 0.75rem; display: flex; align-items: center; gap: 0.3rem; }
+  .routine-group .rg-add { font-size: 0.65rem; color: var(--accent); cursor: pointer; border: none; background: none; padding: 0.1rem 0.3rem; }
+  .routine-group .rg-add:hover { background: var(--accent-light); border-radius: 4px; }
+  .routine-group .rg-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.76rem; padding: 0.2rem 0.25rem; border-radius: 4px; }
+  .routine-group .rg-item:hover { background: var(--accent-light); }
+  .routine-group .rg-item .rg-del { font-size: 0.6rem; color: var(--text-faint); cursor: pointer; padding: 0 0.2rem; opacity: 0; transition: opacity 0.15s; flex-shrink: 0; }
+  .routine-group .rg-item:hover .rg-del { opacity: 1; }
+  .routine-group .rg-item .rg-del:hover { color: var(--red); }
+  .routine-group .rg-item .edit-text { flex: 1; min-width: 0; outline: none; border: 1px dashed transparent; padding: 0.05rem 0.15rem; border-radius: 3px; }
+  .routine-group .rg-item .edit-text:focus { border-color: var(--accent); background: #fff; }
+  .routine-group .rg-item .rg-time { font-size: 0.6rem; color: var(--text-faint); flex-shrink: 0; margin-right: 0.2rem; border: none; background: none; width: 40px; outline: none; }
+  .routine-group .rg-item .rg-time:focus { color: var(--accent); }
+
+  /* ─── MC stabilization accent ─── */
+  .card-mc { border-left: 4px solid var(--green) !important; background: linear-gradient(135deg, var(--surface), var(--green-bg)) !important; }
+  .card-mc .rec-block h4 { color: var(--green); }
+  .mc-accent { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 4px; background: var(--green); color: #fff; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
 
   /* ─── Principle cards in exercises ─── */
   .principles { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
@@ -217,6 +258,7 @@
     <span class="badge-date" id="todayDisplay"></span>
   </div>
   <div class="subtitle">Персонализированный протокол на основе научных данных</div>
+  <div class="wishes-bar" id="wishesBar"></div>
   <div class="meta-grid">
     <div class="meta-field"><label>ФИО</label><div class="editable" contenteditable="true" data-key="name">Эльмира</div></div>
     <div class="meta-field"><label>Возраст</label><div class="editable" contenteditable="true" data-key="age">42</div></div>
@@ -230,6 +272,7 @@
 <!-- ════════ TABS ════════ -->
 <div class="tab-bar">
   <button class="tab-btn active" data-tab="dashboard">◇ Главная</button>
+  <button class="tab-btn" data-tab="today">📋 Today</button>
   <button class="tab-btn" data-tab="exercises">🏋️ Упражнения</button>
   <button class="tab-btn" data-tab="food">🥗 Питание</button>
 </div>
@@ -254,11 +297,12 @@
       <div class="pd">11–17 апр</div>
       <div class="pdesc">Анализы, стихание симптомов, поиск помощи</div>
     </div>
-    <div class="ph">
+    <div class="ph" style="position:relative;">
       <div class="dot active"></div>
       <div class="pl active">Реабилитация</div>
       <div class="pd">18 апр →</div>
       <div class="pdesc">VRT, вагус, MC-стабилизация, сенсорная защита</div>
+      <span class="you-here" id="youHereMarker">📍 Вы здесь</span>
     </div>
     <div class="ph">
       <div class="dot" style="background:var(--border)"></div>
@@ -272,32 +316,40 @@
 
 <!-- Entity Map -->
 <div class="card">
-  <div class="card-title">◇ Карта связей: порочный круг и точки вмешательства</div>
+  <div class="card-title">◇ Карта связей: порочный круг и точки вмешательства <span class="tag tag-purple">ключевой блок</span></div>
   <div class="emap">
     <div class="emap-row">
       <div class="emap-lvl l1">Ур.1: Хронический стресс / тревога</div>
       <div class="emap-arrow">▼</div>
       <div class="emap-int vagus" title="Дыхание 4-7-8, холод, вагусная стимуляция">⚡ Вагус</div>
+      <div class="emap-int cbt" title="КПТ, дневник тревоги, метакогнитивные стратегии">🧠 КПТ</div>
     </div>
     <div class="emap-row">
       <div class="emap-lvl l2">Ур.2: HPA-ось → ↑CRH + ↑кортизол + ↑SP</div>
       <div class="emap-arrow">▼</div>
       <div class="emap-int vagus" title="Ашваганда, адаптогены, режим сна">🌿 Адаптогены</div>
+      <div class="emap-int sleep" title="Сон 7-9 ч, циркадианный ритм">🌙 Сон</div>
     </div>
     <div class="emap-row">
       <div class="emap-lvl l3">Ур.3: CRH→CRHR-1 + SP→MRGPRX2 → Дегрануляция MC</div>
       <div class="emap-arrow">▼</div>
-      <div class="emap-int mc" title="Кверцетин 2000-4000 мг/д, лютеолин, низкогистаминовая диета">🛡 Стабилизация MC</div>
+      <div class="emap-int mc" title="Кверцетин 2000-4000 мг/д, лютеолин, нейропептиды">🛡 Стабилизация MC</div>
+      <div class="emap-int diet" title="SIGHI-диета, исключение триггеров">🍽 Диета</div>
     </div>
     <div class="emap-row">
-      <div class="emap-lvl l4">Ур.4: ↑Гистамин → ↑проницаемость гемато-лабиринтного барьера</div>
+      <div class="emap-lvl l4">Ур.4: ↑Гистамин → ↑проницаемость гемато-лабиринтного барьера (BLB)</div>
       <div class="emap-arrow">▼</div>
-      <div class="emap-int barrier" title="Витамин C, NAC, антигистаминные">💊 Барьер</div>
+      <div class="emap-int barrier" title="Витамин C, NAC, антигистаминные (рупатадин/биластин)">💊 Барьер</div>
     </div>
     <div class="emap-row">
-      <div class="emap-lvl l5">Ур.5: Отёк нерва → ВЕРТИГО → паника → обратно к ур.1</div>
-      <div class="emap-arrow" style="color:var(--red);font-weight:600;">◀</div>
+      <div class="emap-lvl l5">Ур.5: Отёк нерва → ВЕРТИГО</div>
+      <div class="emap-arrow">▼</div>
       <div class="emap-int vrt" title="VOR адаптация, габитуация, Cawthorne-Cooksey">🏃 VRT</div>
+    </div>
+    <div class="emap-row">
+      <div class="emap-lvl l6">Ур.6: Паника → катастрофизация → ↑ страх движения → обратно к ур.1</div>
+      <div class="emap-arrow" style="color:var(--red);font-weight:600;">◀</div>
+      <div class="emap-int cbt" title="Экспозиция, когнитивное переструктурирование">🔄 Поведение</div>
     </div>
   </div>
 </div>
@@ -309,13 +361,19 @@
     <table class="tbl">
       <thead><tr><th>Биомаркер</th><th>Роль</th><th>Ваш уровень</th><th>Референс</th><th>Статус</th></tr></thead>
       <tbody>
-        <tr><td><strong>CRP</strong></td><td>Острое воспаление</td><td>&lt;0.33 мг/л</td><td>0–5</td><td><span class="tag tag-green">Норма</span></td></tr>
+        <tr><td><strong>CRP</strong></td><td>Острое воспаление</td><td>&lt;0.33 мг/л</td><td>0–5</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>СОЭ (ESR)</strong></td><td>Системное воспаление</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Ферритин</strong></td><td>Депо железа, острофазный белок</td><td>85.4 нг/мл</td><td>10–150</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Гемоглобин</strong></td><td>Кислородная ёмкость</td><td>145 г/л</td><td>120–145</td><td><span class="tag tag-amber">Верхняя граница</span></td></tr>
+        <tr><td><strong>Гематокрит</strong></td><td>Густота крови</td><td>46.6%</td><td>35–45</td><td><span class="tag tag-amber">↑ Выше нормы</span></td></tr>
+        <tr><td><strong>NLR</strong></td><td>Нейтрофильно-лимфоцитарное соотношение</td><td>~1.2 (расчёт)</td><td>&lt;3.0</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
+        <tr><td><strong>Магний</strong></td><td>Нейропротекция, передача импульса</td><td>0.94 ммоль/л</td><td>0.66–1.07</td><td><span class="tag tag-green">Норма ✅</span></td></tr>
         <tr><td><strong>IL-6</strong></td><td>Нейровоспаление, активация HPA</td><td><span class="editable" contenteditable="true" data-key="il6">—</span></td><td>&lt;7 пг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
         <tr><td><strong>25-HC</strong></td><td>Биомаркер вестибулярного неврита</td><td><span class="editable" contenteditable="true" data-key="ohc">—</span></td><td>—</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
-        <tr><td><strong>NLR</strong></td><td>Нейтрофильно-лимфоцитарное соотношение</td><td>~1.2 (расчёт)</td><td>&lt;3.0</td><td><span class="tag tag-green">Норма</span></td></tr>
         <tr><td><strong>Кортизол утренний</strong></td><td>Функция HPA-оси</td><td><span class="editable" contenteditable="true" data-key="cortisol">—</span></td><td>6.2–19.4 мкг/дл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
         <tr><td><strong>HRV (RMSSD)</strong></td><td>Вагусный тонус</td><td><span class="editable" contenteditable="true" data-key="hrv">—</span></td><td>&gt;30 мс</td><td><span class="tag tag-blue">Через браслет/часы</span></td></tr>
-        <tr><td><strong>СОЭ</strong></td><td>Системное воспаление</td><td>2 мм/ч</td><td>2–15</td><td><span class="tag tag-green">Норма</span></td></tr>
+        <tr><td><strong>Витамин D</strong></td><td>Иммуномодуляция, нейропластичность</td><td><span class="editable" contenteditable="true" data-key="vitd">—</span></td><td>30–80 нг/мл</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
+        <tr><td><strong>Гомоцистеин</strong></td><td>Эндотелий + BLB</td><td><span class="editable" contenteditable="true" data-key="hcy">—</span></td><td>&lt;12 мкмоль/л</td><td><span class="tag tag-blue">Можно сдать</span></td></tr>
       </tbody>
     </table>
   </div>
@@ -329,8 +387,12 @@
     <div class="rec-phase-grid">
       <div class="rec-phase"><div class="phdr acute">Фаза 1: Острая (1–3 дн)</div><ul><li>Постельный режим</li><li>Антиэметики при тошноте</li><li>Без резких движений</li></ul></div>
       <div class="rec-phase"><div class="phdr subacute">Фаза 2: Подострая (3–10 дн)</div><ul><li>VOR адаптация: палец→поворот головы</li><li>Фиксация взора при ходьбе</li><li>По 1–2 мин, 3×/день</li></ul></div>
-      <div class="rec-phase"><div class="phdr rehab">Фаза 3: Реабилитация (2–6 нед)</div><ul><li>Cawthorne-Cooksey progression</li><li>Ходьба с поворотами головы</li><li>Стояние на одной ноге</li><li>3–5×/день по 2–5 мин</li></ul></div>
-      <div class="rec-phase"><div class="phdr maint">Фаза 4: Поддержание (6+ нед)</div><ul><li>Тренировка равновесия</li><li>Силовые упражнения</li><li>Профилактика 5×/нед</li></ul></div>
+      <div class="rec-phase"><div class="phdr rehab">Фаза 3: Адаптация (2–4 нед)</div><ul><li>Cawthorne-Cooksey базовый</li><li>VOR X1/X2 сидя→стоя</li><li>Габитуация поворотов</li><li>3–5×/день по 2–3 мин</li></ul></div>
+      <div class="rec-phase"><div class="phdr rehab-31">Фаза 3.1: Прогрессия (3–5 нед)</div><ul><li>VOR X2 в движении</li><li>Ходьба с поворотами/кивками</li><li>Стояние на одной ноге</li><li>5×/день по 3–5 мин</li></ul></div>
+      <div class="rec-phase"><div class="phdr rehab-32">Фаза 3.2: Интеграция (4–6 нед)</div><ul><li>Ходьба с двойной задачей</li><li>Наклоны + подъём предметов</li><li>Ходьба по неровной поверхности</li><li>Tandem walk с поворотом головы</li></ul></div>
+      <div class="rec-phase"><div class="phdr maint">Фаза 4: Функция (6–8 нед)</div><ul><li>Тренировка равновесия (BESS)</li><li>Динамические повороты в быту</li><li>Силовая выносливость</li></ul></div>
+      <div class="rec-phase"><div class="phdr maint-41">Фаза 4.1: Нагрузка (8–10 нед)</div><ul><li>Спортивные движения (наклоны)</li><li>Вращения с открытыми глазами</li><li>Прыжки с фиксацией взора</li><li>4×/нед по 10–15 мин</li></ul></div>
+      <div class="rec-phase"><div class="phdr maint-42">Фаза 4.2: Поддержание (10+ нед)</div><ul><li>Профилактика рецидивов</li><li>Вестибулярная «зарядка» 3×/нед</li><li>Ежедневная активность без ограничений</li></ul></div>
     </div>
     <hr>
     <div class="dd"><span class="do">✓ Правило:</span> VOR → габитуация → замещение</div>
@@ -351,18 +413,28 @@
     <p style="font-size:0.72rem;color:var(--text-dim);margin-top:0.3rem;"><strong>Эффект:</strong> ↑HRV, ↓TNF-α, ↓IL-6, ↓CRP, ↓кортизол</p>
   </div>
 
-  <div class="card">
-    <div class="card-title">◇ Стабилизация тучных клеток</div>
+  <div class="card card-mc">
+    <div class="card-title"><span class="mc-accent">★ Приоритет</span> ◇ Стабилизация тучных клеток</div>
     <div class="rec-block">
-      <h4>🥗 Диета <span class="sub">низкогистаминовая ×3-4 нед</span></h4>
+      <h4>🥗 Низкогистаминовая диета <span class="sub">SIGHI ×3-4 нед</span></h4>
       <div class="dd"><span class="do">✓</span> Исключить: ферментированное, выдержанные сыры, алкоголь, консервы, остатки >24ч</div>
       <div class="dd"><span class="do">✓</span> Основы: свежие овощи, зелень, куркума, имбирь, лук</div>
+      <div class="dd"><span class="do">✓</span> Свежее мясо/рыба — приготовить в день покупки</div>
     </div>
     <div class="rec-block">
-      <h4>💊 Нутрицевтики</h4>
-      <div class="dd">✓ <strong>Кверцетин</strong> 2000–4000 мг/д</div>
-      <div class="dd">✓ Витамин C 1–3 г/д, D 2000–5000 МЕ/д</div>
-      <div class="dd">✓ NAC 500–1000 мг/д, куркумин 1–4 г/д</div>
+      <h4>💊 Нутрицевтики для стабилизации MC</h4>
+      <div class="dd">✓ <strong>Кверцетин</strong> 2000–4000 мг/д (флавонол, ингибирует дегрануляцию)</div>
+      <div class="dd">✓ <strong>Лютеолин</strong> 100–200 мг/д (синергист кверцетина, ингибирует CRHR-1)</div>
+      <div class="dd">✓ Витамин C 1–3 г/д (антиоксидант, ↓ гистамина)</div>
+      <div class="dd">✓ Витамин D 2000–5000 МЕ/д (иммуномодуляция MC)</div>
+      <div class="dd">✓ NAC 500–1000 мг/д (предшественник глутатиона, защита BLB)</div>
+      <div class="dd">✓ Куркумин 1–4 г/д (↓TNF-α, ↓ активации MC, пиперин для усвоения)</div>
+    </div>
+    <div class="rec-block">
+      <h4>🧪 Мишени воздействия</h4>
+      <div class="dd">• MRGPRX2 — рецептор SP на MC → блокируется кверцетином</div>
+      <div class="dd">• CRHR-1 — рецептор CRH на MC → блокируется лютеолином</div>
+      <div class="dd">• ↓ гистамина → ↓ проницаемости BLB → ↓ отёка нерва</div>
     </div>
   </div>
 
@@ -383,7 +455,51 @@
   </div>
 </div>
 
-<!-- Monitoring -->
+<!-- Daily routine (editable, grouped) -->
+<div class="card">
+  <div class="card-title">◇ Полный режим дня <span style="font-weight:400;color:var(--text-faint);text-transform:none;letter-spacing:0;">— редактируйте, добавляйте, удаляйте</span></div>
+  <div class="routine-grid" id="routineGrid">
+    <div class="routine-group" data-group="exercises">
+      <div class="rg-header"><span class="rg-title">🏃 Упражнения</span><button class="rg-add" onclick="addRoutineItem('exercises')">+</button></div>
+      <div class="rg-items"></div>
+    </div>
+    <div class="routine-group" data-group="nutrition">
+      <div class="rg-header"><span class="rg-title">🥗 Питание</span><button class="rg-add" onclick="addRoutineItem('nutrition')">+</button></div>
+      <div class="rg-items"></div>
+    </div>
+    <div class="routine-group" data-group="meds">
+      <div class="rg-header"><span class="rg-title">💊 Лекарства / добавки</span><button class="rg-add" onclick="addRoutineItem('meds')">+</button></div>
+      <div class="rg-items"></div>
+    </div>
+    <div class="routine-group" data-group="activities">
+      <div class="rg-header"><span class="rg-title">🧘 Активности / практики</span><button class="rg-add" onclick="addRoutineItem('activities')">+</button></div>
+      <div class="rg-items"></div>
+    </div>
+    <div class="routine-group" data-group="sleep">
+      <div class="rg-header"><span class="rg-title">🌙 Сон / отдых</span><button class="rg-add" onclick="addRoutineItem('sleep')">+</button></div>
+      <div class="rg-items"></div>
+    </div>
+    <div class="routine-group" data-group="custom">
+      <div class="rg-header"><span class="rg-title">📌 Своё</span><button class="rg-add" onclick="addRoutineItem('custom')">+</button></div>
+      <div class="rg-items"></div>
+    </div>
+  </div>
+  <p style="font-size:0.68rem;color:var(--text-faint);margin-top:0.4rem;">💡 Кликните на текст чтобы изменить · ✕ чтобы удалить · кнопка + чтобы добавить</p>
+</div>
+
+<footer class="footer">
+  <p>Протокол основан на международных исследованиях (Nature, Cochrane, J Neuroinflammation, Frontiers 2024–2026)</p>
+  <p>Информация носит справочный характер · Для назначения лечения необходима консультация врача</p>
+  <p style="margin-top:0.15rem;">💾 Данные сохраняются автоматически в браузере</p>
+</footer>
+
+</div><!-- /tab-dashboard -->
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- ═══ TAB 2: TODAY ═══ -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-today">
+
 <div class="grid-2">
   <div class="card">
     <div class="card-title">◇ Ежедневный чеклист</div>
@@ -469,55 +585,15 @@
   </div>
 </div>
 
-<!-- Daily routine -->
-<div class="card">
-  <div class="card-title">◇ Полный режим дня</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;font-size:0.76rem;">
-    <div>
-      <div style="font-weight:600;margin-bottom:0.2rem;">🌅 Утро (7:00–9:00)</div>
-      <div>• Пробуждение, стакан воды</div>
-      <div>• Холодное умывание (30–60")</div>
-      <div>• Кверцетин + C + D + NAC</div>
-      <div>• Низкогистаминовый завтрак</div>
-      <div>• Прогулка / свет 10+ мин</div>
-      <div>• Дыхание 4-7-8 (4-5 циклов)</div>
-    </div>
-    <div>
-      <div style="font-weight:600;margin-bottom:0.2rem;">☀️ День (9:00–18:00)</div>
-      <div>• VOR-упражнения (3×1-2 мин)</div>
-      <div>• Дыхание 5-6 вдохов/мин каждые 2-3ч</div>
-      <div>• Низкогистаминовые приёмы пищи</div>
-      <div>• Прогулка 20+ мин</div>
-      <div>• Гудение/пение 5 мин (в перерыв)</div>
-    </div>
-    <div>
-      <div style="font-weight:600;margin-bottom:0.2rem;">🌆 Вечер (18:00–21:00)</div>
-      <div>• Лёгкий ужин (до 19:00-19:30)</div>
-      <div>• ↓ Синий свет (лампы 2200K)</div>
-      <div>• Wilbarger-протокол (щётка + компрессия)</div>
-      <div>• Гудение / Bhramari pranayama (5-10')</div>
-    </div>
-    <div>
-      <div style="font-weight:600;margin-bottom:0.2rem;">🌙 Ночь (21:00–7:00)</div>
-      <div>• Магний глицинат 300-400 мг</div>
-      <div>• L-теанин 200 мг (по необходимости)</div>
-      <div>• Отход ко сну до 23:00</div>
-      <div>• Утяжелённое одеяло</div>
-      <div>• Беруши (при сенсорной чувствительности)</div>
-    </div>
-  </div>
-</div>
-
 <footer class="footer">
-  <p>Протокол основан на международных исследованиях (Nature, Cochrane, J Neuroinflammation, Frontiers 2024–2026)</p>
-  <p>Информация носит справочный характер · Для назначения лечения необходима консультация врача</p>
-  <p style="margin-top:0.15rem;">💾 Данные сохраняются автоматически в браузере</p>
+  <p>Отслеживание симптомов и прогресса — ключ к успешной реабилитации</p>
+  <p>💾 Все данные сохраняются автоматически</p>
 </footer>
 
-</div><!-- /tab-dashboard -->
+</div><!-- /tab-today -->
 
 <!-- ════════════════════════════════════════════════════════════ -->
-<!-- ═══ TAB 2: УПРАЖНЕНИЯ ═══ -->
+<!-- ═══ TAB 3: УПРАЖНЕНИЯ ═══ -->
 <!-- ════════════════════════════════════════════════════════════ -->
 <div class="tab-content" id="tab-exercises">
 
@@ -1027,15 +1103,172 @@
 (function() {
   'use strict';
 
-  const STORAGE_KEY = 'vestibular_dashboard_v2';
+  const STORAGE_KEY = 'vestibular_dashboard_v3';
+
+  // ─── Wishes ───
+  const WISHES = [
+    { icon: '🌅', text: 'Каждый день — шаг к восстановлению. Вы сильнее, чем думаете.' },
+    { icon: '🌊', text: 'Море внутри нас — спокойное и бескрайнее. Пусть ваш внутренний океан будет тихим.' },
+    { icon: '🌴', text: 'Скоро будет и солнце, и море, и свежий бриз. Всему своё время.' },
+    { icon: '🌸', text: 'Природа мудра: после бури всегда приходит ясное небо.' },
+    { icon: '☀️', text: 'Света и тепла вашему пути восстановления. Вы уже прошли так много.' },
+    { icon: '🏔️', text: 'Горы покоряются шаг за шагом. Каждый день — маленькая вершина.' },
+    { icon: '🌺', text: 'Цветы распускаются в своём ритме. Не торопите себя — всему своё время.' },
+    { icon: '🕊️', text: 'Лёгкости и мира в душе. Ваше тело знает, как исцелиться.' },
+    { icon: '🌿', text: 'Природа восстанавливается сама — доверьтесь этому процессу и в себе.' },
+    { icon: '💫', text: 'Каждый день вы становитесь сильнее. Даже если этого не видно — внутри идёт работа.' },
+    { icon: '🏝️', text: 'Представьте тихий пляж, шум волн, тёплый песок. Ваша нервная система благодарна вам за отдых.' },
+    { icon: '🌄', text: 'Рассвет наступает после самой тёмной ночи. Ваш рассвет уже близко.' },
+    { icon: '🍃', text: 'Лёгкий ветер перемен несёт обновление. Дышите глубже.' },
+    { icon: '🌙', text: 'Спокойной ночи вашим клеткам. Во сне рождается восстановление.' },
+    { icon: '🌟', text: 'Вы — свет для самой себя. Даже в тумане симптомов помните: вы есть.' },
+    { icon: '🌊', text: 'Волны приходят и уходят — и симптомы тоже. Вы научитесь с ними быть.' },
+    { icon: '🌻', text: 'Подсолнух всегда поворачивается к солнцу. Поворачивайтесь к тому, что даёт вам силу.' },
+    { icon: '🦋', text: 'Превращение требует времени и терпения. Вы в процессе — и это прекрасно.' },
+    { icon: '🌳', text: 'Корни дерева уходят глубоко, чтобы выдержать бурю. Ваши корни — ваше дыхание и осознанность.' },
+    { icon: '💧', text: 'Капля за каплей — и камень точит. Маленькие шаги ведут к большой победе.' },
+    { icon: '🌤️', text: 'После дождя воздух чище. После испытаний — яснее ум.' },
+    { icon: '🎵', text: 'Вибрация жизни звучит в каждой клетке. Пойте, дышите, будьте.' },
+    { icon: '🌹', text: 'Красота живёт в каждом мгновении. Найдите её сегодня — даже в малом.' },
+    { icon: '☕', text: 'Тёплый чай, тишина, покой. Простые радости лечат лучше лекарств.' },
+    { icon: '🌈', text: 'После грозы — радуга. Вы заслуживаете радуги.' },
+  ];
+
+  function initWishes() {
+    const bar = document.getElementById('wishesBar');
+    bar.innerHTML = '';
+    WISHES.forEach((w, i) => {
+      const div = document.createElement('div');
+      div.className = 'wish-slide' + (i === 0 ? ' active' : '');
+      div.innerHTML = '<span class="wish-icon">' + w.icon + '</span>' + w.text;
+      bar.appendChild(div);
+    });
+    let idx = 0;
+    setInterval(() => {
+      const slides = bar.querySelectorAll('.wish-slide');
+      slides[idx].classList.remove('active');
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add('active');
+    }, 9000);
+  }
 
   // ─── today date ───
   function setToday() {
     const d = new Date();
     const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
-    document.getElementById('todayDisplay').textContent = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    const dateStr = d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    document.getElementById('todayDisplay').textContent = dateStr;
+    const marker = document.getElementById('youHereMarker');
+    if (marker) marker.textContent = '📍 Вы здесь — ' + dateStr;
   }
-  setToday();
+
+  // ─── Routine data ───
+  function defaultRoutineData() {
+    return {
+      exercises: [
+        { time: '07:30', text: 'VOR X1/X2 — 3×2 мин' },
+        { time: '12:00', text: 'Ходьба с поворотом головы 5 мин' },
+        { time: '15:00', text: 'Равновесие на одной ноге 3×30"' },
+      ],
+      nutrition: [
+        { time: '08:00', text: 'Низкогистаминовый завтрак (овсянка/гречка)' },
+        { time: '12:30', text: 'Обед (белок + овощи)' },
+        { time: '18:00', text: 'Лёгкий ужин (до 19:00)' },
+      ],
+      meds: [
+        { time: '08:00', text: 'Кверцетин 1000 мг + C 500 мг + D 2000 МЕ' },
+        { time: '14:00', text: 'Кверцетин 1000 мг + NAC 500 мг' },
+        { time: '20:00', text: 'Кверцетин 1000 мг + куркумин 1000 мг' },
+        { time: '21:30', text: 'Магний глицинат 300 мг' },
+      ],
+      activities: [
+        { time: '07:00', text: 'Холодное умывание 30"' },
+        { time: '07:15', text: 'Дыхание 4-7-8 (4-5 циклов)' },
+        { time: '10:00', text: 'Прогулка 20+ мин' },
+        { time: '16:00', text: 'Гудение / Brahmari 5 мин' },
+        { time: '20:00', text: 'Wilbarger-протокол (щётка + компрессия)' },
+      ],
+      sleep: [
+        { time: '21:00', text: '↓ Синий свет (лампы 2200K)' },
+        { time: '21:30', text: 'Bhramari pranayama 5-10 мин' },
+        { time: '22:30', text: 'Отход ко сну' },
+      ],
+      custom: [
+        { time: '', text: 'Ваша задача' },
+      ],
+    };
+  }
+
+  function getRoutineData() {
+    try {
+      const saved = localStorage.getItem('routineData_v3');
+      if (saved) return JSON.parse(saved);
+    } catch(e) { /* ignore */ }
+    return null;
+  }
+
+  function saveRoutineData(data) {
+    localStorage.setItem('routineData_v3', JSON.stringify(data));
+  }
+
+  function renderRoutine(data) {
+    if (!data) data = defaultRoutineData();
+    const grid = document.getElementById('routineGrid');
+    if (!grid) return;
+    grid.querySelectorAll('.routine-group').forEach(group => {
+      const g = group.dataset.group;
+      const items = group.querySelector('.rg-items');
+      items.innerHTML = '';
+      (data[g] || []).forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'rg-item';
+        div.innerHTML =
+          '<input class="rg-time" value="' + (item.time || '') + '" placeholder="время" onchange="onRoutineChange()">' +
+          '<span class="edit-text" contenteditable="true" onblur="onRoutineChange()">' + item.text + '</span>' +
+          '<span class="rg-del" onclick="delRoutineItem(this)">✕</span>';
+        items.appendChild(div);
+      });
+    });
+  }
+
+  window.onRoutineChange = function() {
+    const data = collectRoutine();
+    saveRoutineData(data);
+  };
+
+  function collectRoutine() {
+    const data = {};
+    document.querySelectorAll('.routine-group').forEach(group => {
+      const g = group.dataset.group;
+      data[g] = [];
+      group.querySelectorAll('.rg-item').forEach(item => {
+        const time = item.querySelector('.rg-time')?.value || '';
+        const text = item.querySelector('.edit-text')?.innerText?.trim() || '';
+        if (text) data[g].push({ time, text });
+      });
+    });
+    return data;
+  }
+
+  window.addRoutineItem = function(groupName) {
+    const group = document.querySelector(`.routine-group[data-group="${groupName}"]`);
+    if (!group) return;
+    const items = group.querySelector('.rg-items');
+    const div = document.createElement('div');
+    div.className = 'rg-item';
+    div.innerHTML =
+      '<input class="rg-time" value="" placeholder="время" onchange="onRoutineChange()">' +
+      '<span class="edit-text" contenteditable="true" onblur="onRoutineChange()">Новый пункт</span>' +
+      '<span class="rg-del" onclick="delRoutineItem(this)">✕</span>';
+    items.appendChild(div);
+    div.querySelector('.edit-text').focus();
+    onRoutineChange();
+  };
+
+  window.delRoutineItem = function(el) {
+    const item = el.closest('.rg-item');
+    if (item) { item.remove(); onRoutineChange(); }
+  };
 
   // ─── LocalStorage ───
   function saveAll() {
@@ -1047,8 +1280,9 @@
     document.querySelectorAll('#dailyChecklist input[type="checkbox"]').forEach(cb => {
       data[cb.dataset.key] = cb.checked;
     });
+    data.routineData = collectRoutine();
     try {
-      data.weeklyLog = JSON.parse(localStorage.getItem('weeklyLog_v2') || '[]');
+      data.weeklyLog = JSON.parse(localStorage.getItem('weeklyLog_v3') || '[]');
     } catch(e) { data.weeklyLog = []; }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
@@ -1059,7 +1293,7 @@
       if (!raw) return;
       const data = JSON.parse(raw);
       Object.entries(data).forEach(([key, val]) => {
-        if (key === 'weeklyLog') return;
+        if (key === 'weeklyLog' || key === 'routineData') return;
         if (typeof val === 'boolean') {
           const cb = document.querySelector(`#dailyChecklist input[data-key="${key}"]`);
           if (cb) { cb.checked = val; updateCheckCount(); }
@@ -1068,6 +1302,9 @@
           if (el && el.isContentEditable) el.innerText = val;
         }
       });
+      if (data.routineData) {
+        renderRoutine(data.routineData);
+      }
     } catch(e) { /* ignore */ }
   }
 
@@ -1128,10 +1365,10 @@
 
   // ─── Weekly log ───
   function getWeekLog() {
-    try { return JSON.parse(localStorage.getItem('weeklyLog_v2') || '[]'); } catch(e) { return []; }
+    try { return JSON.parse(localStorage.getItem('weeklyLog_v3') || '[]'); } catch(e) { return []; }
   }
   function setWeekLog(log) {
-    localStorage.setItem('weeklyLog_v2', JSON.stringify(log));
+    localStorage.setItem('weeklyLog_v3', JSON.stringify(log));
     renderWeekLog();
   }
   function renderWeekLog() {
@@ -1144,7 +1381,7 @@
     }
     log.slice().reverse().forEach(entry => {
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${entry.date||'?'}</td><td>${entry.vertigo??'—'}</td><td>${entry.anxiety??'—'}</td><td>${entry.check??'—'}/7</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${entry.note||''}</td>`;
+      tr.innerHTML = '<td>'+ (entry.date||'?') +'</td><td>'+ (entry.vertigo??'—') +'</td><td>'+ (entry.anxiety??'—') +'</td><td>'+ (entry.check??'—') +'/7</td><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+ (entry.note||'') +'</td>';
       tbody.appendChild(tr);
     });
   }
@@ -1156,7 +1393,7 @@
     const anxiety = parseFloat(document.getElementById('scoreAnxiety').innerText) || 0;
     const checks = document.querySelectorAll('#dailyChecklist input[type="checkbox"]');
     const done = Array.from(checks).filter(cb => cb.checked).length;
-    const note = document.getElementById('dailyNote')?.innerText?.slice(0, 60) || '';
+    const note = (document.getElementById('dailyNote')?.innerText || '').slice(0, 60);
     const log = getWeekLog();
     const todayStr = d.toLocaleDateString('ru-RU');
     const idx = log.findIndex(e => e.fullDate === todayStr);
@@ -1171,7 +1408,7 @@
 
   window.clearWeek = function() {
     if (!confirm('Очистить недельный лог?')) return;
-    localStorage.setItem('weeklyLog_v1', '[]');
+    localStorage.setItem('weeklyLog_v3', '[]');
     renderWeekLog();
     updateStats();
   };
@@ -1219,11 +1456,18 @@
   }
 
   // ─── Init ───
+  initWishes();
+  setToday();
   loadAll();
   updateCheckCount();
   updateBars();
   renderWeekLog();
   updateStats();
+  // render routine if no saved data
+  if (!getRoutineData()) {
+    renderRoutine(defaultRoutineData());
+    saveRoutineData(defaultRoutineData());
+  }
   window.addEventListener('beforeunload', () => { saveWeekDay(); saveAll(); });
 
   // ─── Tabs: main ───
