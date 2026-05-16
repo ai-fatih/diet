@@ -1,0 +1,14 @@
+{
+  "name": "Vestibular Rehabilitation Dashboard",
+  "short_name": "Vestibular Rehab",
+  "description": "Персонализированный дашборд вестибулярной реабилитации: VRT-упражнения, вагусная стимуляция, стабилизация тучных клеток, низкогистаминовая диета. Научно обоснованный протокол при вестибулярном неврите.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "lang": "ru",
+  "theme_color": "#f4f7fa",
+  "background_color": "#f4f7fa",
+  "categories": ["medical", "health", "education"],
+  "icons": []
+}
