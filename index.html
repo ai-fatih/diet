@@ -567,13 +567,13 @@
   <div class="card">
     <h2 class="card-title">◇ Ежедневный чеклист</h2>
     <ul class="cl" id="dailyChecklist">
-      <li><input type="checkbox" data-key="cb_vagus_morning"><span>☀️ Утренняя вагусная практика (холод/дыхание)</span></li>
-      <li><input type="checkbox" data-key="cb_vor"><span>👁 VOR-упражнения (3×1–2 мин)</span></li>
-      <li><input type="checkbox" data-key="cb_quercetin"><span>💊 Приём кверцетина + C + D + NAC</span></li>
-      <li><input type="checkbox" data-key="cb_diet"><span>🥗 Низкогистаминовое питание</span></li>
-      <li><input type="checkbox" data-key="cb_walk"><span>🚶 Прогулка 20+ мин</span></li>
-      <li><input type="checkbox" data-key="cb_vagus_evening"><span>🌙 Вечерняя вагусная практика (гудение/дыхание)</span></li>
-      <li><input type="checkbox" data-key="cb_sleep"><span>🛌 Отход ко сну до 23:00</span></li>
+      <li><input type="checkbox" data-key="cb_vagus_morning"><span class="cl-text">☀️ Утренняя вагусная практика (холод/дыхание)</span></li>
+      <li><input type="checkbox" data-key="cb_vor"><span class="cl-text">👁 VOR-упражнения (3×1–2 мин)</span></li>
+      <li><input type="checkbox" data-key="cb_quercetin"><span class="cl-text">💊 Приём кверцетина + C + D + NAC</span></li>
+      <li><input type="checkbox" data-key="cb_diet"><span class="cl-text">🥗 Низкогистаминовое питание</span></li>
+      <li><input type="checkbox" data-key="cb_walk"><span class="cl-text">🚶 Прогулка 20+ мин</span></li>
+      <li><input type="checkbox" data-key="cb_vagus_evening"><span class="cl-text">🌙 Вечерняя вагусная практика (гудение/дыхание)</span></li>
+      <li><input type="checkbox" data-key="cb_sleep"><span class="cl-text">🛌 Отход ко сну до 23:00</span></li>
     </ul>
     <div class="flex-between" style="margin-top:0.4rem;">
       <span style="font-size:0.72rem;color:var(--text-dim);">Выполнено: <span id="checkCount">0</span>/7</span>
@@ -1743,7 +1743,137 @@
     }
   }
 
+  // ─── Language switcher ───
+  function buildLangSwitcher() {
+    const bar = document.getElementById('langBar');
+    if (!bar) return;
+    const sizeOpts = [
+      { v:'small', d:'Маленький' },
+      { v:'medium', d:'Средний' },
+      { v:'large', d:'Большой' },
+    ];
+    bar.innerHTML = '<label>Язык:</label>' +
+      '<select id="langSelect" class="lang-select">' +
+      '<option value="ru">🇷🇺 Русский</option>' +
+      Object.entries(LANGUAGES).map(([code, info]) =>
+        '<option value="' + code + '">' + info.flag + ' ' + info.label + '</option>'
+      ).join('') +
+      '</select>' +
+      '<label style="margin-left:0.8rem;">Размер:</label>' +
+      '<select id="sizeSelect" class="lang-select">' +
+      sizeOpts.map(o => '<option value="' + o.v + '">' + o.d + '</option>').join('') +
+      '</select>';
+    document.getElementById('langSelect').addEventListener('change', function() {
+      switchLang(this.value);
+    });
+    initFontSize();
+    document.getElementById('sizeSelect').addEventListener('change', function() {
+      setFontSize(this.value);
+    });
+  }
+
+  function switchLang(lang) {
+    if (lang === 'ru') { location.reload(); return; }
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      const trans = TRANS[key];
+      if (trans && trans[lang]) el.innerHTML = trans[lang];
+    });
+    // Dynamic: wishes
+    const wishesArr = WISHES_TRANS[lang];
+    if (wishesArr) {
+      const bar = document.getElementById('wishesBar');
+      bar.innerHTML = '';
+      WISHES.forEach((w, i) => {
+        const div = document.createElement('div');
+        div.className = 'wish-slide' + (i === 0 ? ' active' : '');
+        div.innerHTML = '<span class="wish-icon">' + w.icon + '</span>' + (wishesArr[i] || w.text);
+        bar.appendChild(div);
+      });
+    }
+    // Dynamic: checklist
+    const clTexts = CHECKLIST_TRANS[lang];
+    if (clTexts) {
+      document.querySelectorAll('#dailyChecklist .cl-text').forEach((el, i) => {
+        if (i < clTexts.length) el.textContent = clTexts[i];
+      });
+    }
+    // Dynamic: symptom labels
+    const symTexts = SYMPTOM_TRANS[lang];
+    if (symTexts) {
+      document.querySelectorAll('.sym-label').forEach((el, i) => {
+        if (i < symTexts.length) el.textContent = symTexts[i];
+      });
+    }
+    // Dynamic: routine group titles
+    const groupTitles = GROUP_TITLES[lang];
+    if (groupTitles) {
+      document.querySelectorAll('.routine-group').forEach(group => {
+        const g = group.dataset.group;
+        const titleEl = group.querySelector('.rg-title');
+        if (titleEl && groupTitles[g]) titleEl.textContent = groupTitles[g];
+      });
+    }
+    // Dynamic: week log headers
+    const weekHeaders = WEEK_LOG_HEADERS[lang];
+    if (weekHeaders) {
+      const row = document.getElementById('weekLogHeaderRow');
+      if (row) row.querySelectorAll('th').forEach((th, i) => { if (i < weekHeaders.length) th.textContent = weekHeaders[i]; });
+    }
+    // Dynamic: biomarker headers
+    const bioHeaders = BIOMARKER_HEADERS[lang];
+    if (bioHeaders) {
+      const row = document.getElementById('bioHeaderRow');
+      if (row) row.querySelectorAll('th').forEach((th, i) => { if (i < bioHeaders.length) th.textContent = bioHeaders[i]; });
+    }
+    // Dynamic: vagus table headers
+    const vagusHeaders = VAGUS_TABLE_HEADERS[lang];
+    if (vagusHeaders) {
+      const row = document.getElementById('vagusHeaderRow');
+      if (row) row.querySelectorAll('th').forEach((th, i) => { if (i < vagusHeaders.length) th.textContent = vagusHeaders[i]; });
+    }
+    // Dynamic: exercise table headers
+    const exHeaders = EX_TABLE_HEADERS[lang];
+    if (exHeaders) {
+      ['exMorningHeader','exDayHeader','exEveningHeader'].forEach(id => {
+        const row = document.getElementById(id);
+        if (row) row.querySelectorAll('th').forEach((th, i) => { if (i < exHeaders.length) th.textContent = exHeaders[i]; });
+      });
+    }
+    // Dynamic: food checker headers
+    const foodHeaders = FOOD_TABLE_HEADERS[lang];
+    if (foodHeaders) {
+      const row = document.getElementById('foodCheckerHeader');
+      if (row) row.querySelectorAll('th').forEach((th, i) => { if (i < foodHeaders.length) th.textContent = foodHeaders[i]; });
+    }
+    // Dynamic: food reference headers
+    const foodRefHeaders = FOOD_REF_HEADERS[lang];
+    if (foodRefHeaders) {
+      ['foodRefMorningHeader','foodRefDayHeader','foodRefEveningHeader'].forEach(id => {
+        const row = document.getElementById(id);
+        if (row) row.querySelectorAll('th').forEach((th, i) => { if (i < foodRefHeaders.length) th.textContent = foodRefHeaders[i]; });
+      });
+    }
+    const sel = document.getElementById('langSelect');
+    if (sel) sel.value = lang;
+    localStorage.setItem('vestibular_lang', lang);
+  }
+
+  const SIZE_MAP = { small:'14px', medium:'16px', large:'18px' };
+
+  function initFontSize() {
+    const saved = localStorage.getItem('vestibular_font_size') || 'medium';
+    document.getElementById('sizeSelect').value = saved;
+    document.documentElement.style.fontSize = SIZE_MAP[saved];
+  }
+
+  function setFontSize(val) {
+    localStorage.setItem('vestibular_font_size', val);
+    document.documentElement.style.fontSize = SIZE_MAP[val];
+  }
+
   // ─── Init ───
+  buildLangSwitcher();
   initWishes();
   setToday();
   seedTimelineFromJson().then(renderTimeline).catch(() => renderTimeline());
