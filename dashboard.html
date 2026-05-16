@@ -3,7 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Дашборд: Медицинские данные</title>
+<meta name="description" content="Персонализированный медицинский дашборд: вестибулярный неврит (AB31.0), диагностика, анализы крови, МСКТ, МРТ шейного отдела, рекомендации невролога.">
+<meta name="keywords" content="вестибулярный неврит, медицинский дашборд, МСКТ головного мозга, МРТ шейного отдела, анализы крови, невролог, диагностика головокружения, цервикогенное головокружение">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Vestibular Rehabilitation Project">
+<link rel="canonical" href="https://vestibular-rehabilitation.vercel.app/dashboard.html">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vestibular-rehabilitation.vercel.app/dashboard.html">
+<meta property="og:title" content="Медицинский дашборд — вестибулярный неврит">
+<meta property="og:description" content="Персонализированный дашборд с диагнозом, результатами анализов и рекомендациями при вестибулярном неврите.">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Vestibular Rehabilitation Dashboard">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Медицинский дашборд — вестибулярный неврит">
+<meta name="twitter:description" content="Персонализированный дашборд с диагнозом, результатами анализов и рекомендациями при вестибулярном неврите.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MedicalWebPage",
+  "name": "Медицинский дашборд — вестибулярный неврит",
+  "url": "https://vestibular-rehabilitation.vercel.app/dashboard.html",
+  "description": "Персонализированный медицинский дашборд с диагнозом вестибулярный неврит, результатами анализов и рекомендациями.",
+  "inLanguage": "ru",
+  "about": {
+    "@type": "MedicalCondition",
+    "name": "Вестибулярный неврит",
+    "code": {
+      "@type": "MedicalCode",
+      "code": "AB31.0",
+      "codingSystem": "ICD-11"
+    }
+  }
+}
+</script>
+<title>Медицинский дашборд — вестибулярный неврит | Диагностика и рекомендации</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -130,7 +163,7 @@
 
   <!-- ========== 0. ДИАГНОЗ ========== -->
   <div class="card" style="border-left: 4px solid var(--accent);">
-    <h2 class="card-title"><span class="icon">◆</span> 0. Диагноз</div>
+    <h2 class="card-title"><span class="icon">◆</span> 0. Диагноз</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Диагноз</th><th>Дата</th><th>Статус</th><th>Источник</th></tr></thead>
@@ -154,7 +187,7 @@
 
   <!-- ========== 1. ИССЛЕДОВАНИЯ ========== -->
   <div class="card">
-    <h2 class="card-title"><span class="icon">◆</span> 1. Инструментальные исследования</div>
+    <h2 class="card-title"><span class="icon">◆</span> 1. Инструментальные исследования</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Исследование</th><th>Дата</th><th>Результат</th><th>Статус</th><th>Комментарий</th></tr></thead>
@@ -188,7 +221,7 @@
   <!-- ========== 2. ЛАБОРАТОРНЫЕ АНАЛИЗЫ ========== -->
   <div class="grid-2">
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> 2A. Биохимия крови (11.04.2026)</div>
+      <h2 class="card-title"><span class="icon">◆</span> 2A. Биохимия крови (11.04.2026)</h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Показатель</th><th>Значение</th><th>Референс</th><th>Статус</th></tr></thead>
@@ -202,7 +235,7 @@
       </div>
     </div>
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> 2B. ОАК + формула (11.04.2026)</div>
+      <h2 class="card-title"><span class="icon">◆</span> 2B. ОАК + формула (11.04.2026)</h2>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Показатель</th><th>Значение</th><th>Референс</th><th>Статус</th></tr></thead>
@@ -223,7 +256,7 @@
   <!-- ========== 3. КЛИНИЧЕСКИЕ ДАННЫЕ ========== -->
   <div class="grid-3">
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Симптомы</div>
+      <h2 class="card-title"><span class="icon">◆</span> Симптомы</h2>
       <table>
         <tbody>
           <tr><td>Боли в шее</td><td><span class="tag tag-red">Да</span></td></tr>
@@ -238,7 +271,7 @@
     </div>
 
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Гипотезы</div>
+      <h2 class="card-title"><span class="icon">◆</span> Гипотезы</h2>
       <div class="hypothesis">
         <div class="h-title">Гемангиомы С4-С5 <span class="prob">🔴 Наиболее вероятно</span></div>
         <div class="h-body">Доброкачественные сосудистые образования. Частая находка на КТ после 30–40 лет. Не влияют на анализы крови.</div>
@@ -258,7 +291,7 @@
     </div>
 
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Ключевой вывод</div>
+      <h2 class="card-title"><span class="icon">◆</span> Ключевой вывод</h2>
       <p style="font-size:0.9rem;color:var(--slate-700);">
         Все дороги ведут к <strong>МРТ шейного отдела</strong>. 
         Без него тревога не уйдёт, а упражнения нельзя делать вслепую.
@@ -273,7 +306,7 @@
 
   <!-- ========== 4. РЕКОМЕНДАЦИИ ========== -->
   <div class="card">
-    <h2 class="card-title"><span class="icon">◆</span> 4. Рекомендации</div>
+    <h2 class="card-title"><span class="icon">◆</span> 4. Рекомендации</h2>
 
     <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;">Приоритетные действия</div>
     <div class="rec-step">
@@ -332,7 +365,7 @@
   <!-- ========== 5. СВОДКА ========== -->
   <div class="grid-2">
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Что исключено (с высокой вероятностью)</div>
+      <h2 class="card-title"><span class="icon">◆</span> Что исключено (с высокой вероятностью)</h2>
       <ul class="questions">
         <li>Опухоль головного мозга — КТ чистое</li>
         <li>Инсульт/кровоизлияние — КТ чистое</li>
@@ -345,7 +378,7 @@
       </ul>
     </div>
     <div class="card">
-      <h2 class="card-title"><span class="icon">◆</span> Что требует подтверждения</div>
+      <h2 class="card-title"><span class="icon">◆</span> Что требует подтверждения</h2>
       <ul class="questions">
         <li><strong>Природа очагов в С4-С5</strong> — МРТ шейного отдела</li>
         <li><strong>Цервикогенное головокружение</strong> — оценка невролога + МРТ</li>
