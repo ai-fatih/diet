@@ -223,6 +223,34 @@ function genDataPage() {
   }
   s3 += '</table></div>';
 
+  // ───────────────────────────────────────────────────────────────────────────────
+  // Пробиотики (Фаза 2)
+  // ───────────────────────────────────────────────────────────────────────────────
+  s3 += '<h3>Пробиотики (Фаза 2, после SIGHI-стабилизации)</h3>';
+  const pb = json.supplements.probiotics;
+  s3 += `<div class="card"><p><strong>Подход.</strong> ${esc(pb.general_approach.rationale)}</p><p><strong>Фаза:</strong> ${esc(pb.general_approach.phase)}</p>`;
+  if (pb.general_approach.note) s3 += `<p><strong>Важно.</strong> ${esc(pb.general_approach.note)}</p>`;
+  s3 += '</div>';
+
+  for (const cand of pb.candidates) {
+    s3 += `<div class="card" style="border-left: 4px solid #0d9488;margin-top:1rem">`;
+    s3 += `<h4 style="margin:0 0 .25rem">${esc(cand.name)}</h4>`;
+    s3 += `<p style="margin:0 0 .5rem;font-size:0.9rem;color:#666">${esc(cand.manufacturer)} — ${esc(cand.form)}`;
+    if (cand.cold_chain_required) s3 += ' ❄️ хол.цепь 2-8°C';
+    s3 += `</p>`;
+    if (cand.rationale) s3 += `<p><strong>Обоснование:</strong> ${esc(cand.rationale)}</p>`;
+    if (cand.start_protocol) s3 += `<p><strong>Старт:</strong> ${esc(cand.start_protocol)}</p>`;
+    s3 += '<table class="strain-table"><tr><th>Штамм</th><th>hdcA</th><th>Гистамин-риск</th><th>Механизм</th><th>Evidence</th></tr>';
+    for (const st of cand.strains) {
+      s3 += `<tr><td><strong>${esc(st.strain)}</strong></td>`;
+      s3 += `<td><span class="tag tag-green">${esc(st.hdcA_status)}</span></td>`;
+      s3 += `<td><span class="tag tag-${st.histamine_risk === 'none' ? 'green' : 'amber'}">${esc(st.histamine_risk)}</span></td>`;
+      s3 += `<td style="font-size:0.85rem">${esc(st.mechanism)}${st.note ? '<br><em>' + esc(st.note) + '</em>' : ''}</td>`;
+      s3 += `<td style="font-size:0.85rem">${esc(st.evidence)}</td></tr>`;
+    }
+    s3 += '</table></div>';
+  }
+
   sections.push(s3);
 
   // ═══════════════════════════════════════════════════════════════════════════
