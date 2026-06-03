@@ -1,0 +1,5 @@
+# Generated HTML pages (root-level only)
+/*.html
+
+# Node
+node_modules/

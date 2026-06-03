@@ -3,9 +3,270 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Персонализированный медицинский дашборд: вестибулярный неврит (AB31.0), диагностика, анализы крови, МСКТ, МРТ шейного отдела, рекомендации невролога.">
+<meta name="theme-color" content="#f4f7fa">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+    --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b; --slate-900: #0f172a;
+    --accent: #6366f1; --accent-dim: #4f46e5; --danger: #ef4444;
+    --amber: #f59e0b; --emerald: #10b981;
+    --green: #10b981; --green-bg: #f0fdf4;
+    --amber-bg: #fefce8; --red-bg: #fef2f2; --purple-bg: #f3e8ff;
+    --accent-light: #eef2ff;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    --radius: 12px; --shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --bg: var(--slate-50); --surface: #fff; --border: var(--slate-200);
+    --text: var(--slate-800); --text-dim: var(--slate-500); --text-faint: var(--slate-400);
+  }
+  html { font-size: 15px; }
+  body {
+    font-family: var(--font); background: var(--bg); color: var(--text);
+    line-height: 1.6; padding: 0;
+  }
+  .app { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
+  @media (min-width: 768px) { .app { padding: 3rem 2.5rem; } }
+
+  /* ─── Header ─── */
+  .header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; color: var(--slate-900); }
+  .header h1 small { font-size: 0.65rem; font-weight: 400; color: var(--text-dim); display: block; margin-top: 0.1rem; }
+  .header h1 span { color: var(--accent); }
+  .header .meta { margin-top: 0.5rem; color: var(--text-dim); font-size: 0.85rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .badge-date { font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.65rem; border-radius: 999px; background: var(--accent); color: #fff; white-space: nowrap; }
+  .subtitle { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.3rem; }
+  .nav-links { display: flex; gap: 1.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+  .nav-links a { font-size: 0.8rem; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .nav-links a:hover { text-decoration: underline; }
+  .section-nav { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 0.75rem 1rem; margin-bottom: 2rem; }
+  .section-nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 0.75rem; }
+  .section-nav a { font-size: 0.78rem; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .section-nav a:hover { text-decoration: underline; }
+  .note { font-size: 0.82rem; color: var(--text-dim); background: var(--slate-50); border-radius: 6px; padding: 0.6rem 0.8rem; margin-bottom: 1rem; border-left: 3px solid var(--slate-300); }
+  .compact { list-style: none; padding: 0; }
+  .compact li { padding: 0.15rem 0; font-size: 0.82rem; }
+  .compact li::before { content: '·'; margin-right: 0.4rem; color: var(--text-faint); }
+  .lit-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; }
+  .lit-card h3, .lit-card h4 { margin-top: 1rem; }
+  .lit-card h3:first-child, .lit-card h4:first-child { margin-top: 0; }
+
+  /* ─── Card ─── */
+  .card {
+    background: var(--surface); border-radius: var(--radius);
+    border: 1px solid var(--border); padding: 1.5rem;
+    margin-bottom: 1.5rem; box-shadow: var(--shadow);
+  }
+  .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+  .card-exclude { border-left: 4px solid var(--danger); background: #fef2f2; border-color: #fecaca; border-style: solid; }
+  .card-exclude h4 { background: #b91c1c; color: #fff; display: inline-block; padding: 0.2rem 0.7rem; border-radius: 6px; }
+  .card-allowed { border-left: 4px solid var(--emerald); background: #f0fdf4; border-color: #bbf7d0; }
+  .card-amber { border-left: 4px solid var(--amber); background: var(--amber-bg); }
+  .card-vagus { border-left: 4px solid #a78bfa; background: #f5f3ff; }
+  .card-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .card-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .card-grid { grid-template-columns: 1fr 1fr; } }
+  .card-title {
+    font-size: 0.85rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.04em; color: var(--text-faint);
+    display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;
+  }
+  .tag, .card .tag { display: inline-block; font-size: 0.65rem; font-weight: 500; padding: 0.08rem 0.4rem; border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap; }
+  .tag-purple { background: var(--purple-bg); color: #6a4a8a; }
+
+  /* ─── Entity Map ─── */
+  .emap { }
+  .emap-row { display: flex; align-items: center; gap: 0; margin-bottom: 0; position: relative; padding: 0.15rem 0; }
+  .emap-lvl { flex: 1; padding: 0.45rem 0.7rem; border-radius: 6px; font-size: 0.78rem; font-weight: 500; border: 1px solid var(--border); background: var(--surface); }
+  .emap-lvl.l1 { background: #fef2f2; border-color: #fecaca; }
+  .emap-lvl.l2 { background: #fff7ed; border-color: #fed7aa; }
+  .emap-lvl.l3 { background: #fefce8; border-color: #fde68a; }
+  .emap-lvl.l4 { background: #f0fdf4; border-color: #bbf7d0; }
+  .emap-lvl.l5 { background: #eef2ff; border-color: #c7d2fe; }
+  .emap-lvl.l6 { background: #faf5ff; border-color: #e9d5ff; }
+  .emap-arrow { padding: 0 0.35rem; font-size: 0.7rem; color: var(--text-faint); }
+  .emap-int { padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.68rem; font-weight: 600; white-space: nowrap; border: 1px solid var(--border); background: var(--surface); cursor: help; margin-left: 0.25rem; transition: all 0.15s; }
+  .emap-int:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); transform: translateY(-1px); }
+  .emap-int.vagus { border-color: #a78bfa; color: #6d28d9; background: #f5f3ff; }
+  .emap-int.cbt { border-color: #60a5fa; color: #1e40af; background: #eff6ff; }
+  .emap-int.sleep { border-color: #818cf8; color: #3730a3; background: #eef2ff; }
+  .emap-int.mc { border-color: #34d399; color: #047857; background: #ecfdf5; }
+  .emap-int.diet { border-color: #fbbf24; color: #92400e; background: #fffbeb; }
+  .emap-int.barrier { border-color: #60a5fa; color: #1e40af; background: #eff6ff; }
+  .emap-int.vrt { border-color: #f472b6; color: #9d174d; background: #fdf2f8; }
+
+  /* ─── Rec blocks (MC card) ─── */
+  .rec-stack { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem; }
+  .rec-block { margin-bottom: 0.8rem; }
+  .rec-block h3 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.3rem; color: var(--slate-700); }
+  .rec-block .sub { font-size: 0.65rem; font-weight: 400; color: var(--text-faint); }
+  .mc-accent { display: inline-block; padding: 0.1rem 0.4rem; border-radius: 4px; background: var(--green); color: #fff; font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+  .card-mc { border-left: 4px solid var(--emerald); }
+  .dd { font-size: 0.82rem; padding: 0.15rem 0; color: var(--text); line-height: 1.5; }
+  .do { color: var(--emerald); font-weight: 600; }
+  .dont { color: var(--danger); font-weight: 600; }
+
+  /* ─── Table ─── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  thead th {
+    text-align: left; padding: 0.65rem 0.75rem; font-weight: 600; font-size: 0.75rem;
+    text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-faint);
+    border-bottom: 2px solid var(--border); white-space: nowrap;
+  }
+  tbody td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--slate-100); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--slate-50); }
+
+  /* ─── Tag / Status ─── */
+  .tag-green { background: #f0fdf4; color: #15803d; }
+  .tag-amber { background: #fefce8; color: #a16207; }
+  .tag-yellow { background: #fefce8; color: #a16207; }
+  .tag-red { background: #fef2f2; color: #b91c1c; }
+  .tag-blue { background: #f0f9ff; color: #0369a1; }
+  .tag-hpa { background: #fef2f2; color: #991b1b; }
+  .tag-mc { background: #f0fdf4; color: #166534; }
+  .tag-vestibular { background: #eef2ff; color: #1e40af; }
+  .tag-uterine { background: #fdf2f8; color: #9d174d; }
+  .tag-gut { background: #fffbeb; color: #92400e; }
+  .tag-skeletal { background: #f5f3ff; color: #5b21b6; }
+  .status { display: flex; align-items: center; gap: 0.4rem; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .status-dot.green { background: var(--emerald); }
+  .status-dot.yellow { background: var(--amber); }
+  .status-dot.red { background: var(--danger); }
+
+  /* ─── Grid ─── */
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+  .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
+
+  /* ─── Hypothesis, Rec steps ─── */
+  .hypothesis { margin-bottom: 0.75rem; }
+  .hypothesis:last-child { margin-bottom: 0; }
+  .hypothesis .h-title { font-weight: 600; font-size: 0.9rem; }
+  .hypothesis .h-title .prob { font-weight: 400; font-size: 0.75rem; color: var(--text-dim); }
+  .hypothesis .h-body { font-size: 0.82rem; color: var(--text-dim); margin-top: 0.15rem; }
+  .rec-step { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.6rem 0; border-bottom: 1px solid var(--slate-100); }
+  .rec-step:last-child { border-bottom: none; }
+  .rec-num { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
+  .rec-num.danger { background: var(--danger); }
+  .rec-num.amber { background: var(--amber); }
+  .rec-body { font-size: 0.85rem; }
+  .rec-body strong { color: var(--slate-900); }
+
+  /* ─── Misc ─── */
+  .lang-bar { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .lang-bar label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); white-space: nowrap; }
+  .lang-select { font-size: 0.78rem; padding: 0.25rem 0.5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; font-family: var(--font); }
+  .lang-select:focus { outline: none; border-color: var(--accent); }
+  .footer { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-faint); text-align: center; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+  .questions li { padding: 0.4rem 0; font-size: 0.85rem; color: var(--text-dim); border-bottom: 1px solid var(--slate-100); }
+  .questions li:last-child { border-bottom: none; }
+  .questions li::marker { color: var(--accent); }
+  .dos-donts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem; font-size: 0.82rem; }
+  .dos-donts .do { color: var(--emerald); }
+  .dos-donts .dont { color: var(--danger); }
+
+  @media print {
+    .lang-bar, .footer { display: none; }
+    .card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  }
+
+  /* ─── Dependency Graph ─── */
+  .graph-container {
+    width: 100%; height: 500px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); margin-bottom: 2rem;
+    position: relative; overflow: hidden;
+  }
+  .graph-container .vis-network { outline: none; }
+
+  /* ─── Node Cards ─── */
+  .node-grid { grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .node-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 1100px) { .node-grid { grid-template-columns: 1fr 1fr 1fr; } }
+  .node-card { display: flex; flex-direction: column; gap: 0.5rem; }
+  .node-card-header { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .node-card-header .node-emoji { font-size: 1.4rem; line-height: 1; }
+  .node-card-header strong { font-size: 0.95rem; }
+  .node-card-header .tag { font-size: 0.6rem; }
+  .graph-btn {
+    margin-left: auto; padding: 0.2rem 0.5rem;
+    font-size: 0.75rem; background: var(--slate-100);
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text-dim); cursor: pointer; transition: all 0.15s;
+    font-family: var(--font);
+  }
+  .graph-btn:hover { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+  .node-what { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+  .node-links { font-size: 0.78rem; display: flex; flex-direction: column; gap: 0.15rem; }
+  .node-links a { color: var(--accent); text-decoration: none; }
+  .node-links a:hover { text-decoration: underline; }
+  .link-out { color: var(--emerald); }
+  .link-in { color: var(--accent-dim); }
+  .node-do { font-size: 0.8rem; padding: 0.5rem 0.7rem; background: var(--slate-50); border-radius: 6px; border-left: 3px solid var(--emerald); }
+
+  /* ─── Tabs ─── */
+  .food-tabs { display: flex; gap: 0; margin-bottom: 1.5rem; border-bottom: 2px solid var(--slate-200); }
+  .food-tab { padding: 0.5rem 1.2rem; font-size: 0.8rem; font-weight: 600; border: none; background: transparent; color: var(--text-faint); cursor: pointer; font-family: var(--font); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+  .food-tab:hover { color: var(--text); }
+  .food-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .food-tab-content { display: none; }
+  .food-tab-content.active { display: block; }
+  .estro-info { background: #f5f3ff; border: 1px solid #e4d5f7; border-radius: var(--radius); padding: 1.2rem; margin-bottom: 1.5rem; font-size: 0.85rem; line-height: 1.6; }
+  .estro-info h4 { margin-top: 0; color: #6d28d9; }
+  .estro-info p { margin: 0.5rem 0; }
+
+  /* ─── Food Guide ─── */
+  .food-filter { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .food-btn { padding: 0.35rem 0.8rem; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); color: var(--text-dim); cursor: pointer; font-family: var(--font); transition: all 0.15s; }
+  .food-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .food-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .food-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+  @media (min-width: 768px) { .food-grid { grid-template-columns: 1fr 1fr; } }
+  .food-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 1.2rem; box-shadow: var(--shadow); }
+  .food-card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .food-card-header .emoji { font-size: 1.3rem; }
+  .food-card-header .name { font-weight: 600; font-size: 0.95rem; }
+  .food-card-header .cat { font-size: 0.6rem; color: var(--text-faint); background: var(--slate-100); padding: 0.1rem 0.4rem; border-radius: 999px; }
+  .food-tags { display: flex; gap: 0.35rem; margin-left: auto; }
+  .food-tag { font-size: 0.55rem; padding: 0.1rem 0.35rem; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
+  .food-tag.sighi { background: #ecfdf5; color: #166534; }
+  .food-tag.fodmap { background: #fffbeb; color: #92400e; }
+  .food-tag.fodmap-y { background: #fef2f2; color: #b91c1c; }
+  .food-label { font-size: 0.65rem; font-weight: 600; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.03em; margin-top: 0.6rem; margin-bottom: 0.15rem; }
+  .food-body { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+  .food-source { font-size: 0.65rem; color: var(--text-faint); margin-top: 0.5rem; padding-top: 0.4rem; border-top: 1px solid var(--slate-100); }
+  .estro-body { border-left: 3px solid #a78bfa; padding-left: 0.5rem; background: #f5f3ff; border-radius: 0 4px 4px 0; }
+  .comp-badge { font-size: 0.55rem; padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .comp-badge.gut { background: #e0f2fe; color: #075985; }
+  .comp-badge.repro { background: #fce7f3; color: #9d174d; }
+  .comp-badge.both { background: #ecfdf5; color: #065f46; }
+  .cycle-badge { font-size: 0.55rem; padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .cycle-badge.follicular { background: #fce7f3; color: #9d174d; }
+  .cycle-badge.luteal { background: #ede9fe; color: #5b21b6; }
+  .cycle-badge.menstrual { background: #fef2f2; color: #991b1b; }
+  .cycle-badge.both { background: #f1f5f9; color: #475569; }
+  .food-prep-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; padding-top: 0.5rem; border-top: 1px solid var(--slate-100); }
+  .food-prep-item { font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 6px; background: var(--slate-50); color: var(--text-dim); line-height: 1.4; }
+  .ru-badge { font-size: 0.55rem; padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+  .ru-badge.seas { background: #fffbeb; color: #92400e; }
+  .ru-badge.lim { background: #fff7ed; color: #9a3412; }
+  .ru-badge.rare { background: #fef2f2; color: #991b1b; }
+  .food-ru-alt { font-size: 0.7rem; margin-top: 0.5rem; padding: 0.35rem 0.5rem; background: #f1f5f9; border-radius: 6px; color: var(--text-dim); line-height: 1.4; border-left: 3px solid var(--accent); }
+</style>
+
+</head>
+
+<meta name="description" content="Персонализированный медицинский дашборд: вестибулярный неврит (AB31.0), диагностика, анализы крови, МСКТ, рекомендации.">
 <script src="translations.js"></script>
-<meta name="keywords" content="вестибулярный неврит, медицинский дашборд, МСКТ головного мозга, МРТ шейного отдела, анализы крови, невролог, диагностика головокружения, цервикогенное головокружение">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Vestibular Rehabilitation Project">
 <link rel="canonical" href="https://vestibular-rehabilitation.vercel.app/dashboard.html">
@@ -29,129 +290,12 @@
   "about": {
     "@type": "MedicalCondition",
     "name": "Вестибулярный неврит",
-    "code": {
-      "@type": "MedicalCode",
-      "code": "AB31.0",
-      "codingSystem": "ICD-11"
-    }
+    "code": { "@type": "MedicalCode", "code": "AB31.0", "codingSystem": "ICD-11" }
   }
 }
 </script>
 <title>Медицинский дашборд — вестибулярный неврит | Диагностика и рекомендации</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --slate-50: #f8fafc;
-    --slate-100: #f1f5f9;
-    --slate-200: #e2e8f0;
-    --slate-300: #cbd5e1;
-    --slate-400: #94a3b8;
-    --slate-500: #64748b;
-    --slate-600: #475569;
-    --slate-700: #334155;
-    --slate-800: #1e293b;
-    --slate-900: #0f172a;
-    --accent: #6366f1;
-    --accent-dim: #4f46e5;
-    --danger: #ef4444;
-    --amber: #f59e0b;
-    --emerald: #10b981;
-    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  }
-  html { font-size: 15px; }
-  body {
-    font-family: var(--font);
-    background: var(--slate-50);
-    color: var(--slate-800);
-    line-height: 1.6;
-    padding: 0;
-  }
-  .app { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
-  @media (min-width: 768px) { .app { padding: 3rem 2.5rem; } }
 
-  .header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--slate-200); }
-  .header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; color: var(--slate-900); }
-  .header h1 span { color: var(--accent); }
-  .header .meta { margin-top: 0.5rem; color: var(--slate-500); font-size: 0.85rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
-  .header .badge { display: inline-block; font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.65rem; border-radius: 999px; background: var(--accent); color: #fff; }
-
-  .card {
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid var(--slate-200);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    transition: box-shadow 0.2s;
-  }
-  .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
-  .card-title { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--slate-500); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
-  .card-title .icon { color: var(--accent); }
-
-  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-  @media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
-  .grid-3 { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
-  @media (min-width: 768px) { .grid-3 { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 1100px) { .grid-3 { grid-template-columns: 1fr 1fr 1fr; } }
-
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  thead th {
-    text-align: left; padding: 0.65rem 0.75rem; font-weight: 600; font-size: 0.75rem;
-    text-transform: uppercase; letter-spacing: 0.03em; color: var(--slate-500);
-    border-bottom: 2px solid var(--slate-200); white-space: nowrap;
-  }
-  tbody td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--slate-100); vertical-align: top; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: var(--slate-50); }
-
-  .tag {
-    display: inline-block; font-size: 0.7rem; font-weight: 500; padding: 0.15rem 0.5rem;
-    border-radius: 999px; letter-spacing: 0.02em; white-space: nowrap;
-  }
-  .tag-green { background: #f0fdf4; color: #15803d; }
-  .tag-yellow { background: #fefce8; color: #a16207; }
-  .tag-red { background: #fef2f2; color: #b91c1c; }
-  .tag-blue { background: #f0f9ff; color: #0369a1; }
-
-  .status { display: flex; align-items: center; gap: 0.4rem; }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-  .status-dot.green { background: var(--emerald); }
-  .status-dot.yellow { background: var(--amber); }
-  .status-dot.red { background: var(--danger); }
-
-  .hypothesis { margin-bottom: 0.75rem; }
-  .hypothesis:last-child { margin-bottom: 0; }
-  .hypothesis .h-title { font-weight: 600; font-size: 0.9rem; }
-  .hypothesis .h-title .prob { font-weight: 400; font-size: 0.75rem; }
-  .hypothesis .h-body { font-size: 0.82rem; color: var(--slate-600); margin-top: 0.15rem; }
-
-  .rec-step { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.6rem 0; border-bottom: 1px solid var(--slate-100); }
-  .rec-step:last-child { border-bottom: none; }
-  .rec-num { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; }
-  .rec-num.danger { background: var(--danger); }
-  .rec-num.amber { background: var(--amber); }
-  .rec-body { font-size: 0.85rem; }
-  .rec-body strong { color: var(--slate-900); }
-
-  .footer { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--slate-200); font-size: 0.75rem; color: var(--slate-400); text-align: center; }
-
-  .lang-bar { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
-  .lang-bar label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--slate-500); white-space: nowrap; }
-  .lang-select { font-size: 0.78rem; padding: 0.25rem 0.5rem; border-radius: 6px; border: 1px solid var(--slate-200); background: #fff; color: var(--slate-700); cursor: pointer; font-family: var(--font); }
-  .lang-select:focus { outline: none; border-color: var(--accent); }
-
-  hr { border: none; border-top: 1px solid var(--slate-200); margin: 1rem 0; }
-
-  .questions li { padding: 0.4rem 0; font-size: 0.85rem; color: var(--slate-600); border-bottom: 1px solid var(--slate-100); }
-  .questions li:last-child { border-bottom: none; }
-  .questions li::marker { color: var(--accent); }
-
-  .dos-donts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem; font-size: 0.82rem; }
-  .dos-donts .do { color: var(--emerald); }
-  .dos-donts .dont { color: var(--danger); }
-</style>
-</head>
 <body>
 <div class="app">
 
@@ -160,16 +304,21 @@
   <header class="header">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
       <h1><span>◆</span> <span data-i18n="dash_title">Медицинский дашборд</span></h1>
-      <span class="badge" data-i18n="dash_date">18 апреля 2026</span>
+      <span class="badge-date" data-i18n="dash_date">18 апреля 2026</span>
     </div>
     <div class="meta">
       <span data-i18n="dash_gender">Женщина</span>
       <span data-i18n="dash_complaints">Жалобы: головокружение (~10 дн.), боли в шее</span>
       <span data-i18n="dash_referral">Направление: невролог → КТ</span>
     </div>
+    <nav class="nav-links">
+      <a href="index.html">Карта связей</a>
+      <a href="data.html">Данные</a>
+      <a href="literature.html">Литература</a>
+    </nav>
   </header>
 
-  <!-- ========== 0. ДИАГНОЗ ========== -->
+  <!-- ═══ 0. ДИАГНОЗ ═══ -->
   <div class="card" style="border-left: 4px solid var(--accent);">
     <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s0_title">0. Диагноз</span></h2>
     <div class="table-wrap">
@@ -179,7 +328,7 @@
           <tr>
             <td><strong>Вестибулярный неврит</strong> (AB31.0)</td>
             <td>18.04.2026</td>
-            <td><span class="tag tag-green">Подтверждён</span></td>
+            <td><span class="tag-green tag">Подтверждён</span></td>
             <td>Невролог (очный приём)</td>
           </tr>
           <tr>
@@ -193,7 +342,7 @@
     </div>
   </div>
 
-  <!-- ========== 1. ИССЛЕДОВАНИЯ ========== -->
+  <!-- ═══ 1. ИССЛЕДОВАНИЯ ═══ -->
   <div class="card">
     <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s1_title">1. Инструментальные исследования</span></h2>
     <div class="table-wrap">
@@ -226,7 +375,7 @@
     </div>
   </div>
 
-  <!-- ========== 2. ЛАБОРАТОРНЫЕ АНАЛИЗЫ ========== -->
+  <!-- ═══ 2. ЛАБОРАТОРНЫЕ АНАЛИЗЫ ═══ -->
   <div class="grid-2">
     <div class="card">
       <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s2a_title">2A. Биохимия крови (11.04.2026)</span></h2>
@@ -261,7 +410,35 @@
     </div>
   </div>
 
-  <!-- ========== 3. КЛИНИЧЕСКИЕ ДАННЫЕ ========== -->
+  <!-- ═══ MC-КАРТА (shared) ═══ -->
+  <div class="card card-mc">
+  <h2 class="card-title"><span class="mc-accent">★ Приоритет</span> ◇ Стабилизация тучных клеток</h2>
+  <div class="rec-block">
+    <h3>🥗 Низкогистаминовая диета <span class="sub">SIGHI ×3–4 нед</span></h3>
+    <div class="dd"><span class="do">✓</span> Исключить: ферментированное, выдержанные сыры, алкоголь, консервы, остатки &gt;24ч</div>
+    <div class="dd"><span class="do">✓</span> Основы: свежие овощи, зелень, куркума, имбирь, лук</div>
+    <div class="dd"><span class="do">✓</span> Свежее мясо/рыба — приготовить в день покупки</div>
+  </div>
+  <div class="rec-block">
+    <h3>💊 Нутрицевтики для стабилизации MC</h3>
+    <div class="dd">✓ <strong>Кверцетин</strong> 2000–4000 мг/д (флавонол, ингибирует дегрануляцию)</div>
+    <div class="dd">✓ <strong>Лютеолин</strong> 100–200 мг/д (синергист кверцетина, ингибирует CRHR-1)</div>
+    <div class="dd">✓ <strong>PEA (пальмитоилэтаноламид)</strong> 400–800 мг/д (агонист PPAR-α, ↓ активацию MC, синергист кверцетина)</div>
+    <div class="dd">✓ Витамин C 1–3 г/д (антиоксидант, ↓ гистамина)</div>
+    <div class="dd">✓ Витамин D 2000–5000 МЕ/д (иммуномодуляция MC)</div>
+    <div class="dd">✓ NAC 500–1000 мг/д (предшественник глутатиона, защита BLB)</div>
+    <div class="dd">✓ Куркумин 1–4 г/д (↓TNF-α, ↓ активации MC, пиперин для усвоения)</div>
+  </div>
+  <div class="rec-block">
+    <h3>🧪 Мишени воздействия</h3>
+    <div class="dd">• MRGPRX2 — рецептор SP на MC → блокируется кверцетином</div>
+    <div class="dd">• CRHR-1 — рецептор CRH на MC → блокируется лютеолином</div>
+    <div class="dd">• ↓ гистамина → ↓ проницаемости BLB → ↓ отёка нерва</div>
+  </div>
+</div>
+
+
+  <!-- ═══ 3. КЛИНИЧЕСКИЕ ДАННЫЕ ═══ -->
   <div class="grid-3">
     <div class="card">
       <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s3_symptoms">Симптомы</span></h2>
@@ -281,19 +458,19 @@
     <div class="card">
       <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s3_hypotheses">Гипотезы</span></h2>
       <div class="hypothesis">
-        <div class="h-title">Гемангиомы С4-С5 <span class="prob">🔴 Наиболее вероятно</span></div>
+        <div class="h-title">Гемангиомы С4-С5 <span class="prob">Наиболее вероятно</span></div>
         <div class="h-body">Доброкачественные сосудистые образования. Частая находка на КТ после 30–40 лет. Не влияют на анализы крови.</div>
       </div>
       <div class="hypothesis">
-        <div class="h-title">Цервикогенное головокружение <span class="prob">🔴 Высокая</span></div>
+        <div class="h-title">Цервикогенное головокружение <span class="prob">Высокая вероятность</span></div>
         <div class="h-body">Связь с болью в шее, положительная динамика от массажа, улучшение лёжа.</div>
       </div>
       <div class="hypothesis">
-        <div class="h-title">Психогенное (тревожное) <span class="prob">🟡 Умеренная</span></div>
+        <div class="h-title">Психогенное (тревожное) <span class="prob">Умеренная вероятность</span></div>
         <div class="h-body">Стресс + тревога из-за результатов КТ. Замкнутый круг.</div>
       </div>
       <div class="hypothesis">
-        <div class="h-title">Метастатическое поражение <span class="prob">🟢 Крайне маловероятно</span></div>
+        <div class="h-title">Метастатическое поражение <span class="prob">Крайне маловероятно</span></div>
         <div class="h-body">Нормальные СРБ, СОЭ, ферритин, гемоглобин. Маммография и КТ головы — без патологий.</div>
       </div>
     </div>
@@ -301,29 +478,29 @@
     <div class="card">
       <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s3_conclusion">Ключевой вывод</span></h2>
       <p style="font-size:0.9rem;color:var(--slate-700);">
-        Все дороги ведут к <strong>МРТ шейного отдела</strong>. 
+        Все дороги ведут к <strong>МРТ шейного отдела</strong>.
         Без него тревога не уйдёт, а упражнения нельзя делать вслепую.
       </p>
       <hr>
-      <p style="font-size:0.82rem;color:var(--slate-500);">
+      <p style="font-size:0.82rem;color:var(--text-dim);">
         Анализы крови — <strong>щит</strong> против страшных диагнозов.
         Нет анемии, нет воспаления, нет опухолей по данным КТ и маммографии.
       </p>
     </div>
   </div>
 
-  <!-- ========== 4. РЕКОМЕНДАЦИИ ========== -->
+  <!-- ═══ 4. РЕКОМЕНДАЦИИ ═══ -->
   <div class="card">
     <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s4_title">4. Рекомендации</span></h2>
 
-    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_priority_actions">Приоритетные действия</div>
+    <div style="font-weight:600;font-size:0.82rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_priority_actions">Приоритетные действия</div>
     <div class="rec-step">
       <span class="rec-num danger">1</span>
       <div class="rec-body"><strong>МРТ шейного отдела позвоночника</strong> — определить природу очагов С4-С5. Золотой стандарт. Без него упражнения противопоказаны.</div>
     </div>
     <div class="rec-step">
       <span class="rec-num danger">2</span>
-      <div class="rec-body"><strong>Приём невролога</strong> (запланирован) — с анализами крови, КТ, вопросами.</div>
+      <div class="rec-body"><strong>Приём невролога</strong> — с анализами крови, КТ, вопросами.</div>
     </div>
     <div class="rec-step">
       <span class="rec-num amber">3</span>
@@ -332,8 +509,8 @@
 
     <hr>
 
-    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_lifestyle">Образ жизни</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+    <div style="font-weight:600;font-size:0.82rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_lifestyle">Образ жизни</div>
+    <div class="dos-donts">
       <div>
         <p style="font-weight:600;font-size:0.8rem;color:var(--emerald);margin-bottom:0.25rem;" data-i18n="dash_do">Можно и нужно</p>
         <ul class="questions" style="font-size:0.82rem;">
@@ -343,7 +520,7 @@
           <li>Диафрагмальное дыхание (животом)</li>
           <li>Приём магния (глицинат/цитрат 300–400 мг/сут)</li>
           <li>Мягкий массаж шеи (продолжать)</li>
-          <li>Дневник головокружения (когда/что провоцирует)</li>
+          <li>Дневник головокружения</li>
         </ul>
       </div>
       <div>
@@ -359,10 +536,10 @@
 
     <hr>
 
-    <div style="font-weight:600;font-size:0.82rem;color:var(--slate-500);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_questions_header">Вопросы к неврологу на приём</div>
+    <div style="font-weight:600;font-size:0.82rem;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem;" data-i18n="dash_questions_header">Вопросы к неврологу на приём</div>
     <ol class="questions">
       <li>Можно ли считать очаги в С4-С5 доброкачественными (гемангиомы) с учётом нормальных анализов крови?</li>
-      <li>Нужно ли МРТ с ангиографией (сосуды шеи) или достаточно стандартного режима?</li>
+      <li>Нужно ли МРТ с ангиографией или достаточно стандартного режима?</li>
       <li>Какие упражнения для шеи безопасны до получения МРТ?</li>
       <li>Можно ли направить на УЗИ БЦА (сосуды шеи)?</li>
       <li>Стоит ли рассмотреть вестибулярную реабилитацию или физиотерапию?</li>
@@ -370,7 +547,7 @@
     </ol>
   </div>
 
-  <!-- ========== 5. СВОДКА ========== -->
+  <!-- ═══ 5. СВОДКА ═══ -->
   <div class="grid-2">
     <div class="card">
       <h2 class="card-title"><span class="icon">◆</span> <span data-i18n="dash_s5_excluded">Что исключено (с высокой вероятностью)</span></h2>
@@ -382,7 +559,7 @@
         <li>Инфекция — лейкоциты и формула в норме</li>
         <li>ДППГ (позиционное головокружение) — проба отрицательна</li>
         <li>Рак молочной железы — BI-RADS 2 (09.2025)</li>
-        <li>Системное метастатическое поражение — кровь чистая, КТ и маммография чисты</li>
+        <li>Системное метастатическое поражение — кровь, КТ, маммография чисты</li>
       </ul>
     </div>
     <div class="card">
@@ -404,16 +581,13 @@
 <script>
 (function() {
   'use strict';
-
   let currentLang = localStorage.getItem('vestibular_lang') || 'ru';
-
   function t(key) {
     if (key === 'ru') return null;
     const trans = DASHBOARD_TRANS[key];
     if (!trans) return null;
     return trans[currentLang] || null;
   }
-
   function tArr(baseKey) {
     if (currentLang === 'ru') return null;
     const suffix = '_' + currentLang;
@@ -421,19 +595,14 @@
     if (arr && Array.isArray(arr)) return arr;
     return null;
   }
-
   function applyTranslations() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
       const val = t(key);
-      if (val !== null && val !== undefined) {
-        el.innerHTML = val;
-      }
+      if (val !== null && val !== undefined) el.innerHTML = val;
     });
     const sel = document.getElementById('langSelect');
     if (sel) sel.value = currentLang;
-
-    // Table headers
     const diagHeaders = tArr('dash_diag_h');
     if (diagHeaders) applyTableHeaders('diagHeaderRow', diagHeaders);
     const studyHeaders = tArr('dash_study_h');
@@ -443,65 +612,46 @@
     const cbcHeaders = tArr('dash_biochem_h');
     if (cbcHeaders) applyTableHeaders('cbcHeaderRow', cbcHeaders);
   }
-
   function applyTableHeaders(rowId, headers) {
     const row = document.getElementById(rowId);
     if (!row) return;
-    row.querySelectorAll('th').forEach((th, i) => {
-      if (i < headers.length) th.textContent = headers[i];
-    });
+    row.querySelectorAll('th').forEach((th, i) => { if (i < headers.length) th.textContent = headers[i]; });
   }
-
   function switchLang(lang) {
     if (lang === currentLang) return;
     currentLang = lang;
     localStorage.setItem('vestibular_lang', lang);
     applyTranslations();
   }
-
   function buildLangSwitcher() {
     const bar = document.getElementById('langBar');
     if (!bar) return;
     const sizeLabel = t('size_label') || 'Размер:';
-    const sizeOpts = [
-      { v:'small', k:'size_small', d:'Маленький' },
-      { v:'medium', k:'size_medium', d:'Средний' },
-      { v:'large', k:'size_large', d:'Большой' },
-    ];
+    const sizeOpts = [{ v:'small', k:'size_small', d:'Маленький' },{ v:'medium', k:'size_medium', d:'Средний' },{ v:'large', k:'size_large', d:'Большой' }];
     bar.innerHTML = '<label>Язык:</label>' +
       '<select id="langSelect" class="lang-select">' +
       '<option value="ru">🇷🇺 Русский</option>' +
-      Object.entries(LANGUAGES).map(([code, info]) =>
-        '<option value="' + code + '">' + info.flag + ' ' + info.label + '</option>'
-      ).join('') +
+      Object.entries(LANGUAGES).map(([code, info]) => '<option value="' + code + '">' + info.flag + ' ' + info.label + '</option>').join('') +
       '</select>' +
       '<label style="margin-left:0.8rem;">' + sizeLabel + '</label>' +
       '<select id="sizeSelect" class="lang-select">' +
       sizeOpts.map(o => '<option value="' + o.v + '">' + o.d + '</option>').join('') +
       '</select>';
     document.getElementById('langSelect').value = currentLang;
-    document.getElementById('langSelect').addEventListener('change', function() {
-      switchLang(this.value);
-    });
+    document.getElementById('langSelect').addEventListener('change', function() { switchLang(this.value); });
     initFontSize();
-    document.getElementById('sizeSelect').addEventListener('change', function() {
-      setFontSize(this.value);
-    });
+    document.getElementById('sizeSelect').addEventListener('change', function() { setFontSize(this.value); });
   }
-
   const SIZE_MAP = { small:'14px', medium:'16px', large:'18px' };
-
   function initFontSize() {
     const saved = localStorage.getItem('vestibular_font_size') || 'medium';
     document.getElementById('sizeSelect').value = saved;
     document.documentElement.style.fontSize = SIZE_MAP[saved];
   }
-
   function setFontSize(val) {
     localStorage.setItem('vestibular_font_size', val);
     document.documentElement.style.fontSize = SIZE_MAP[val];
   }
-
   buildLangSwitcher();
   applyTranslations();
 })();

@@ -1,0 +1,382 @@
+{
+  "claims": [
+    {
+      "id": "immune-1",
+      "statement": "NK cell dysfunction is a central immune defect in endometriosis: reduced NKG2D activating receptor, increased inhibitory receptors NKG2A, KIR2DL1, LILRB1, and sICAM-1 blocking the LFA-1/ICAM-1 synapse.",
+      "source": "nk_cell_dysfunction.md",
+      "url": "https://www.frontiersin.org/journals/immunology/articles/10.3389/fimmu.2025.1657605/full",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-2",
+      "statement": "Endometriosis is an immune-mediated disease with macrophage M2 polarization, reduced NK cytotoxicity, complement activation (C3a/C5a), Th2 predominance, Treg increase, and B-cell activation with autoantibodies.",
+      "source": "endometriosis_immune_mediated.md",
+      "url": "https://www.frontiersin.org/journals/immunology/articles/10.3389/fimmu.2025.1727183/full",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-3",
+      "statement": "Immune profiles differ by endometriosis phenotype: peritoneal (stage-dependent M1→M2), ovarian (local immunosuppression + Treg expansion), adenomyosis (Th17/Treg, HMGB-1/TLR4), deep infiltrating (IDO1/COX-2/MMP-9, PD-1+ NK exhaustion), extragenital (complete NK absence CD56-, maximal TGF-β/PD-L1).",
+      "source": "endometriosis_immune_mediated.md",
+      "url": "https://www.frontiersin.org/journals/immunology/articles/10.3389/fimmu.2025.1727183/full",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-4",
+      "statement": "Estrogen suppresses NK cell cytotoxicity via reduced Granzyme B and NKG2D, and induces COX-2+CD16- NK cell differentiation producing IL-10 and TGF-β, promoting immunotolerance.",
+      "source": "estrogen_nk_axis.md",
+      "url": "https://www.mdpi.com/1422-0067/25/6/3362",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-5",
+      "statement": "Protopanaxadiol (ginseng extract, estrogen antagonist) enhances NK cytotoxicity — potential therapeutic agent.",
+      "source": "estrogen_nk_axis.md",
+      "url": "https://www.mdpi.com/1422-0067/25/6/3362",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-6",
+      "statement": "Uterine NK cells constitute 30-40% of leukocytes in proliferative phase and up to 70% in secretory phase; in endometriosis they may contribute to infertility and miscarriage.",
+      "source": "estrogen_nk_axis.md",
+      "url": "https://www.mdpi.com/1422-0067/25/6/3362",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-7",
+      "statement": "Immune checkpoint pathways PD-1/PD-L1, TIM-3/Gal-9, CTLA-4/CD80/CD86, and CD47/SIRPα are dysregulated in endometriosis; anti-PD-L1 and anti-CTLA4 reduce lesion size in animal models.",
+      "source": "immunopathological_insights.md",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12274256/",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-8",
+      "statement": "Endometriosis shares immunopathological similarities with cancer: immune evasion, M2-like macrophage polarization, NK suppression, and immune checkpoint activation.",
+      "source": "immunopathological_insights.md",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12274256/",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-9",
+      "statement": "scRNA-seq with machine learning identified GNLY (granulysin), PRF1 (perforin 1), and ENTPD1 (CD39) as key biomarkers of NK dysfunction; three-gene model AUC = 0.84.",
+      "source": "single_cell_nk_biomarkers.md",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12866336/",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-10",
+      "statement": "ENTPD1 (CD39) is highly expressed in endometrial stromal cells and enhances migration and invasion while modulating NK cells via adenosine signaling.",
+      "source": "single_cell_nk_biomarkers.md",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12866336/",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "immune-11",
+      "statement": "HLA-E and HLA-G expressed on endometriotic lesions protect them from NK cell killing by binding inhibitory receptors.",
+      "source": "immunopathological_insights.md",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12274256/",
+      "category": "immune_dysfunction"
+    },
+    {
+      "id": "not_endometrium-1",
+      "statement": "36.89% of endometriosis datasets contain eutopic endometrium ONLY — more than any other biospecimen type; almost half of all biospecimens labeled 'endometriosis' have no representation of actual endometriotic disease.",
+      "source": "not_the_endometrium_elife.md",
+      "url": "https://elifesciences.org/articles/103825",
+      "category": "not_endometrium"
+    },
+    {
+      "id": "not_endometrium-2",
+      "statement": "Using eutopic endometrium as a surrogate for ectopic endometriotic tissue is inappropriate despite similarities — the field has a 'persistent bias in both thought and methodology'.",
+      "source": "not_the_endometrium_elife.md",
+      "url": "https://elifesciences.org/articles/103825",
+      "category": "not_endometrium"
+    },
+    {
+      "id": "not_endometrium-3",
+      "statement": "Only 35% of cells in endometriotic lesions originate from grafted endometrium; 65% are host-derived infiltrating cells (NK cells, B cells, macrophages, T cells, fibroblasts, neutrophils, endothelial cells).",
+      "source": "redefining_retrograde_menstruation.md",
+      "url": "https://doi.org/10.1186/s10020-026-01442-3",
+      "category": "not_endometrium"
+    },
+    {
+      "id": "not_endometrium-4",
+      "statement": "The majority of cells in endometriotic lesions are immune cells, not endometrial cells; 'Endometriosis is clearly a disease of the immune system.'",
+      "source": "redefining_retrograde_menstruation.md",
+      "url": "https://doi.org/10.1186/s10020-026-01442-3",
+      "category": "not_endometrium"
+    },
+    {
+      "id": "not_endometrium-5",
+      "statement": "All currently approved therapies are hormonal, targeting autograft stromal cells which are NOT the majority of cells in the lesion — immunotherapies used in cancer may be applicable.",
+      "source": "redefining_retrograde_menstruation.md",
+      "url": "https://doi.org/10.1186/s10020-026-01442-3",
+      "category": "not_endometrium"
+    },
+    {
+      "id": "not_endometrium-6",
+      "statement": "TET3-overexpressing macrophages are key pathogenic contributors and potential therapeutic targets in endometriosis.",
+      "source": "redefining_retrograde_menstruation.md",
+      "url": "https://doi.org/10.1186/s10020-026-01442-3",
+      "category": "not_endometrium"
+    },
+    {
+      "id": "not_endometrium-7",
+      "statement": "Endometriosis lesions are oligoclonal structures: epithelial cells in lesions consist of unrelated clones, stromal cells are distinct from epithelial clones, and lesions at different body sites have independently derived clone sets.",
+      "source": "oligoclonal_lesions.md",
+      "url": "https://doi.org/10.64898/2026.02.25.708037",
+      "category": "not_endometrium"
+    },
+    {
+      "id": "not_endometrium-8",
+      "statement": "Mutation burdens, signatures, and driver landscapes are similar in lesions and normal endometrium; clonal ancestors of endometriosis are found in normal endometrium of patients.",
+      "source": "oligoclonal_lesions.md",
+      "url": "https://doi.org/10.64898/2026.02.25.708037",
+      "category": "not_endometrium"
+    },
+    {
+      "id": "male-1",
+      "statement": "Endometriosis in males is extremely rare — only ~17-20 documented cases in literature as of 2024.",
+      "source": "male_endometriosis_review.md",
+      "url": "",
+      "category": "male_endometriosis"
+    },
+    {
+      "id": "male-2",
+      "statement": "The main risk factor for male endometriosis is prolonged estrogen therapy for prostate carcinoma; other factors include cirrhosis, spironolactone use, and persistent Müllerian duct syndrome.",
+      "source": "male_endometriosis_review.md",
+      "url": "",
+      "category": "male_endometriosis"
+    },
+    {
+      "id": "male-3",
+      "statement": "Müllerian duct remnant metaplasia is the most accepted pathogenesis theory for male endometriosis — embryologic cell rests along the route of Müllerian ducts.",
+      "source": "male_endometriosis_review.md",
+      "url": "",
+      "category": "male_endometriosis"
+    },
+    {
+      "id": "male-4",
+      "statement": "Complete surgical excision is curative for male endometriosis with no recurrence reported.",
+      "source": "male_endometriosis_review.md",
+      "url": "",
+      "category": "male_endometriosis"
+    },
+    {
+      "id": "male-5",
+      "statement": "Pooled prevalence of endometriosis in transgender men is 25.14% (CI: 17.24-33.94%) — higher than the general cisgender female population (~10%).",
+      "source": "transgender_endometriosis.md",
+      "url": "",
+      "category": "male_endometriosis"
+    },
+    {
+      "id": "male-6",
+      "statement": "Testosterone therapy does NOT fully suppress endometriosis — the disease can persist despite masculinizing hormone therapy, challenging the notion that endometriosis is purely estrogen-driven.",
+      "source": "transgender_endometriosis.md",
+      "url": "",
+      "category": "male_endometriosis"
+    },
+    {
+      "id": "male-7",
+      "statement": "70.58% of transgender men using testosterone reported dysmenorrhea; 21.9% of patients without pelvic pain still had endometriosis.",
+      "source": "transgender_endometriosis.md",
+      "url": "",
+      "category": "male_endometriosis"
+    },
+    {
+      "id": "multiomics-1",
+      "statement": "Multi-omics of ovarian endometriomas (scRNA-seq + spatial transcriptomics + MALDI-MSI metabolomics) identified XBP1, VCAN, and CLDN7 as key epithelial markers, with Claudin family (CLDN3, CLDN4, CLDN7) as core targets.",
+      "source": "ovarian_endometriomas_multiomics.md",
+      "url": "https://doi.org/10.1038/s41467-025-66706-8",
+      "category": "multiomics_spatial"
+    },
+    {
+      "id": "multiomics-2",
+      "statement": "PAEP, MMP7, and MUC5B are upregulated in epithelial cells of ovarian endometriomas, supporting the implantation theory of endometriosis.",
+      "source": "ovarian_endometriomas_multiomics.md",
+      "url": "https://doi.org/10.1038/s41467-025-66706-8",
+      "category": "multiomics_spatial"
+    },
+    {
+      "id": "multiomics-3",
+      "statement": "Spatial metabolomics revealed altered cytochrome P450 enzymes, lipoprotein particles, and cholesterol metabolism in mesenchymal regions of ovarian endometriomas.",
+      "source": "ovarian_endometriomas_multiomics.md",
+      "url": "https://doi.org/10.1038/s41467-025-66706-8",
+      "category": "multiomics_spatial"
+    },
+    {
+      "id": "multiomics-4",
+      "statement": "CIBERSORTx deconvolution identified 5 major cell types and 52 distinct cell subtypes; MUC5B+ epithelial cells and dStromal-late mesenchymal cells are dual drivers of fibrosis and inflammation.",
+      "source": "integrated_analysis_muc5b.md",
+      "url": "",
+      "category": "multiomics_spatial"
+    },
+    {
+      "id": "multiomics-5",
+      "statement": "A random forest model based on cell proportions achieved AUC = 0.932 for endometriosis diagnosis; MUC5B+ epithelial cells were the top predictive feature.",
+      "source": "integrated_analysis_muc5b.md",
+      "url": "",
+      "category": "multiomics_spatial"
+    },
+    {
+      "id": "multiomics-6",
+      "statement": "Most epithelial subtypes (SOX9_I, SOX9_f_II, Gla_s, Cil) are DECREASED in endometriosis while MUC5B+, Lum, and KRT subtypes are INCREASED; eM2 macrophages are elevated in stage III-IV.",
+      "source": "integrated_analysis_muc5b.md",
+      "url": "",
+      "category": "multiomics_spatial"
+    },
+    {
+      "id": "omentum-1",
+      "statement": "The human omentum provides molecular cues for trans-coelomic spread: omental conditioned media promotes cell migration in both endometriosis and ovarian cancer primary cultures.",
+      "source": "omentum_cell_migration.md",
+      "url": "https://doi.org/10.3390/ijms26051822",
+      "category": "omentum_cancer"
+    },
+    {
+      "id": "omentum-2",
+      "statement": "Omental conditioned media contains high levels of HGF, SDF-1α, MCP-1, VEGF-A, IL-6, and IL-8; HGF/c-MET signaling mediates cell migration in both conditions.",
+      "source": "omentum_cell_migration.md",
+      "url": "https://doi.org/10.3390/ijms26051822",
+      "category": "omentum_cancer"
+    },
+    {
+      "id": "omentum-3",
+      "statement": "c-MET inhibition (PHA665752) significantly reduces cell migration — a potential therapeutic target for endometriosis.",
+      "source": "omentum_cell_migration.md",
+      "url": "https://doi.org/10.3390/ijms26051822",
+      "category": "omentum_cancer"
+    },
+    {
+      "id": "omentum-4",
+      "statement": "PTTG1 is consistently upregulated in migrated cells of both endometriosis and ovarian cancer.",
+      "source": "omentum_cell_migration.md",
+      "url": "https://doi.org/10.3390/ijms26051822",
+      "category": "omentum_cancer"
+    },
+    {
+      "id": "omentum-5",
+      "statement": "Omentectomy during endometriosis surgery is proposed as a clinical trial concept; endometriosis is benign but shares distribution pattern with ovarian cancer metastasis.",
+      "source": "omentum_cell_migration.md",
+      "url": "https://doi.org/10.3390/ijms26051822",
+      "category": "omentum_cancer"
+    },
+    {
+      "id": "mensc-1",
+      "statement": "Whole-genome methylation profiling of menstrual stem cells (MenSCs) via EM-seq identified DMRs enriched in genes linked to inflammation, tissue remodeling, and development.",
+      "source": "mensc_methylation.md",
+      "url": "https://doi.org/10.1101/2025.07.25.666720",
+      "category": "menstrual_stem_cells"
+    },
+    {
+      "id": "mensc-2",
+      "statement": "Machine learning model based on MenSC DNA methylation achieves specificity 83% and sensitivity 79% for endometriosis diagnosis — a promising non-invasive approach.",
+      "source": "mensc_methylation.md",
+      "url": "https://doi.org/10.1101/2025.07.25.666720",
+      "category": "menstrual_stem_cells"
+    },
+    {
+      "id": "mensc-3",
+      "statement": "DMRs in MenSCs map to WNT signaling, stem cell regulation, and extracellular matrix remodeling pathways.",
+      "source": "mensc_methylation.md",
+      "url": "https://doi.org/10.1101/2025.07.25.666720",
+      "category": "menstrual_stem_cells"
+    },
+    {
+      "id": "mensc-4",
+      "statement": "Integration of MenSC methylation data with scRNA-seq (HECA dataset) showed methylation changes correlate with transcriptional suppression in MenSC-like stromal populations.",
+      "source": "mensc_methylation.md",
+      "url": "https://doi.org/10.1101/2025.07.25.666720",
+      "category": "menstrual_stem_cells"
+    },
+    {
+      "id": "mensc-5",
+      "statement": "Genes ZNF516, TPGS1, GPM6B, CLMP, and PPFIA1 are differentially methylated and downregulated transcriptionally in endometriosis MenSCs.",
+      "source": "mensc_methylation.md",
+      "url": "https://doi.org/10.1101/2025.07.25.666720",
+      "category": "menstrual_stem_cells"
+    },
+    {
+      "id": "atlas-1",
+      "statement": "The Human Endometrial Cell Atlas (HECA) is a high-resolution single-cell reference of 313,527 cells from 63 women with and without endometriosis, validated with 312,246 nuclei from 63 additional donors.",
+      "source": "nature_genetics_endometrial_atlas.md",
+      "url": "https://www.nature.com/articles/s41588-024-01873-w",
+      "category": "atlas"
+    },
+    {
+      "id": "atlas-2",
+      "statement": "SOX9+ basalis (CDH2+) cells are putative epithelial stem/progenitor cells, mapped to basalis glands via spatial transcriptomics and smFISH.",
+      "source": "nature_genetics_endometrial_atlas.md",
+      "url": "https://www.nature.com/articles/s41588-024-01873-w",
+      "category": "atlas"
+    },
+    {
+      "id": "atlas-3",
+      "statement": "GWAS integration pinpoints decidualized stromal cells (dStromal) and macrophages as the most likely dysregulated cell types in endometriosis; no endometriosis-specific cell state was found.",
+      "source": "nature_genetics_endometrial_atlas.md",
+      "url": "https://www.nature.com/articles/s41588-024-01873-w",
+      "category": "atlas"
+    },
+    {
+      "id": "atlas-4",
+      "statement": "MUC5B+ cells are identified as likely endocervical contamination rather than true endometrial cells.",
+      "source": "nature_genetics_endometrial_atlas.md",
+      "url": "https://www.nature.com/articles/s41588-024-01873-w",
+      "category": "atlas"
+    },
+    {
+      "id": "atlas-5",
+      "statement": "New cell types discovered: SOX9+ basalis stem/progenitors, PreGlandular and PreLuminal transitional cells, eStromal MMPs, and dStromal early/mid/late decidualized populations.",
+      "source": "nature_genetics_endometrial_atlas.md",
+      "url": "https://www.nature.com/articles/s41588-024-01873-w",
+      "category": "atlas"
+    },
+    {
+      "id": "atlas-6",
+      "statement": "Functionalis layer features dynamic TGFβ signaling with spatial boundaries maintained by LEFTY1/LEFTY2 antagonists; basalis niche uses CXCR4/CXCL12, WNT (RSPO1/LGR4), and FGF signaling.",
+      "source": "nature_genetics_endometrial_atlas.md",
+      "url": "https://www.nature.com/articles/s41588-024-01873-w",
+      "category": "atlas"
+    },
+    {
+      "id": "microbiota-1",
+      "statement": "Gut dysbiosis in endometriosis: increased Firmicutes/Bacteroidetes ratio, increased Shigella/E. coli, decreased Clostridia; vaginal: decreased Lactobacillus, increased Gardnerella and Atopobium.",
+      "source": "frontiers_microbiota_endometriosis.md",
+      "url": "https://doi.org/10.3389/fmicb.2025.1521216",
+      "category": "microbiota"
+    },
+    {
+      "id": "microbiota-2",
+      "statement": "LPS from Gram-negative bacteria activates TLR4, promoting pro-inflammatory cytokines, angiogenesis, and lesion growth in endometriosis.",
+      "source": "frontiers_microbiota_endometriosis.md",
+      "url": "https://doi.org/10.3389/fmicb.2025.1521216",
+      "category": "microbiota"
+    },
+    {
+      "id": "microbiota-3",
+      "statement": "Gut bacteria produce β-glucuronidase, deconjugating estrogens and increasing the pool of active estrogen — the 'estrobolome' mechanism linking microbiota to hyperestrogenic state in endometriosis.",
+      "source": "frontiers_microbiota_endometriosis.md",
+      "url": "https://doi.org/10.3389/fmicb.2025.1521216",
+      "category": "microbiota"
+    },
+    {
+      "id": "microbiota-4",
+      "statement": "Microbiota contributes to endometriosis through five mechanisms: inflammatory response, immune dysregulation (NK/T-cell via PD-1/PD-L1), estrogen metabolism (estrobolome), lipid metabolism (SCFA depletion), and the brain-gut axis.",
+      "source": "frontiers_microbiota_endometriosis.md",
+      "url": "https://doi.org/10.3389/fmicb.2025.1521216",
+      "category": "microbiota"
+    },
+    {
+      "id": "microbiota-5",
+      "statement": "The microbiome offers potential as early non-invasive diagnostic biomarkers: Anaerococcus (vaginal) for staging, Ruminococcus (gut) + Pseudomonas (pelvic) for early diagnosis.",
+      "source": "frontiers_microbiota_endometriosis.md",
+      "url": "https://doi.org/10.3389/fmicb.2025.1521216",
+      "category": "microbiota"
+    },
+    {
+      "id": "microbiota-6",
+      "statement": "Therapeutic approaches targeting the microbiome include probiotics (Lactobacillus strains), dietary intervention, fecal microbiota transplantation (FMT), antibiotics, and postbiotics (butyrate).",
+      "source": "frontiers_microbiota_endometriosis.md",
+      "url": "https://doi.org/10.3389/fmicb.2025.1521216",
+      "category": "microbiota"
+    }
+  ]
+}
